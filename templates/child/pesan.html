@@ -1,0 +1,113 @@
+{% extends '../index.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block url %}
+<li class="nav-item "><a class="nav-link" href="{% url 'home' %}">Home</a></li>
+<li class="nav-item "><a class="nav-link" href="{% url 'daftar' %}">Daftar</a></li>
+<li class="nav-item "><a class="nav-link" href="{% url 'minta' %}">Request</a></li>
+<li class="nav-item active"><a class="nav-link" href="{% url 'pesan' %}">Contact</a></li>
+{% endblock %}
+
+{% block map %}
+<style>
+    #map {
+      height: 400px; 
+      width: 100%; 
+     }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="contact_area section_gap_bottom banner_gap">
+    <div class="container">
+        <div class="col-md-12">
+            <h1>Lokasi Kami</h1>
+            <div id="map"></div>
+            <script>
+                function initMap() {
+                var amikom = { lat: -7.7630148, lng: 110.4099902 };
+                var map = new google.maps.Map(
+                    document.getElementById('map'), {zoom: 4, center: amikom});
+                var marker = new google.maps.Marker({position: amikom, map: map});
+                }
+            </script>
+            <script async defer 
+            src="https://maps.googleapis.com/maps/api/js?key=http://127.0.0.1:8000/pesan&callback=initMap"
+            type="text/javascript"></script>
+        </div>
+    </div>
+</section>
+<section class="contact_area section_gap_bottom">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3">
+                <div class="contact_info">
+                    <div class="info_item">
+                        <i class="lnr lnr-home"></i>
+                        <h6>Special Region of Yogyakarta, Indonesia</h6>
+                        <p>Condong Catur, Sleman</p>
+                    </div>
+                    <div class="info_item">
+                        <i class="lnr lnr-phone-handset"></i>
+                        <h6><a href="#">[+62] 86-666-666-666</a></h6>
+                        <p>Senin - Sabtu 09:00 to 18:00</p>
+                    </div>
+                    <div class="info_item">
+                        <i class="lnr lnr-envelope"></i>
+                        <h6><a href="#">Support at tukangku@gmail.com</a></h6>
+                        <p>Support tukangku :)</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-9">
+                <form action="" method="POST"> 
+                    <div class="col-lg-12">
+                    {% csrf_token %}
+                    {% for hidden_field in form.hidden_fields %}
+                    {{ hidden_field }}
+                      {% endfor %}
+                
+                    {% if form.non_field_errors %}
+                        <div class="alert alert-danger" role="alert">
+                        {% for error in form.non_field_errors %}
+                            {{ error }}
+                        {% endfor %}
+                        </div>
+                    {% endif %}
+                
+                    {% for field in form.visible_fields %}
+                        <div class="form-group">
+                        {{ field.label_tag }}
+                    
+                        {% if form.is_bound %}
+                            {% if field.errors %}
+                                {% render_field field class="form-control is-invalid" %}
+                            {% for error in field.errors %}
+                                <div class="invalid-feedback">
+                                {{ error }}
+                                </div>
+                            {% endfor %}
+                            {% else %}
+                                {% render_field field class="form-control is-valid" %}
+                            {% endif %}
+                        {% else %}
+                            {% render_field field class="form-control" %}
+                        {% endif %}
+                    
+                        {% if field.help_text %}
+                            <small class="form-text text-muted">{{ field.help_text }}</small>
+                        {% endif %}
+                        </div>
+                    {% endfor %}    
+                    </div>
+                    <div class="col-lg-12">
+                        <button type="submit" class="primary-btn" style="border-radius: 30px;">Kirim</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

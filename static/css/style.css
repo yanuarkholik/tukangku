@@ -1,0 +1,19 @@
+.tinggi {
+      height: 260px;
+}
+
+.banner_gap {
+      padding-top: 150px;
+}
+
+.img-profile {
+      max-width: 30px; 
+      max-height: 30px; 
+      object-fit: cover; 
+      border-radius: 50%;
+}
+
+.logo_h {
+      padding: 10px;
+}
+
