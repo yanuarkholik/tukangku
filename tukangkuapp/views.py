@@ -29,20 +29,10 @@ def mintaForm(request):
         form = MintaForm(request.POST)
         if form.is_valid():
             form.save()
-            return HttpResponseRedirect(reverse("minta"))
-
+            return HttpResponseRedirect(reverse("mintaForm"))
     context = { 'form': form }
     return render(request, 'child/request.html', context)
 
-def daftar(request):
-    form = DaftarForm()
-    if request.method == 'POST':
-        form = DaftarForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return HttpResponseRedirect(reverse("daftar"))
-    context = { 'form': form }
-    return render(request, 'child/daftar.html', context)
 
 def pesan(request):
     form = PesanForm()
@@ -80,24 +70,26 @@ def registerForm(request):
 @login_required
 def profile(request):
     if request.method == 'POST':
+        m_form = DaftarForm(request.POST)
         u_form = UserUpdateForm(request.POST, instance=request.user)
         p_form = ProfileUpdateForm(request.POST,
                                    request.FILES, instance=request.user.profile)
-        if u_form.is_valid() and p_form.is_valid():
+        if u_form.is_valid() and p_form.is_valid() and m_form.is_valid():
             u_form.save()
             p_form.save()
-            messages.success(request, f'Your account has been updated!')
+            m_form.save()
             return redirect('profile')
 
     else:
         u_form = UserUpdateForm(instance=request.user)
         p_form = ProfileUpdateForm(instance=request.user.profile)
+        m_form = DaftarForm()
 
     context = {
         'u_form': u_form,
-        'p_form': p_form
+        'p_form': p_form,
+        'm_form': m_form,
     }
-
     return render(request, 'tukangkuapp/profile.html', context)
 
 # CRUD

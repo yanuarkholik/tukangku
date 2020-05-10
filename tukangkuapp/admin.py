@@ -10,7 +10,7 @@ class ProfileAdmin(admin.ModelAdmin):
 
 @admin.register(Daftar)
 class DaftarAdmin(admin.ModelAdmin):  
-    list_display = ('author', 'email', 'telepon', 'gender', 'posisi', 'buat')
+    list_display = ('author', 'posisi', 'buat')
     ordering = ('-buat',)
     search_fields = ('author',)
 

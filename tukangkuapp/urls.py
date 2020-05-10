@@ -7,7 +7,7 @@ from django.contrib.auth import views as auth_views
 from .views import (
     index, landing, register, home, profile,
     
-    pesan, mintaForm, daftar, list_baru, list_populer, registerForm,
+    pesan, mintaForm, list_baru, list_populer, registerForm,
 
     MintaDetailView, MintaUpdateView, MintaDeleteView
 )
@@ -17,7 +17,6 @@ urlpatterns = [
     path('post/', home, name='home'),
     path('contact/', pesan, name='pesan' ),
     path('request/', mintaForm, name='minta'),
-    path('daftar/', daftar, name='daftar'),
     path('list-terbaru/', list_baru, name='list_baru'),
     path('list-terpopuler/', list_populer, name='list_populer'),
     path('registerForm/', registerForm, name='registerForm'),

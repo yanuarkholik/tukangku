@@ -22,11 +22,7 @@ POSISI_CHOICES = [
 # Form Section
 
 class Daftar(models.Model):
-    email       = models.EmailField()
-    telepon     = models.CharField(max_length=13)
-    deskripsi   = models.TextField(null=True, blank=True)
-    umur        = models.DateTimeField
-    gender      = models.CharField(max_length=20, choices=GENDER_CHOICES)
+    deskripsi   = models.TextField(null=True, blank=True, help_text='Deskripsikan keahlian anda disini**')
     posisi      = models.CharField(max_length=20, choices=POSISI_CHOICES)
     author      = models.ForeignKey(User, on_delete=models.CASCADE)
     buat        = models.DateTimeField(auto_now=True)
