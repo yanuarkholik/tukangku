@@ -18,16 +18,17 @@ POSISI_CHOICES = [
     ('Tukang', 'Tukang'),
 ]
 
+
 # Form Section
 
 class Daftar(models.Model):
-    nama        = models.CharField(max_length=200, )
     email       = models.EmailField()
     telepon     = models.CharField(max_length=13)
-    deskripsi   = models.TextField(default="Tidak ada deskripsi", null=True, blank=True)
+    deskripsi   = models.TextField(null=True, blank=True)
     umur        = models.DateTimeField
     gender      = models.CharField(max_length=20, choices=GENDER_CHOICES)
     posisi      = models.CharField(max_length=20, choices=POSISI_CHOICES)
+    author      = models.ForeignKey(User, on_delete=models.CASCADE)
     buat        = models.DateTimeField(auto_now=True)
 
     class Meta:
@@ -37,7 +38,7 @@ class Pesan(models.Model):
     nama        = models.CharField(max_length=100)
     email       = models.EmailField()
     subjek      = models.CharField(max_length=100, blank=True, null=True)
-    pesan       = models.TextField()
+    pesan       = models.TextField
 
     class Meta:
         verbose_name_plural = 'Data-Pesan'
@@ -45,34 +46,41 @@ class Pesan(models.Model):
 class Minta(models.Model):
     judul       = models.CharField(max_length=100)
     kontak      = models.CharField(max_length=50, help_text='Nomor telepon atau email**')
-    upah        = models.CharField(max_length=10)
-    deskripsi   = models.TextField(default="Tidak ada deskripsi", null=True, blank=True)
+    upah        = models.CharField(max_length=50, default='Rp ')
+    deskripsi   = models.TextField(null=True, blank=True)
     buat        = models.DateTimeField(default=timezone.now)
-    author      = models.ForeignKey(User, on_delete=models.CASCADE, default='1')
-
-    class Meta:
-        verbose_name_plural = 'Data-Minta'
+    author      = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def get_absolute_url(self):
-        return reverse('post-detail', kwargs={'pk': self.pk})
-        
+        return reverse('minta-detail', kwargs={'pk': self.pk})
+
+    class Meta:
+        verbose_name_plural = 'Data-Request'
+
 class Profile(models.Model):
     user    = models.OneToOneField(User, on_delete=models.CASCADE)
     image   = models.ImageField(default='default.jpg', upload_to='upload')
+    display = models.ImageField(default='default.jpg', upload_to='upload/display')
+    buat    = models.DateTimeField(auto_now=True)
     
     def __str__(self):
         return f'{self.user.username}'
 
-    def save(self):
-        super().save()
+    def save(self, *args, **kwargs):
+        super(Profile, self).save(*args, **kwargs)
 
         img = Image.open(self.image.path)
 
         if img.height > 300 or img.width > 300:
-            output_size = (300, 300)
+            output_size = (300,300)
             img.thumbnail(output_size)
             img.save(self.image.path)
 
     class Meta:
         verbose_name_plural = 'Data-User'
 
+@receiver(post_save, sender=User)
+def update_user_profile(sender, instance, created, **kwargs):
+    if created:
+        Profile.objects.create(user=instance)
+    instance.profile.save()

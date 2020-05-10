@@ -1,5 +1,6 @@
 {% extends '../index.html' %}
 {% load static %}
+{% load crispy_forms_tags %}
 
 {% block url %}
 <li class="nav-item active"><a class="nav-link" href="{% url 'home' %}">Home</a></li>
@@ -92,9 +93,9 @@
 			<a href=""></a>
 			<div class="col-lg-3 col-md-3 col-sm-3 rounded">
 				<div class="card ">
-					<img class="card-img-top" src="{% static 'upload/img/product/p8.jpg' %}" alt="Image" style="max-height: 180px; object-fit: cover;">
+					<img class="card-img-top" src="{% static 'upload/img/banner/banner-bg.jpg' %}" alt="Image" style="max-height: 180px; object-fit: cover;">
 					<div class="card-body">
-						<h6 class="">{{ prof.nama }}</h6>
+						<h6 class=""><img src="{{ prof.author.profile.image.url}}" class="img-profile ">{{ prof.author }}</h6>
 						<div class="price">
 							<p style="color:rgb(92, 92, 92);">{{ prof.deskripsi }}</p>
 						</div>
@@ -126,7 +127,8 @@
 				<div class="card ">
 					<img class="card-img-top" src="{% static 'upload/img/banner/banner-bg.jpg' %}" alt="Image" style="height: 180px; object-fit: cover; width: auto;">
 					<div class="card-body">
-						<h6 class="">{{ prof.nama }}</h6>
+						
+						<h6 class=""><img src="{{ prof.author.profile.image.url}}" class="img-profile ">{{ prof.author }}</h6>
 						<div class="price">
 							<p style="color:rgb(92, 92, 92);">{{ prof.deskripsi }}</p>
 						</div>
@@ -137,8 +139,42 @@
 		</div>
 	</div>
 </section>
-{% endblock %}
 <!-- End Bar Area -->
-	
+<!-- Start Request Area -->
+<section class="owl-carousel section_gap">
+	<div class="container">
+		<div class="row justify-content-center">
+			<div class="col-lg-12">
+				<div class="section-title">
+					<h1>Request MyTukang</h1>
+					<h6>Hand-vetted, verified talent, for all your professional needs</h6>
+					<a href="{% url 'list_populer' %}" class="btn btn-primary btn-lg active btn-sm" role="button" aria-pressed="true">Lihat Semuanya</a>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			{% for req in request %}
+			<a href="{% url 'minta-detail' req.id %}">
+			<div class="col-lg-3 col-md-3 col-sm-3 rounded">
+				<div class="card ">
+					<img class="card-img-top" src="{{ req.author.profile.image.url }}" alt="Image" style="max-height: 180px; object-fit: cover;">
+					<div class="card-body">
+						<h6 class="">{{ req.judul }}</a></h6>
+						<div class="price">
+							<p style="color:rgb(92, 92, 92);">{{ req.deskripsi }}</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</a>
+			{% endfor %}
+		</div>
+	</div>
+</section>
+<!-- End Request Area -->
+
+{% endblock %}
+
+
 </body>
 </html>

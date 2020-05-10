@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.decorators import login_required
 from django.views.generic import TemplateView, ListView 
 from django.contrib.auth import login, authenticate
@@ -19,11 +20,10 @@ def landing(request):
     return render(request, 'landing.html')
 
 def register(request):
-    return render(request, 'users/register.html')
+    return render(request, 'tukangkuapp/register.html')
 
 # Child
-def minta(request):
-    mintakonten = Minta.objects.order_by('-buat')[:4]
+def mintaForm(request):
     form = MintaForm()
     if request.method == 'POST':
         form = MintaForm(request.POST)
@@ -31,7 +31,7 @@ def minta(request):
             form.save()
             return HttpResponseRedirect(reverse("minta"))
 
-    context = { 'form': form, 'request': minta }
+    context = { 'form': form }
     return render(request, 'child/request.html', context)
 
 def daftar(request):
@@ -43,11 +43,6 @@ def daftar(request):
             return HttpResponseRedirect(reverse("daftar"))
     context = { 'form': form }
     return render(request, 'child/daftar.html', context)
-
-def home(request):
-    profile = Daftar.objects.order_by('-buat')[:4]
-    context = {'profile': profile}
-    return render(request, 'child/home.html', context)
 
 def pesan(request):
     form = PesanForm()
@@ -77,9 +72,6 @@ def registerForm(request):
         if form.is_valid():
             form.save()
             username = form.cleaned_data.get('username')
-            raw_password = form.cleaned_data.get('password1')
-            user = authenticate(username=username, password=raw_password)
-            login(request, user)
             return redirect('home')
     else:
         form = SignUpForm()
@@ -106,7 +98,7 @@ def profile(request):
         'p_form': p_form
     }
 
-    return render(request, 'users/profile.html', context)
+    return render(request, 'tukangkuapp/profile.html', context)
 
 # CRUD
 
@@ -119,26 +111,14 @@ from django.views.generic import (
     DeleteView
 )
 
-
-class MintaListView(ListView):
-    model = Minta
-    template_name = 'child/home.html'  # <app>/<model>_<viewtype>.html
-    context_object_name = 'posts'
-    ordering = ['-date_posted']
-
+def home(request):
+    profile = Daftar.objects.order_by('-buat')[:4]
+    minta   = Minta.objects.order_by('-buat')[:4]
+    context = {'profile': profile, 'request': minta}
+    return render(request, 'child/home.html', context)
 
 class MintaDetailView(DetailView):
     model = Minta
-
-
-class MintaCreateView(LoginRequiredMixin, CreateView):
-    model = Minta
-    fields = ['title', 'content']
-
-    def form_valid(self, form):
-        form.instance.author = self.request.user
-        return super().form_valid(form)
-
 
 class MintaUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Minta

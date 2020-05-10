@@ -72,45 +72,65 @@
     <!-- start banner Area -->
     <section class="banner-area section_gap banner_gap">
         <div class="container">
-            <div class="row ">
-                <div class="col-lg-4 border ">
-                    <div class="row mt-5 mb-5 ">
-                        <div class="col-lg-12 d-flex justify-content-center ">
-                            <img src="{{ user.profile.image.url }}" class="border" style="border-radius: 50%; width: 200px; height: 200px; object-fit: cover;"> 
-                            
-                        </div>
-                        <div class="col-lg-12 d-flex justify-content-center mt-3">
-                            <h4 style="font-family: roboto;" class="roboto">{{ user.username }}</h4>
-                        </div>
-                        <div class="col-lg-12 d-flex justify-content-center mt-0">
-                            <p>Deskripsikan dirimu </p><span></span>
-                        </div>
-                    </div>
-                    
-                </div>
-                <div class="col-lg-7 border ml-4">
-                   <div class="row">
-                       <div class="col-lg-12 mt-5 mb-5">
-                            <h3 style="font-family: roboto;">Profile Anda</h3>
-                            <hr>
-                            <form method="POST" enctype="multipart/form-data">
-                                {% csrf_token %}
-                                <fieldset class="form-group">
-                                    {{ u_form|crispy }}
-                                    {{ p_form|crispy }}
-                                </fieldset>
-                                <div class="form-group ">
-                                        <button class="btn btn-outline-info btn-block" type="submit">Update</button>
-                                </div>
-                            </form>
-
-                       </div>
-                   </div>
-                </div>
-            </div>
+			<div class="row">
+				<div class=" col-lg-4">
+					<div class="col-lg-12 border ">
+						<div class="row mt-5 mb-5 ">
+							<div class="col-lg-12 d-flex justify-content-center ">
+								<img src="{{ user.profile.image.url }}" class="border" style="border-radius: 50%; width: 200px; height: 200px; object-fit: cover;"> 
+							</div>
+							<div class="col-lg-12 d-flex justify-content-center mt-3">
+								<h4 style="font-family: roboto;" class="roboto">{{ user.username }}</h4>
+							</div>
+							<div class="col-lg-12 d-flex justify-content-center mt-0">
+								<p>Deskripsikan dirimu </p><span></span>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-8">
+					<div class="row">
+						<div class="col-lg-12 border ">
+							<div class="row">
+								<div class="col-lg-12 mt-5 mb-5">
+									 <h3 style="font-family: roboto;">Profile Anda</h3>
+									 <hr>
+									 <form method="POST" enctype="multipart/form-data">
+										 {% csrf_token %}
+										 <fieldset class="form-group col-lg-12">
+											 {{ u_form|crispy }}
+											 {{ p_form.image }}
+										 </fieldset>
+										 <div class="form-group col-lg-3">
+												 <button class="btn btn-outline-info btn-block" type="submit">Update</button>
+										 </div>
+									 </form>
+								</div>
+							</div>
+						</div>
+						<div class="col-lg-12 border mt-3">
+							<div class="row">
+								<div class="col-lg-12 mt-5 mb-5">
+									 <h3 style="font-family: roboto;">Profile Anda</h3>
+									 <hr>
+									 <form method="POST" enctype="multipart/form-data">
+										 {% csrf_token %}
+										 <fieldset class="form-group col-lg-12">
+											 {{ u_form|crispy }}
+											 {{ p_form.image }}
+										 </fieldset>
+										 <div class="form-group col-lg-3">
+												 <button class="btn btn-outline-info btn-block" type="submit">Update</button>
+										 </div>
+									 </form>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>            
         </div>
     </section>
-	  
 	<!-- End banner Area -->
 
 	<!-- Start Footer Area -->
