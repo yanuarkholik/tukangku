@@ -1,10 +1,7 @@
 from django.contrib import admin
 
-from .models import Post, Daftar, Pesan, Banner, Minta, Profile
+from .models import Daftar, Pesan, Minta, Profile
 # Register your models here.
-
-admin.site.register(Post)
-admin.site.register(Banner)
 admin.site.register(Profile)
 
 # Custom Column
@@ -22,6 +19,6 @@ class PesanAdmin(admin.ModelAdmin):
 
 @admin.register(Minta)
 class MintaAdmin(admin.ModelAdmin):  
-    list_display = ('judul', 'perusahaan', 'estimasi', 'buat')
+    list_display = ('judul', 'kontak', 'upah', 'author', 'buat')
     ordering = ('-buat',)
-    search_fields = ('nama',)
+    search_fields = ('judul',)

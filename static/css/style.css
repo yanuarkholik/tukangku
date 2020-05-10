@@ -13,6 +13,17 @@
       border-radius: 50%;
 }
 
+.img-profile-big {
+      border-radius: 50%; 
+      width: 200px; 
+      height: 200px; 
+      object-fit: cover;
+}
+
+.roboto {
+      font-family: roboto;
+}
+
 .logo_h {
       padding: 10px;
 }

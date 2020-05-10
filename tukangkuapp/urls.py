@@ -5,18 +5,11 @@ from django.contrib.auth import views as auth_views
 
 
 from .views import (
-    index, 
-    landing,
-    register,
-    registerForm,
-    profile,
-    home,  
-    pesan,
-    minta,
-    daftar,
-    list_baru,
-    list_populer,
-    Search,
+    index, landing, register, home, profile,
+    
+    pesan, minta, daftar, list_baru, list_populer, registerForm,
+
+    MintaListView, MintaDetailView, MintaCreateView, MintaUpdateView, MintaDeleteView
 )
 
 urlpatterns = [
@@ -33,10 +26,16 @@ urlpatterns = [
     path('', landing, name='landing'),
     path('index/', index, name='index'),
     path('profile/', profile, name='profile'),
-    path('search/', Search, name='search'),
     path('register/', register, name='register'),
     path('login/', auth_views.LoginView.as_view(template_name='users/login.html'), name='login'),
     path('logout/', auth_views.LogoutView.as_view(template_name='landing.html'), name='logout'),
+
+    # CRUD
+    path('post/', MintaListView.as_view(), name='blog-home'),
+    path('post/<int:pk>/', MintaDetailView.as_view(), name='post-detail'),
+    path('post/new/', MintaCreateView.as_view(), name='post-create'),
+    path('post/<int:pk>/update/', MintaUpdateView.as_view(), name='post-update'),
+    path('post/<int:pk>/delete/', MintaDeleteView.as_view(), name='post-delete'),
 ]
 
 if settings.DEBUG:
