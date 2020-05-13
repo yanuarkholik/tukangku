@@ -84,53 +84,78 @@
 							<div class="col-lg-12 d-flex justify-content-center mt-0">
 								<p>Deskripsikan dirimu </p><span></span>
 							</div>
+							<div class="col-lg-12 mt-0">
+								<span class="d-flex justify-content-center">
+									<button type="button" class="btn btn-outline-primary btn-block ml-2 mr-2" data-toggle="modal" data-target="#exampleModal">
+										Edit Profile
+									</button>
+								</span>
+								<div class="row">
+									<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+										<div class="modal-dialog" role="document">
+											<div class="modal-content">
+												<div class="modal-header">
+													<h3 style="font-family: roboto;">Profile Anda</h3>
+													<hr>
+													<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+														<span aria-hidden="true">&times;</span>
+													</button>
+													
+												</div>
+												<div class="modal-body">
+													<p>Tell us a bit about your needs and get customized recommendations.
+														Don’t worry, this information will remain private, and will not be displayed on the platform
+													</p>
+													<div class="mt-4">
+														<form method="POST" enctype="multipart/form-data">
+															{% csrf_token %}
+															<fieldset class="form-group col-lg-12">
+																{{ u_form|crispy }}
+																{{ p_form|crispy }}
+															</fieldset>
+														 </form>
+													</div>
+												</div>
+												<div class="modal-footer">
+												<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+												<button class="btn btn-primary" type="submit">Update</button>
+												</div>
+											</div>
+										</div>
+									</div>      
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
 				<div class="col-lg-8">
 					<div class="row">
-						<div class="col-lg-12 border ">
-							<div class="row">
-								<div class="col-lg-12 mt-4 mb-5">
-									 <h3 style="font-family: roboto;">Profile Anda</h3>
-									 <p>Tell us a bit about your needs and get customized recommendations.
-										Don’t worry, this information will remain private, and will not be displayed on the platform</p>
-									 <hr>
-									 <form method="POST" enctype="multipart/form-data">
-										{% csrf_token %}
-										<fieldset class="form-group col-lg-12">
-											{{ u_form|crispy }}
-											{{ p_form|crispy }}
-										</fieldset>
-										<div class="form-group col-lg-3">
-												<button class="btn btn-primary btn-block" type="submit">Update</button>
+						<div class="col-lg-12 ">
+							<h3 class="ml-1">{{ user.username }}' Gigs</h3>
+							<div class="ml-2 mr-2">
+								<div class="row">
+									{% for post in posts %}
+									<div class="col-lg-4 mt-2 ">
+										<div class="card">
+											<img class="card-img-top" src="{{post.file.url}}" alt="" style="height: 180px; object-fit: cover;">
+											<div class="card-body">
+												<p class="card-text">{{post.deskripsi}}</p>
+												<span>
+													<a href="{% url 'daftar-update' post.id %}" class="btn btn-outline-primary ">Edit</a>
+													<a href="{% url 'daftar-delete' post.id %}" class="btn btn-outline-danger ">Delete</a>
+												</span>
+											</div>
+											
 										</div>
-									 </form>
+									</div>
+									{% endfor %}
 								</div>
 							</div>
 						</div>
 						<div class="col-lg-12 border mt-3">
 							<div class="row">
 								<div class="col-lg-12 mt-4 mb-4 ">
-									<span class="d-flex justify-content-between">
-										<p style="font-family: roboto;">Sepertinya anda belum menjadi MyTukang. Ayo daftar segera!</p>
-										<button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#dropdown" aria-expanded="false" aria-controls="multiCollapseExample2">Become MyTukang</button>
-									</span>
-									<div class="collapse multi-collapse" id="dropdown">
-										<div class="mt-4">
-											<form method="POST">
-												<div class="col-lg-12">
-													{{ m_form.deskripsi|as_crispy_field }}
-												</div>
-												<div class="col-lg-12">
-													{{ m_form.posisi|as_crispy_field }}
-												</div><br><br>
-												<div class="form-group col-lg-3">
-													<button class="btn btn-primary btn-block" type="submit">Tambahkan</button>
-												</div>
-											</form>
-										</div>
-									</div>
+									
 								</div>
 							</div>
 						</div>

@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from django import forms
 
-from .models import Daftar, Pesan, Minta, Profile
+from .models import Daftar, Pesan, Minta, Profile, Review, PesanAuthor
 
 class SignUpForm(UserCreationForm):
     email = forms.EmailField(max_length=254)
@@ -24,17 +24,28 @@ class ProfileUpdateForm(forms.ModelForm):
         model = Profile
         fields = ['image']
 
-class DaftarForm(ModelForm):
+class ReviewForm(forms.ModelForm):
+    class Meta:
+        model = Review
+        fields = ['review', 'author']
+
+class DaftarForm(forms.ModelForm):
     class Meta:
         model = Daftar
         fields = '__all__'
 
-class PesanForm(ModelForm):
+class PesanForm(forms.ModelForm):
     class Meta:
         model = Pesan
         fields = '__all__'
 
-class MintaForm(ModelForm):
+class PesanAuthorForm(forms.ModelForm):
+    class Meta:
+        model = PesanAuthor
+        fields = '__all__'
+
+
+class MintaForm(forms.ModelForm):
     class Meta:
         model = Minta
         fields = '__all__'

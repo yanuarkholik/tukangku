@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'tukangkuapp',
     'crispy_forms',
+    'star_ratings',
     'widget_tweaks',
 ]
 
@@ -74,6 +75,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'tukangku.wsgi.application'
 
+TEMPLATE_CONTEXT_PROCESSORS = 'django.core.context_processors.request'
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases

@@ -89,19 +89,21 @@
 		</div>
 		<div class="row">
 			{% for prof in profile %}
-			<a href=""></a>
 			<div class="col-lg-3 col-md-3 col-sm-3 rounded">
 				<div class="card ">
-					<img class="card-img-top" src="{% static 'upload/img/banner/banner-bg.jpg' %}" alt="Image" style="max-height: 180px; object-fit: cover;">
+					<a href="{% url 'list_populer' %}">
+					<img class="card-img-top" src="{{ prof.author.profile.image.url }}" alt="Image" style="height: 180px; object-fit: cover;">
+					</a>
 					<div class="card-body">
-						<h6 class=""><img src="{{ prof.author.profile.image.url}}" class="img-profile ">{{ prof.author }}</h6>
+						<a href="{% url 'daftar' prof.id %}">
+						<h6 class=""><img src="{{ prof.author.profile.image.url}}" class="img-profile "> {{ prof.author }}</h6>
+						</a>
 						<div class="price">
 							<p style="color:rgb(92, 92, 92);">{{ prof.deskripsi }}</p>
 						</div>
 					</div>
 				</div>
 			</div>
-			</a>
 			{% endfor %}
 		</div>
 	</div>
@@ -121,13 +123,15 @@
 				</div>
 			</div>
 			{% for prof in profile %}
-			<a href="#"></a>
 			<div class="col-lg-3 col-md-3 col-sm-3 rounded">
 				<div class="card ">
-					<img class="card-img-top" src="{% static 'upload/img/banner/banner-bg.jpg' %}" alt="Image" style="height: 180px; object-fit: cover; width: auto;">
+					<a href="{% url 'list_baru' %}">
+					<img class="card-img-top" src="{{ prof.author.profile.image.url }}" alt="Image" style="height: 180px; object-fit: cover;">
+					</a>
 					<div class="card-body">
-						
-						<h6 class=""><img src="{{ prof.author.profile.image.url}}" class="img-profile ">{{ prof.author }}</h6>
+						<a href="{% url 'daftar' prof.id %}">
+							<h6 class=""><img src="{{ prof.author.profile.image.url}}" class="img-profile " style=" width: 30px; height: 30px; object-fit: cover; border-radius: 50%;">{{ prof.author }}</h6>
+						</a>
 						<div class="price">
 							<p style="color:rgb(92, 92, 92);">{{ prof.deskripsi }}</p>
 						</div>
@@ -153,25 +157,32 @@
 		</div>
 		<div class="row">
 			{% for req in request %}
-			<a href="{% url 'minta-detail' req.id %}">
 			<div class="col-lg-3 col-md-3 col-sm-3 rounded">
 				<div class="card ">
-					<img class="card-img-top" src="{{ req.author.profile.image.url }}" alt="Image" style="max-height: 180px; object-fit: cover;">
+					<a href="{% url 'minta-detail' req.id %}">
+						<img class="card-img-top" src="{{ req.author.profile.image.url }}" alt="Image" style="height: 180px; object-fit: cover;">
+					</a>
 					<div class="card-body">
-						<h6 class="">{{ req.judul }}</a></h6>
+						<a href="{% url 'minta-detail' req.id %}">
+							<h6 class="">{{ req.judul }}</h6>
+						</a>
 						<div class="price">
+							<p>
+								<a href="{% url 'dashboard' req.id %}">
+									<img src="{{ req.author.profile.image.url }}" class="mr-1" style=" width: 30px; height: 30px; object-fit: cover; border-radius: 50%;"> 
+									{{ req.author }}
+								</a>
+							</p>
 							<p style="color:rgb(92, 92, 92);">{{ req.deskripsi }}</p>
 						</div>
 					</div>
 				</div>
 			</div>
-		</a>
 			{% endfor %}
 		</div>
 	</div>
 </section>
 <!-- End Request Area -->
-
 {% endblock %}
 
 

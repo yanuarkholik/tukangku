@@ -1,0 +1,138 @@
+{% extends '../index.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block url %}
+<li class="nav-item "><a class="nav-link" href="{% url 'home' %}">Home</a></li>
+<li class="nav-item"><a class="nav-link" href="{% url 'pesan' %}">Contact</a></li>
+
+<img src="{{ user.profile.image.url }}" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" class="img-profile dropdown mt-2 ">
+	<div class="dropdown-menu dropdown-menu-right">
+		<a class="dropdown-item" href="{% url 'profile' %}">Profile</a>
+		<a class="dropdown-item" href="#">Another action</a>
+		<a class="dropdown-item" href="#">Something else here</a>
+		<div class="dropdown-divider"></div>
+		<a class="dropdown-item" href="{% url 'logout' %}">Log Out</a>
+	</div>
+{% endblock %}
+
+{% block content %}
+<section class="banner-area section_gap banner_gap">
+    <div class="container">
+        <div class="row">
+            <div class=" col-lg-4">
+                <div class="col-lg-12 border ">
+                    <div class="row mt-5 mb-5 ">
+                        <div class="col-lg-12 d-flex justify-content-center ">
+                            <img src="{{ object.author.profile.image.url }}" class="border" style="border-radius: 50%; width: 200px; height: 200px; object-fit: cover;">
+                        </div>
+                        <div class="col-lg-12 d-flex justify-content-center mt-3">
+                            <h4 style="font-family: roboto;" class="roboto">{{ object.author }}</h4>
+                        </div>
+                        <div class="col-lg-12 d-flex justify-content-center mt-0">
+                            <p>Deskripsikan dirimu </p><span></span>
+                        </div>
+                        <div class="col-lg-12 mt-0">
+                            <span class="d-flex justify-content-center">
+                                <a href="{% url 'pesan-author' user.id %}">
+                                    <button type="button" class="btn btn-primary mr-2" data-toggle="modal" data-target="#Modal1">
+                                        Buat Pesanan
+                                    </button>
+                                </a>
+                                <button class="btn btn-outline-primary ml-2" type="button" data-toggle="modal" data-target="#Modal2">
+                                    Contact me
+                                </button>
+                            </span>
+                            <div class="row">
+                                <!-- <div class="modal fade" id="Modal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLabel">Tulis Pesanan Anda</h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="mt-4">
+                                                    <form action="" method="POST"> 
+                                                        {% csrf_token %}
+                                                        {{ form }}
+                                                    </form>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                            <button type="submit" class="btn btn-primary">Kirim</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>       -->
+                            </div>
+                            <div class="row">
+                                <div class="modal fade" id="Modal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLabel">Tulis Pesanan Anda</h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="mt-4">
+                                                    <form action="" method="POST"> 
+                                                        
+                                                    </form>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                            <button type="submit" class="btn btn-primary">Kirim</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>      
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-8 ">
+                <div class="row">
+                    <div class="col-lg-12 ">
+                        <h3 style="font-family: roboto;">{{ object.author }}'s Gigs <span style="color: rgb(128, 128, 128);"></span></h3>
+                            <div class="mt-4" >
+                                <div class="row">
+                                    {% for list in profile %}
+                                    <div class="col-lg-4 col-md-4 rounded">
+                                        <div class="card ">
+                                            <img class="card-img-top" src="{{ object.author.profile.image.url }}" alt="Image" style="max-height: 180px; object-fit: cover;">
+                                            <div class="card-body">
+                                                <h6 class=""><img src="{{ object.author.profile.image.url }}" class="img-profile" style=" width: 30px; height: 30px; object-fit: cover; border-radius: 50%;"> {{ object.author }}</h6>
+                                                <div class="price">
+                                                    <p style="color:rgb(92, 92, 92);">{{ object.deskripsi }}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                    </div>
+                    <div class="col-lg-12  mt-5">
+                        <h3 style="font-family: roboto;">Review Pelanggan <span style="color: rgb(128, 128, 128);">(x)</span></h3>
+                        <div class="row">
+                            <div class="col-lg-12 mt-4 mb-4 ">
+                                {% block review %}
+                                {% endblock %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>            
+    </div>
+</section>
+<!-- End banner Area -->
+{% endblock %}
