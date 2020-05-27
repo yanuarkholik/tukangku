@@ -17,24 +17,26 @@
 {% endblock %}
 
 {% block content %}
-<section class="banner-area section_gap banner_gap">
+<section class="banner-area section_gap">
     <div class="container">
         <div class="row">
             <div class=" col-lg-4">
                 <div class="col-lg-12 border ">
                     <div class="row mt-5 mb-5 ">
+                        {% for post in posts|slice:":1" %}
                         <div class="col-lg-12 d-flex justify-content-center ">
-                            <img src="{{ object.author.profile.image.url }}" class="border" style="border-radius: 50%; width: 200px; height: 200px; object-fit: cover;">
+                            <img src="{{ post.user.profile.image.url }}" class="border" style="border-radius: 50%; width: 200px; height: 200px; object-fit: cover;">
                         </div>
                         <div class="col-lg-12 d-flex justify-content-center mt-3">
-                            <h4 style="font-family: roboto;" class="roboto">{{ object.author }}</h4>
+                            <h4 style="font-family: roboto;" class="roboto">{{ view.kwargs.username }}</h4>
                         </div>
                         <div class="col-lg-12 d-flex justify-content-center mt-0">
-                            <p>Deskripsikan dirimu </p><span></span>
+                            <p class="text-justify">{{ post.user.profile.deskripsi }}</p><span></span>
                         </div>
+                        {% endfor %}
                         <div class="col-lg-12 mt-0">
                             <span class="d-flex justify-content-center">
-                                <a href="{% url 'pesan-author' user.id %}">
+                                <a href="{% url 'pesan-user' user.id %}">
                                     <button type="button" class="btn btn-primary mr-2" data-toggle="modal" data-target="#Modal1">
                                         Buat Pesanan
                                     </button>
@@ -101,31 +103,31 @@
             <div class="col-lg-8 ">
                 <div class="row">
                     <div class="col-lg-12 ">
-                        <h3 style="font-family: roboto;">{{ object.author }}'s Gigs <span style="color: rgb(128, 128, 128);"></span></h3>
+                        <h3 style="font-family: roboto;">{{ view.kwargs.username }}'s Gigs <span style="color: rgb(128, 128, 128);"></span></h3>
                             <div class="mt-4" >
                                 <div class="row">
-                                    {% for list in profile %}
+                                    {% for post in posts %}
                                     <div class="col-lg-4 col-md-4 rounded">
                                         <div class="card ">
-                                            <img class="card-img-top" src="{{ object.author.profile.image.url }}" alt="Image" style="max-height: 180px; object-fit: cover;">
+                                            <img class="card-img-top" src="{{ post.file.url }}" alt="Image" style="max-height: 180px; object-fit: cover;">
                                             <div class="card-body">
-                                                <h6 class=""><img src="{{ object.author.profile.image.url }}" class="img-profile" style=" width: 30px; height: 30px; object-fit: cover; border-radius: 50%;"> {{ object.author }}</h6>
+                                                <h6 class=""><img src="{{ post.user.profile.image.url }}" class="img-profile" style=" width: 30px; height: 30px; object-fit: cover; border-radius: 50%;"> {{ post.user }}</h6>
                                                 <div class="price">
-                                                    <p style="color:rgb(92, 92, 92);">{{ object.deskripsi }}</p>
+                                                    <p style="color:rgb(92, 92, 92);" class="text-truncate">{{ post.deskripsi }}</p>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div>  
                                     {% endfor %}
                                 </div>
                             </div>
                     </div>
                     <div class="col-lg-12  mt-5">
                         <h3 style="font-family: roboto;">Review Pelanggan <span style="color: rgb(128, 128, 128);">(x)</span></h3>
+                        <hr>
                         <div class="row">
                             <div class="col-lg-12 mt-4 mb-4 ">
-                                {% block review %}
-                                {% endblock %}
+                                
                             </div>
                         </div>
                     </div>

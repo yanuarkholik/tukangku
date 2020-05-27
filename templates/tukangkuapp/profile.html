@@ -81,9 +81,15 @@
 							<div class="col-lg-12 d-flex justify-content-center mt-3">
 								<h4 style="font-family: roboto;" class="roboto">{{ user.username }}</h4>
 							</div>
-							<div class="col-lg-12 d-flex justify-content-center mt-0">
-								<p>Deskripsikan dirimu </p><span></span>
-							</div>
+							{% if user.profile.deskripsi == null %}
+								<div class="col-lg-12 d-flex justify-content-center mt-0">
+									<p>Belum ada deskripsi</p><span></span>
+								</div>
+							{% else %}
+								<div class="col-lg-12 d-flex justify-content-center mt-0">
+									<p>{{ user.profile.deskripsi }}</p><span></span>
+								</div>
+							{% endif %}
 							<div class="col-lg-12 mt-0">
 								<span class="d-flex justify-content-center">
 									<button type="button" class="btn btn-outline-primary btn-block ml-2 mr-2" data-toggle="modal" data-target="#exampleModal">
@@ -113,12 +119,12 @@
 																{{ u_form|crispy }}
 																{{ p_form|crispy }}
 															</fieldset>
+															<div class="modal-footer">
+																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+																<button class="btn btn-primary" type="submit">Update</button>
+																</div>
 														 </form>
 													</div>
-												</div>
-												<div class="modal-footer">
-												<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-												<button class="btn btn-primary" type="submit">Update</button>
 												</div>
 											</div>
 										</div>
@@ -137,15 +143,35 @@
 									{% for post in posts %}
 									<div class="col-lg-4 mt-2 ">
 										<div class="card">
-											<img class="card-img-top" src="{{post.file.url}}" alt="" style="height: 180px; object-fit: cover;">
+											<img class="card-img-top" src="{{ post.file.url }}" alt="" style="height: 180px; object-fit: cover;">
 											<div class="card-body">
-												<p class="card-text">{{post.deskripsi}}</p>
+												<p class="card-text">{{ post.deskripsi }}</p>
 												<span>
-													<a href="{% url 'daftar-update' post.id %}" class="btn btn-outline-primary ">Edit</a>
-													<a href="{% url 'daftar-delete' post.id %}" class="btn btn-outline-danger ">Delete</a>
+													<a href="{% url 'daftar-update' post.id %}" role="button" class="btn btn-secondary btn-sm mr-2"><img src="{% static 'image/edit.png' %}" alt=""></a>
+													<button type="button" class="btn btn-danger btn-sm " data-toggle="modal" data-target="#ModalDelete">
+														<img src="{% static 'image/remove.png' %}" alt="">
+													</button>
+													<div class="modal fade" id="ModalDelete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+														<div class="modal-dialog" role="document">
+															<div class="modal-content">
+																<div class="modal-header">
+																	<h5 class="modal-title" id="exampleModalLabel">Anda yakin akan menghapus post ini?</h5>
+																	<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+																		<span aria-hidden="true">&times;</span>
+																	</button>
+																</div>
+																<div class="modal-body">
+																	<form method="POST">
+																		{% csrf_token %}
+																		<button class="btn btn-outline-danger" type="submit">Yes, Delete</button>
+                                        								<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+																	</form>
+																</div>
+															</div>
+														</div>
+													</div>
 												</span>
 											</div>
-											
 										</div>
 									</div>
 									{% endfor %}

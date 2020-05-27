@@ -4,46 +4,46 @@
 
 {% block url %}
 <li class="nav-item active"><a class="nav-link" href="{% url 'home' %}">Home</a></li>
-<li class="nav-item"><a class="nav-link" href="{% url 'pesan' %}">Contact</a></li>
+<li class="nav-item"><a class="nav-link" href="{% url 'pesan' %}">Pesan</a></li>
+<li class="nav-item"><a class="nav-link" href="{% url 'all-tukang' %}">Tukang</a></li>
 
-<img src="{{ user.profile.image.url }}" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" class="img-profile dropdown mt-2 ">
-	<div class="dropdown-menu dropdown-menu-right">
-		<a class="dropdown-item" href="{% url 'profile' %}">Profile</a>
+<img src="{{ user.profile.image.url }}" data-toggle="dropdown" data-toggle="dropdown" data-display="static" type="button" aria-haspopup="true" aria-expanded="false" class="img-profile dropdown mt-2 ">
+	<div class="dropdown-menu dropdown-menu-right dropdown-menu-lg-left">
+		<a class="dropdown-item" href="{% url 'profile' %}">Profile, {{user.username }}</a>
 		<a class="dropdown-item" href="#">Another action</a>
 		<a class="dropdown-item" href="#">Something else here</a>
 		<div class="dropdown-divider"></div>
 		<a class="dropdown-item" href="{% url 'logout' %}">Log Out</a>
 	</div>
-
 {% endblock %}
 
 <!-- start banner Area -->
 {% block content %}
-<section class="banner-area banner_gap">
+<section class="banner-area mb-5" style="padding-top: 100px;">
 	<div class="container">
 		<div class="row  align-items-center justify-content-start">
 			<div class="col-lg-12">
 				<div class=" owl-carousel">
 					<div class="row align-items-center d-flex ">
-						<div class="col-lg-3 col-md-6">
-							<div class="tinggi">
-								<div class="container ">
-									<h1>Hai<br>{{ user.username }}!</h1>
+						<div class="col-lg-3 shadow-sm rounded bg-white">
+							<div class="container">
+								<div class="mt-4 mb-5">
+									<h3>Hai<br>{{ user.username }}!</h3>
 									<p>Get offers from sellers for your project</p>
 									<a href="{% url 'minta' %}"><button class="btn btn-primary btn-block"> Make a Request</button></a>
 								</div>
 							</div>
 						</div>
-						<div class="col-lg-9">
-							<div id="slider" class="carousel slide" data-ride="carousel">
+						<div class="col-lg-9 ">
+							<div id="slider" class="carousel slide " data-ride="carousel" >
 								<ol class="carousel-indicators">
 								  <li data-target="#slide" data-slide-to="0" class="active"></li>
 								  <li data-target="#slider" data-slide-to="1"></li>
 								  <li data-target="#slider" data-slide-to="2"></li>
 								</ol>
-								<div class="carousel-inner bg-dark jumbotron jumbotron-fluid tinggi rounded">
+								<div class="carousel-inner bg-dark jumbotron jumbotron-fluid rounded" style="height: 100%;">
 									<div class="carousel-item active">
-										<img src="..." class="d-block w-100" alt="First slide label">
+										<img src="" class="d-block w-100" alt="First slide label">
 										<div class="carousel-caption d-none d-md-block">
 										<h1 class="display-4">First slide label</h1>
 										<p class="lead">Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
@@ -63,8 +63,6 @@
 										<p class="lead">Praesent commodo cursus magna, vel scelerisque nisl consectetur.</p>
 										</div>
 									</div>
-									</div>
-									</a>
 								</div>
 							</div>
 						</div>
@@ -76,13 +74,13 @@
 </section>
 <!-- End banner Area -->
 <!-- Start Konten Area -->
-<section class="owl-carousel section_gap">
-	<div class="container">
+<section class="owl-carousel mb-5">
+	<div class="container shadow-sm rounded bg-white p-4">
 		<div class="row justify-content-center">
 			<div class="col-lg-12">
 				<div class="section-title">
-					<h1>Top Pro Service MyTukang</h1>
-					<h6>Hand-vetted, verified talent, for all your professional needs</h6>
+					<h1 class="display-4">Top Pro Service MyTukang</h1>
+					<p class="lead mb-1">Hand-vetted, verified talent, for all your professional needs</p>
 					<a href="{% url 'list_populer' %}" class="btn btn-primary btn-lg active btn-sm" role="button" aria-pressed="true">Lihat Semuanya</a>
 				</div>
 			</div>
@@ -91,16 +89,26 @@
 			{% for prof in profile %}
 			<div class="col-lg-3 col-md-3 col-sm-3 rounded">
 				<div class="card ">
-					<a href="{% url 'list_populer' %}">
-					<img class="card-img-top" src="{{ prof.author.profile.image.url }}" alt="Image" style="height: 180px; object-fit: cover;">
+					<a href="{% url 'daftar-detail' prof.slug %}">
+					<img class="card-img-top" src="{{ prof.file.url }}" alt="Image" style="height: 180px; object-fit: cover;">
 					</a>
 					<div class="card-body">
-						<a href="{% url 'daftar' prof.id %}">
-						<h6 class=""><img src="{{ prof.author.profile.image.url}}" class="img-profile "> {{ prof.author }}</h6>
+						<a href="{% url 'dashboard' prof.user.username %}">
+						<h6 class="roboto"><img src="{{ prof.user.profile.image.url}}" class="img-profile "> {{ prof.user }}</h6>
 						</a>
 						<div class="price">
-							<p style="color:rgb(92, 92, 92);">{{ prof.deskripsi }}</p>
+							<p class="text-justify text-truncate" style="color:rgb(92, 92, 92);">{{ prof.deskripsi }}</p>
 						</div>
+						<div class="">
+							<p class="card-text text-uppercase font-weight-bold">
+								{{ prof.posisi }}
+							</p>
+						</div>
+					</div>
+					<div class="card-footer text-muted">
+						<p class="card-text text-right font-weight-light" style="font-size: large;">
+							
+						</p>
 					</div>
 				</div>
 			</div>
@@ -112,29 +120,42 @@
 
 
 <!-- Start Bar Area -->
-<section class="features-area section_gap">
+<section class="features-area mb-5">
 	<div class="container">
-		<div class="row features-inner">
+		<div class="row">
 			<div class="col-lg-12">
 				<div class="section-title">
-					<h1>Best Selling MyTukang</h1>
-					<h6>Hand-vetted, verified talent, for all your professional needs</h6>
+					<h1 class="display-4">The Best Tukang</h1>
+					<p class="lead mb-1">Hand-vetted, verified talent, for all your professional needs</p>
 					<a href="{% url 'list_baru' %}" class="btn btn-primary btn-lg active btn-sm" role="button" aria-pressed="true">Lihat Semuanya</a>
 				</div>
 			</div>
 			{% for prof in profile %}
 			<div class="col-lg-3 col-md-3 col-sm-3 rounded">
 				<div class="card ">
-					<a href="{% url 'list_baru' %}">
-					<img class="card-img-top" src="{{ prof.author.profile.image.url }}" alt="Image" style="height: 180px; object-fit: cover;">
+					<a href="{% url 'daftar-detail' prof.slug %}">
+					<img class="card-img-top" src="{{ prof.file.url }}" alt="Image" style="height: 180px; object-fit: cover;">
 					</a>
 					<div class="card-body">
-						<a href="{% url 'daftar' prof.id %}">
-							<h6 class=""><img src="{{ prof.author.profile.image.url}}" class="img-profile " style=" width: 30px; height: 30px; object-fit: cover; border-radius: 50%;">{{ prof.author }}</h6>
+						<a href="{% url 'dashboard' prof.user.username %}">
+							<h6 class="roboto">
+								<img src="{{ prof.user.profile.image.url}}" class="img-profile " style=" width: 30px; height: 30px; object-fit: cover; border-radius: 50%;"> 
+								{{ prof.user }}
+							</h6>
 						</a>
 						<div class="price">
-							<p style="color:rgb(92, 92, 92);">{{ prof.deskripsi }}</p>
+							<p class="text-justify text-truncate" style="color:rgb(92, 92, 92);">{{ prof.deskripsi }}</p>
 						</div>
+						<div class="">
+							<p class="card-text text-uppercase font-weight-bold">
+								{{ prof.posisi }}
+							</p>
+						</div>
+					</div>
+					<div class="card-footer text-muted">
+						<p class="card-text text-right font-weight-light" style="font-size: large;">
+							
+						</p>
 					</div>
 				</div>
 			</div>
@@ -144,13 +165,13 @@
 </section>
 <!-- End Bar Area -->
 <!-- Start Request Area -->
-<section class="owl-carousel section_gap">
-	<div class="container">
+<section class="owl-carousel mb-5">
+	<div class="container shadow-sm rounded bg-white p-4">
 		<div class="row justify-content-center">
 			<div class="col-lg-12">
 				<div class="section-title">
-					<h1>Request MyTukang</h1>
-					<h6>Hand-vetted, verified talent, for all your professional needs</h6>
+					<h1 class="display-4">Request MyTukang</h1>
+					<p class="lead mb-1">Hand-vetted, verified talent, for all your professional needs</p>
 					<a href="{% url 'list_populer' %}" class="btn btn-primary btn-lg active btn-sm" role="button" aria-pressed="true">Lihat Semuanya</a>
 				</div>
 			</div>
@@ -159,22 +180,22 @@
 			{% for req in request %}
 			<div class="col-lg-3 col-md-3 col-sm-3 rounded">
 				<div class="card ">
-					<a href="{% url 'minta-detail' req.id %}">
+					<a href="{% url 'minta-detail' req.slug %}">
 						<img class="card-img-top" src="{{ req.author.profile.image.url }}" alt="Image" style="height: 180px; object-fit: cover;">
 					</a>
 					<div class="card-body">
-						<a href="{% url 'minta-detail' req.id %}">
-							<h6 class="">{{ req.judul }}</h6>
-						</a>
-						<div class="price">
-							<p>
-								<a href="{% url 'dashboard' req.id %}">
-									<img src="{{ req.author.profile.image.url }}" class="mr-1" style=" width: 30px; height: 30px; object-fit: cover; border-radius: 50%;"> 
-									{{ req.author }}
-								</a>
-							</p>
-							<p style="color:rgb(92, 92, 92);">{{ req.deskripsi }}</p>
+						<div class="card-text">
+							<h6 class="roboto">
+								<img src="{{ req.author.profile.image.url }}" class="mr-1" style=" width: 30px; height: 30px; object-fit: cover; border-radius: 50%;">  
+								{{ req.author }}
+							</h6>
+							<p class="text-justify text-truncate" style="color:rgb(92, 92, 92);">{{ req.deskripsi }}</p>
 						</div>
+					</div>
+					<div class="card-footer text-muted">
+						<p class="card-text text-right font-weight-light" style="font-size: large;">
+							<small class="text-uppercase" style="font-size: small;">upah</small> {{ req.upah}}
+						</p>
 					</div>
 				</div>
 			</div>

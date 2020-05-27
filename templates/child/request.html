@@ -4,18 +4,17 @@
 {% load crispy_forms_tags %}
 
 {% block url %}
-<li class="nav-item "><a class="nav-link" href="{% url 'home' %}">Home</a></li>
-<li class="nav-item"><a class="nav-link" href="{% url 'pesan' %}">Contact</a></li>
-
-<img src="{{ user.profile.image.url }}" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" class="img-profile dropdown mt-2 ">
-	<div class="dropdown-menu dropdown-menu-right">
-		<a class="dropdown-item" href="{% url 'profile' %}">Profile</a>
+<li class="nav-item"><a class="nav-link" href="{% url 'home' %}">Home</a></li>
+<li class="nav-item"><a class="nav-link" href="{% url 'pesan' %}">Pesan</a></li>
+<li class="nav-item"><a class="nav-link" href="{% url 'pesan' %}">Tukang</a></li>
+<img src="{{ user.profile.image.url }}" data-toggle="dropdown" data-toggle="dropdown" data-display="static" type="button" aria-haspopup="true" aria-expanded="false" class="img-profile dropdown mt-2 ">
+	<div class="dropdown-menu dropdown-menu-right dropdown-menu-lg-left">
+		<a class="dropdown-item" href="{% url 'profile' %}">Profile, {{user.username }}</a>
 		<a class="dropdown-item" href="#">Another action</a>
 		<a class="dropdown-item" href="#">Something else here</a>
 		<div class="dropdown-divider"></div>
 		<a class="dropdown-item" href="{% url 'logout' %}">Log Out</a>
 	</div>
-
 {% endblock %}
 
 {% block content %}

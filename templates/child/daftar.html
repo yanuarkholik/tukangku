@@ -6,6 +6,7 @@
 {% block url %}
 <li class="nav-item "><a class="nav-link" href="{% url 'home' %}">Home</a></li>
 <li class="nav-item"><a class="nav-link" href="{% url 'pesan' %}">Contact</a></li>
+<li class="nav-item"><a class="nav-link" href="{% url 'pesan' %}">Contact</a></li>
 
 <img src="{{ user.profile.image.url }}" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" class="img-profile dropdown mt-2 ">
 	<div class="dropdown-menu dropdown-menu-right">
@@ -32,7 +33,7 @@
 								<h6>Sub Judul</h6>
 								{% csrf_token %}
 								<div class="col-lg-8">
-									{{ user.username }}
+									
 								</div>
 							  <button type="submit" class="primary-btn">Kirim Data</button>
 							</form>

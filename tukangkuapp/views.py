@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
-from django.urls import reverse, reverse_lazy
+from django.http import HttpResponseRedirect, JsonResponse
+from django.urls import reverse
+from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.decorators import login_required
@@ -14,12 +15,15 @@ from .models import Daftar, Pesan, Minta, Profile, PesanAuthor, PostDaftarImage
 
 # Parent
 def index(request):
+    """ Parent page: Index """
     return render(request, 'index.html')
 
 def landing(request):
+    """ Parent page: Landing """
     return render(request, 'landing.html')
 
 def register(request):
+    """ Parent page: Register """
     return render(request, 'tukangkuapp/register.html')
 
 # Child
@@ -36,26 +40,32 @@ def pesan(request):
     return render(request, 'child/pesan.html', context)
 
 def list_baru(request):
+    """ Menampilkan list baru dari Daftar """
     terbaru = Daftar.objects.order_by('-buat')
     count_terbaru = Daftar.objects.all().count()
     context = {'baru': terbaru, 'count': count_terbaru }
     return render(request, 'child/list_baru.html', context)
 
 def list_populer(request):
+    """ Menampilkan list populer dari Daftar """
     terpopuler = Daftar.objects.order_by('-buat')
     count_terbaru = Daftar.objects.all().count()
     context = {'populer': terpopuler, 'count': count_terbaru}
     return render(request, 'child/list_populer.html', context)
 
 def registerForm(request):
+    """ Membuat Form Register akun MyTukang """
     if request.method == 'POST':
-        form = SignUpForm(request.POST)
+        form = UserCreationForm(request.POST)
         if form.is_valid():
             form.save()
             username = form.cleaned_data.get('username')
+            raw_password = form.cleaned_data.get('password1')
+            user = authenticate(username=username, password=raw_password)
+            login(request, user)
             return redirect('home')
     else:
-        form = SignUpForm()
+        form = UserCreationForm()
     return render(request, 'tukangkuapp/register.html', {'form': form})
 
 def reviewForm(request):
@@ -72,7 +82,7 @@ def reviewForm(request):
 
 @login_required
 def profile(request):
-    posts = Daftar.objects.all()
+    """ Menampilkan konten pada User Profile """
     if request.method == 'POST':
         u_form = UserUpdateForm(request.POST, instance=request.user)
         p_form = ProfileUpdateForm(request.POST,
@@ -87,20 +97,12 @@ def profile(request):
         u_form = UserUpdateForm(instance=request.user)
         p_form = ProfileUpdateForm(instance=request.user.profile)
 
+    posts = Daftar.objects.filter(user=request.user)
     context = {
         'u_form': u_form,
         'p_form': p_form,
         'posts': posts,
     }
-    class DaftarDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
-        model = Daftar
-        success_url = '/profile/'
-
-        def test_func(self):
-            daftar = self.get_object()
-            if self.request.user == daftar.author:
-                return True
-            return False
 
     return render(request, 'tukangkuapp/profile.html', context)
 
@@ -116,51 +118,51 @@ from django.views.generic import (
 )
 
 def home(request):
+    """ Menampilkan konten pada Home """
     profile = Daftar.objects.order_by('-buat')[:4]
     minta   = Minta.objects.order_by('-buat')[:4]
     context = {'profile': profile, 'request': minta}
     return render(request, 'child/home.html', context)
 
-class MintaDetailView(DetailView):
-    model = Minta
-
-class DashboardDetailView(DetailView):
-    model = Minta
+class TukangAllListView(ListView):
+    model = Daftar
+    template_name = 'child/tukang_all.html'
 
     def get_context_data(self, **kwargs):
-        context = super(DashboardDetailView, self).get_context_data(**kwargs)
-        context['profile'] = Minta.objects.filter(pk=self.kwargs.get('pk'))
+        context = super(TukangAllListView, self).get_context_data(**kwargs)
+        context['daftar'] = Daftar.objects.all()
         return context
 
-class DaftarCreateView(View):
-    def get(self, request):
-        photos_list = Daftar.objects.all()
-        return render(self.request, 'tukangkuapp/profile.html', {'photos': photos_list})
+class MintaDetailView(DetailView):
+    """ Menampilkan slug pada url ke Minta Detail """
+    model = Minta
+    slug_url_kwarg = 'slug'
+    slug_field = 'slug'
 
-    def post(self, request):
-        form = DaftarForm(self.request.POST, self.request.FILES)
-        if form.is_valid():
-            photo = form.save()
-            data = {'is_valid': True, 'name': photo.file.name, 'url': photo.file.url}
-        else:
-            data = {'is_valid': False}
-        return JsonResponse(data)
+class DashboardDetailView(ListView):
+    """ Menampilkan detail author dan daftar gigs pada author """
+    model = Daftar
+    context_object_name = 'posts'
+        
+    def get_queryset(self):
+        user = get_object_or_404(User, username=self.kwargs.get('username'))
+        return Daftar.objects.filter(user=user).order_by('-buat')
 
 class DaftarDetailView(DetailView):
+    """ Menampilkan slug pada url ke Daftar Detail """
     model = Daftar
-
-    def get_context_data(self, **kwargs):
-        context = super( DaftarDetailView, self).get_context_data(**kwargs)
-        context['profile'] = Daftar.objects.filter(pk=self.kwargs.get('pk'))
-        return context
+    context_object_name = 'posts'
+    slug_url_kwarg = 'slug'
+    slug_field = 'slug'
 
 class DaftarListView(ListView):
+    """ List daftar gigs pada profile """
     model = Daftar
     template_name = 'tukangkuapp/profile.html'
 
     def get_context_data(self, request, **kwargs):
         context = super( DaftarListView, self).get_context_data(**kwargs)
-        context['daftar'] = Daftar.objects.filter(user=request.author)
+        context['daftar'] = Daftar.objects.filter(user=request.user)
         return context
 
 class MintaCreateView(CreateView):
@@ -169,7 +171,7 @@ class MintaCreateView(CreateView):
     fields  = ['judul', 'kontak', 'upah', 'deskripsi', 'file']
     
     def form_valid(self, form):
-        form.instance.author = self.request.user
+        form.instance.author = self.request.author
         return super().form_valid(form)
 
 class PesanAuthorCreateView(LoginRequiredMixin, CreateView):
@@ -181,7 +183,8 @@ class PesanAuthorCreateView(LoginRequiredMixin, CreateView):
         form.instance.author = self.request.user
         return super().form_valid(form)
 
-class DaftarUpdateView(UpdateView):
+class DaftarUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    """ Membuat update data pada Daftar dan kembali ke Profile """
     model = Daftar
     fields = ['deskripsi', 'anggota', 'posisi', 'file']
     success_url = '/profile/'
@@ -196,17 +199,8 @@ class DaftarUpdateView(UpdateView):
             return True
         return False
 
-class DaftarDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
-    model = Daftar
-    success_url = '/profile/'
-
-    def test_func(self):
-        daftar = self.get_object()
-        if self.request.user == daftar.author:
-            return True
-        return False
-
 class MintaUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    """ Membuat update data pada Minta  """
     model = Minta
     fields = ['judul', 'kontak', 'upah', 'deskripsi', 'file']
 
@@ -222,6 +216,7 @@ class MintaUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
 
 class MintaDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    """ Menghapus data Minta yang dipilih dan kembali ke Home """
     model = Minta
     success_url = '/post/'
 

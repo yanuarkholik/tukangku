@@ -1,14 +1,20 @@
 from django.contrib import admin
 
-from .models import Daftar, Pesan, Minta, Profile, Review, PesanAuthor, PostDaftarImage
+from .models import Daftar, Pesan, Minta, Profile, Review, PesanAuthor, PostDaftarImage, RequestDirectAuthor
 # Custom Column
 
 class PostImageAdmin(admin.TabularInline):
     model = PostDaftarImage
 
+@admin.register(RequestDirectAuthor)
+class RequestDirectAuthorAdmin(admin.ModelAdmin):  
+    list_display = ('author','user','buat', 'id')
+    ordering = ('-buat',)
+    search_fields = ()
+
 @admin.register(Profile)
 class ProfileAdmin(admin.ModelAdmin):  
-    list_display = ('user','buat','deskripsi', 'id')
+    list_display = ('user','buat', 'id')
     ordering = ('-buat',)
     search_fields = ()
 
@@ -17,7 +23,8 @@ class DaftarAdmin(admin.ModelAdmin):
     inlines = [
         PostImageAdmin,
         ]
-    list_display = ('author','posisi','deskripsi','buat', 'id')
+    list_display = ('user','posisi','buat', 'id')
+    prepopulated_fields = {'slug': ('judul',)}
     ordering = ('-buat',)
     search_fields = ()
 
@@ -45,5 +52,6 @@ class PesanAdmin(admin.ModelAdmin):
 @admin.register(Minta)
 class MintaAdmin(admin.ModelAdmin):  
     list_display = ('judul', 'kontak', 'upah', 'author', 'buat', 'id')
+    prepopulated_fields = {'slug': ('judul',)}
     ordering = ('-buat',)
     search_fields = ('judul',)
