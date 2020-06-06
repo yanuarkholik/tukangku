@@ -14,6 +14,8 @@
 	{% block map %}
 	{% endblock %}
 	<!-- CSS -->
+	{% block css %}
+	{% endblock %}
 	<link rel="stylesheet" href="{% static 'css/linearicons.css' %}">
 	<link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}">
 	<link rel="stylesheet" href="{% static 'css/themify-icons.css' %}">
@@ -32,31 +34,102 @@
 <body class="bg-light">
 	<!-- Start Header Area-->
 	<header class="header_area ">
-		<div class="">
-			<nav class="navbar navbar-expand-lg navbar main_box shadow-sm fixed-top">
-				<div class="container">
-					<!-- Brand and toggle get grouped for better mobile display -->
-					<a class="navbar-brand logo_h" href="{% url 'home' %}"><img src="{% static 'upload/img/logo.png' %}" class="p-0" alt=""></a>
-					<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-					 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-						<span class="icon-bar"></span>
-						<span class="icon-bar"></span>
-						<span class="icon-bar"></span>
-					</button>
+		<nav class="navbar navbar-expand-lg main_box navbar-top border-bottom">
+			<div class="container" style="max-width: 95%;">
+				<a class="navbar-brand logo_h" href="{% url 'home' %}"><img src="{% static 'upload/img/logo.png' %}" class="p-0" alt=""></a>
+				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navCollapse" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
 					
-					<!-- Collect the nav links, forms, and other content for toggling -->
-					<div class="collapse navbar-collapse offset" id="navbarSupportedContent">
-						<ul class="nav navbar-nav menu_nav ml-auto">
-							{% block url %}
-							{% endblock %}
-						</ul>
+				<!-- Collect the nav links, forms, and other content for toggling -->
+				<div class="collapse navbar-collapse offset" id="navCollapse">
+					<ul class="nav navbar-nav menu_nav ml-auto">
+						{% block url %}
+						{% endblock %}
+					</ul>
+				</div>
+			</div>
+		</nav>
+		<nav class="navbar navbar-expand-lg main_box navbar-down sticky-top border-bottom">
+			<div class="container" style="max-width: 95%;">
+				<div class="navbar-nav ">
+					<div class="nav-item dropdown ">
+						<a class="nav-link dropdown-toggle alert-link text-info" href="http://example.com" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							Pemrograman & Teknologi
+						</a>
+						<div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink" >
+							<a class="dropdown-item" href="#">Action</a>
+							<a class="dropdown-item" href="#">Another action</a>
+							<a class="dropdown-item" href="#">Something else here</a>
+						</div>
+					</div>
+					<div class="nav-item dropdown">
+						<a class="nav-link dropdown-toggle alert-link text-info" href="http://example.com" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							Desain Grafis
+						</a>
+						<div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+							<a class="dropdown-item" href="#">Action</a>
+							<a class="dropdown-item" href="#">Another action</a>
+							<a class="dropdown-item" href="#">Something else here</a>
+						</div>
+					</div>
+					<div class="nav-item dropdown">
+						<a class="nav-link dropdown-toggle alert-link text-info" href="http://example.com" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							Marketing
+						</a>
+						<div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+							<a class="dropdown-item" href="#">Action</a>
+							<a class="dropdown-item" href="#">Another action</a>
+							<a class="dropdown-item" href="#">Something else here</a>
+						</div>
+					</div>
+					<div class="nav-item dropdown">
+						<a class="nav-link dropdown-toggle alert-link text-info" href="http://example.com" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							Menulis
+						</a>
+						<div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+							<a class="dropdown-item" href="#">Action</a>
+							<a class="dropdown-item" href="#">Another action</a>
+							<a class="dropdown-item" href="#">Something else here</a>
+						</div>
+					</div>
+					<div class="nav-item dropdown">
+						<a class="nav-link dropdown-toggle alert-link text-info" href="http://example.com" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							Video & Animasi
+						</a>
+						<div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+							<a class="dropdown-item" href="#">Action</a>
+							<a class="dropdown-item" href="#">Another action</a>
+							<a class="dropdown-item" href="#">Something else here</a>
+						</div>
+					</div>
+					<div class="nav-item dropdown">
+						<a class="nav-link dropdown-toggle alert-link text-info" href="http://example.com" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							Musik & Audio
+						</a>
+						<div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+							<a class="dropdown-item" href="#">Action</a>
+							<a class="dropdown-item" href="#">Another action</a>
+							<a class="dropdown-item" href="#">Something else here</a>
+						</div>
+					</div>
+					<div class="nav-item dropdown">
+						<a class="nav-link dropdown-toggle alert-link text-info" href="http://example.com" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							Bisnis
+						</a>
+						<div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+							<a class="dropdown-item" href="#">Action</a>
+							<a class="dropdown-item" href="#">Another action</a>
+							<a class="dropdown-item" href="#">Something else here</a>
+						</div>
 					</div>
 				</div>
-            </nav>
-		</div>
+			</div>
+		</nav>
 	</header>
 	<!-- End Header Area -->
-
 	<!-- start banner Area -->
 	{% block content %}
 	{% endblock %}

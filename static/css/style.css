@@ -24,4 +24,6 @@
 .logo_h {
       padding: 10px;
 }
-
+.container {
+      width: 95%;
+}

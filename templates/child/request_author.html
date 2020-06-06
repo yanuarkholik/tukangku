@@ -1,0 +1,303 @@
+{% load static %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+<!DOCTYPE html>
+<html lang="zxx" class="no-js">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="shortcut icon" href="{% static 'upload/img/fav.png' %}">
+	<meta name="author" content="CodePixar">
+	<meta name="description" content="">
+	<meta name="keywords" content="">
+	<title>Tukangku | One Tukang for Every Need</title>
+	{% block map %}
+	{% endblock %}
+	<!-- CSS -->
+	{% block css %}
+	{% endblock %}
+	<link rel="stylesheet" href="{% static 'css/linearicons.css' %}">
+	<link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}">
+	<link rel="stylesheet" href="{% static 'css/themify-icons.css' %}">
+	<link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">	
+	<link rel="stylesheet" href="{% static 'css/owl.carousel.css' %}">
+	<link rel="stylesheet" href="{% static 'css/nice-select.css' %}">
+	<link rel="stylesheet" href="{% static 'css/nouislider.min.css' %}">
+	<link rel="stylesheet" href="{% static 'css/ion.rangeSlider.css' %}" />
+	<link rel="stylesheet" href="{% static 'css/ion.rangeSlider.skinFlat.css' %}" />
+	<link rel="stylesheet" href="{% static 'css/magnific-popup.css' %}">
+	<link rel="stylesheet" href="{% static 'css/main.css' %}">
+	<link rel="stylesheet" href="{% static 'css/style.css' %}">
+	<link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+</head>
+<body class="bg-light">
+	<!-- Start Header Area-->
+	<header class="header_area ">
+		<nav class="navbar navbar-expand-lg main_box navbar-top border-bottom">
+			<div class="container" style="max-width: 95%;">
+				<a class="navbar-brand logo_h" href="{% url 'home' %}"><img src="{% static 'upload/img/logo.png' %}" class="p-0" alt=""></a>
+				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navCollapse" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+					
+				<!-- Collect the nav links, forms, and other content for toggling -->
+				<div class="collapse navbar-collapse offset" id="navCollapse">
+					<ul class="nav navbar-nav menu_nav ml-auto">
+						<li class="nav-item "><a class="nav-link" href="{% url 'home' %}">Home</a></li>
+						<li class="nav-item"><a class="nav-link" href="{% url 'pesan' %}">Pesan</a></li>
+						<li class="nav-item"><a class="nav-link" href="{% url 'all-tukang' %}">Seller</a></li>
+						<img src="{{ user.profile.image.url }}" data-toggle="dropdown" data-toggle="dropdown" data-display="static" type="button" aria-haspopup="true" aria-expanded="false" class="img-profile dropdown mt-2 ">
+							<div class="dropdown-menu dropdown-menu-right dropdown-menu-lg-left">
+								<a class="dropdown-item" href="{% url 'profile' %}">Profile, {{user.username }}</a>
+								<a class="dropdown-item" href="#">Another action</a>
+								<a class="dropdown-item" href="#">Something else here</a>
+								<div class="dropdown-divider"></div>
+								<a class="dropdown-item" href="{% url 'logout' %}">Log Out</a>
+							</div>
+					</ul>
+				</div>
+			</div>
+		</nav>
+	</header>
+	<!-- End Header Area -->
+	
+	<!-- start banner Area -->
+	<main role="main" class="section_gap" >
+		<ul class="progress-indicator">
+			<li class="completed">
+				<span class="bubble"></span>
+				<i class="fa fa-check-circle"></i>
+				deskripsi request
+			</li>
+			<li class="">
+				<span class="bubble"></span>
+				konfirmasi
+			</li>
+			<li class="">
+				<span class="bubble"></span>
+				selesai
+			</li>
+		</ul>
+		<div class="container" style="max-width: 95%;">
+			<div class="row ">
+				<div class="col-lg-9 bg-white p-3 rounded shadow-sm mt-4">
+					<div class="col-lg-12">
+						<h2 class="roboto">Deskripsi Project</h2>
+						<p class="roboto">Deskripsikan project yang anda inginkan, jangan lupa untuk mengisi semua kolom,<br> 
+							dengan begitu Seller dapat dengan mudah memahami permintaan anda.
+						</p>
+					</div>
+					<hr>
+					<form action="" method="POST">
+						<div class="col-lg-12">
+							{% csrf_token %}
+							{{ form|crispy }}
+						</div>
+						<div class="col-lg-3 mb-3">
+							<a href="{% url 'req-cek' %}" role="button" class="btn btn-primary btn-block" type="submit">
+								Lanjutkan
+							</a>
+						</div>
+					</form>
+				</div>
+				<div class="col-lg-3 ">
+					<div class="bg-white p-3 rounded shadow-sm mt-4">
+						<h4 class="roboto">Summary</h4>
+						<small class="text-muted ">
+							Anda dapat menambah paket pada checkbox disamping**
+						</small>
+						<p class="font-weight-normal mt-3">Sub Total</p>
+						<p class="font-weight-normal">Service Fee</p>
+						<hr>
+						<p class="font-weight-bold">Total</p><p class="font-weight-normal">IDR harga</p>
+						<p class="font-weight-normal"></p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</main>
+	<!-- End banner Area -->
+
+	<!-- Start Footer Area -->
+	<footer class="footer-area section_gap">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-3 col-md-6 col-sm-6">
+					<div class="single-footer-widget">
+						<h6>About Us</h6>
+						<p>
+							Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore dolore
+							magna aliqua.
+						</p>
+					</div>
+				</div>
+				<div class="col-lg-4  col-md-6 col-sm-6">
+					<div class="single-footer-widget">
+						<h6>Newsletter</h6>
+						<p>Stay update with our latest</p>
+						<div class="" id="mc_embed_signup">
+
+							<form target="_blank" novalidate="true" action="https://spondonit.us12.list-manage.com/subscribe/post?u=1462626880ade1ac87bd9c93a&amp;id=92a4423d01"
+							 method="get" class="form-inline">
+
+								<div class="d-flex flex-row">
+
+									<input class="form-control" name="EMAIL" placeholder="Enter Email" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Enter Email '"
+									 required="" type="email">
+
+
+									<button class="click-btn btn btn-default"><i class="fa fa-long-arrow-right" aria-hidden="true"></i></button>
+									<div style="position: absolute; left: -5000px;">
+										<input name="b_36c4fd991d266f23781ded980_aefe40901a" tabindex="-1" value="" type="text">
+									</div>
+
+								</div>
+								<div class="info"></div>
+							</form>
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-3  col-md-6 col-sm-6">
+					<div class="single-footer-widget mail-chimp">
+						<h6 class="mb-20">Tukangku Team</h6>
+						<ul class="instafeed d-flex flex-wrap">
+							<li><img src="{% static 'upload/img/i1.jpg' %}" alt=""></li>
+							<li><img src="{% static 'upload/img/i2.jpg' %}" alt=""></li>
+							<li><img src="{% static 'upload/img/i3.jpg' %}" alt=""></li>
+							<li><img src="{% static 'upload/img/i4.jpg' %}" alt=""></li>
+						</ul>
+					</div>
+				</div>
+				<div class="col-lg-2 col-md-6 col-sm-6">
+					<div class="single-footer-widget">
+						<h6>Follow Us</h6>
+						<p>Let us be social</p>
+						<div class="footer-social d-flex align-items-center">
+							<a href="#"><i class="fa fa-facebook"></i></a>
+							<a href="#"><i class="fa fa-twitter"></i></a>
+							<a href="#"><i class="fa fa-dribbble"></i></a>
+							<a href="#"><i class="fa fa-behance"></i></a>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="footer-bottom d-flex justify-content-center align-items-center flex-wrap">
+				<p class="footer-text m-0"><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+				Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | Tukangku Team
+				</p>
+			</div>
+		</div>
+	</footer>
+	<!-- End Footer Area -->
+
+	
+	<script src="{% static 'js/vendor/jquery-2.2.4.min.js' %}"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4"
+	crossorigin="anonymous"></script>
+	<script src="{% static 'js/vendor/bootstrap.min.js' %}"></script>
+	<script src="{% static 'js/jquery.ajaxchimp.min.js' %}"></script>
+	<script src="{% static 'js/jquery.nice-select.min.js' %}"></script>
+	<script src="{% static 'js/jquery.sticky.js' %}"></script>
+	<script src="{% static 'js/nouislider.min.js' %}"></script>
+	<script src="{% static 'js/countdown.js' %}"></script>
+	<script src="{% static 'js/jquery.magnific-popup.min.js' %}"></script>
+	<script src="{% static 'js/owl.carousel.min.js' %}"></script>
+	<!--gmaps Js-->
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCjCGmQ0Uq4exrzdcL6rvxywDDOvfAu6eE"></script>
+	<script src="{% static 'js/gmaps.min.js' %}"></script>
+	<script src="{% static 'js/main.js' %}"></script>
+
+	<style>
+		.flexer, .progress-indicator { 
+			display: -webkit-box; 
+			display: -moz-box; 
+			display: -ms-flexbox; 
+			display: -webkit-flex; 
+			display: flex; 
+			}
+		.no-flexer, .progress-indicator.stacked { 
+			display: block; 
+			}
+		.no-flexer-element { 
+			-ms-flex: 0; 
+			-webkit-flex: 0; 
+			-moz-flex: 0; 
+			flex: 0; 
+			}
+		.flexer-element, .progress-indicator > li { 
+			-ms-flex: 1; 
+			-webkit-flex: 1; 
+			-moz-flex: 1; 
+			flex: 1; 
+			}
+		.progress-indicator { 
+			margin: 0; 
+			padding: 0; 
+			font-size: 80%; 
+			text-transform: uppercase; 
+			margin-bottom: 1em; 
+				}
+		.progress-indicator > li { 
+			list-style: none; 
+			text-align: center; 
+			width: auto; 
+			padding: 0; 
+			margin: 0; 
+			position: relative; 
+			text-overflow: ellipsis; 
+			color: #bebdbd; 
+			display: block; 
+			}
+		.progress-indicator > li:hover { 
+			color: #6e6e6e; 
+			}
+		.progress-indicator > li .bubble { 
+			border-radius: 1000px; 
+			width: 20px; 
+			height: 20px; 
+			background-color: #d5d4d2; 
+			display: block; 
+			margin: 0 auto 0.5em auto; 
+			}
+		.progress-indicator > li .bubble:before, 
+		.progress-indicator > li .bubble:after { 
+			display: block; 
+			position: absolute; 
+			top: 9px; 
+			width: 100%; 
+			height: 3px; 
+			content: ''; 
+			background-color: #d5d4d2; 
+		}
+		.progress-indicator > li .bubble:before { 
+			left: 0; 
+			} 
+		.progress-indicator > li .bubble:after { 
+			right: 0; 
+			}
+		.progress-indicator > li.completed { 
+			color: rgb(38, 161, 38); 
+			}
+		.progress-indicator > li.completed .bubble { 
+			background-color: #5cc85c; 
+			color: #65d074; 
+			border-color: #247830; 
+			}
+		.progress-indicator > li.completed .bubble:before, 
+		.progress-indicator > li.completed .bubble:after { 
+			background-color: #5cc85c; 
+			border-color: #247830; 
+			}
+		.progress-indicator > li a:hover .bubble { 
+			background-color: #5671d0; 
+			color: #5671d0; 
+			border-color: #1f306e; 
+			}
+		
+	</style>
+</body>
+</html>

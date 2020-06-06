@@ -38,9 +38,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'tukangkuapp',
+    'sellerapp',
     'crispy_forms',
     'star_ratings',
-    'widget_tweaks',
+    'django.contrib.humanize',  
 ]
 
 MIDDLEWARE = [

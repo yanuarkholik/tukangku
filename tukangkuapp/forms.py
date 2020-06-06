@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from django import forms
 
-from .models import Daftar, Pesan, Minta, Profile, Review, PesanAuthor
+from .models import Daftar, Pesan, Minta, Profile, Review, PesanAuthor, RequestDirectAuthor
 
 class SignUpForm(UserCreationForm):
     email = forms.EmailField(max_length=254)
@@ -28,6 +28,11 @@ class ReviewForm(forms.ModelForm):
     class Meta:
         model = Review
         fields = ['review', 'author']
+
+class RequestDirectAuthorForm(forms.ModelForm):
+    class Meta:
+        model = RequestDirectAuthor
+        fields = '__all__'
 
 class DaftarForm(forms.ModelForm):
     class Meta:

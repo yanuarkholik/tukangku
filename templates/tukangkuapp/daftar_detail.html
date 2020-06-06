@@ -5,7 +5,7 @@
 {% block url %}
 <li class="nav-item "><a class="nav-link" href="{% url 'home' %}">Home</a></li>
 <li class="nav-item"><a class="nav-link" href="{% url 'pesan' %}">Pesan</a></li>
-<li class="nav-item"><a class="nav-link" href="{% url 'pesan' %}">Tukang</a></li>
+<li class="nav-item"><a class="nav-link" href="{% url 'all-tukang' %}">Seller</a></li>
 <img src="{{ user.profile.image.url }}" data-toggle="dropdown" data-toggle="dropdown" data-display="static" type="button" aria-haspopup="true" aria-expanded="false" class="img-profile dropdown mt-2 ">
 	<div class="dropdown-menu dropdown-menu-right dropdown-menu-lg-left">
 		<a class="dropdown-item" href="{% url 'profile' %}">Profile, {{user.username }}</a>
@@ -14,12 +14,13 @@
 		<div class="dropdown-divider"></div>
 		<a class="dropdown-item" href="{% url 'logout' %}">Log Out</a>
 	</div>
+
 {% endblock %}
 
 {% block content %}
 <!-- start banner Area -->
-<main role="main" class="section_gap  mr-2 ml-2 ">
-	<div class="container ">
+<section class="mb-5" style="padding-top: 130px;">
+	<div class="container" style="max-width: 95%;">
 		<div class="row">
 			<div class="col-lg-8 mt-1">
 				<div class="col-lg-12 p-0">
@@ -30,26 +31,30 @@
 				</div>
 				<div class="col-lg-12 p-3 rounded shadow-sm bg-white">
 					<ol class="breadcrumb bg-white">
-						<li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
-						<li class="breadcrumb-item"><a href="#">Tukang</a></li>
-						<li class="breadcrumb-item active" aria-current="page">{{ object.user }}</li>
+						<li class="breadcrumb-item"><a href="{% url 'all-tukang' %}">{{ object.kategori }}</a></li>
+						<li class="breadcrumb-item"><a href="#">{{ object.subkategori }}</a></li>
+						<li class="breadcrumb-item active" aria-current="page">{{ object.judul }}</li>
 					</ol>
 					<h2 class="roboto">{{ object.judul }}</h2>
+					<div class="media mb-1">
+						<img src="{{ object.user.profile.image.url }}" class="border mr-2 mb-2" style="border-radius: 50%; width: 30px; height: 30px; object-fit: cover;">
+						<h5 class="mt-0 roboto align-self-center mr-1" >{{ object.user }}</h5>
+						<h5 class="font-weight-light align-self-center text-secondary roboto mr-1">meong</h5>
+						<h5 class="font-weight-light align-self-center text-secondary roboto mr-1"> | Count Reviews</h5>
+						<h5 class="font-weight-light align-self-center text-secondary roboto"> | Queue</h5>
+					</div>
 					<img src="{{ object.file.url }}" alt="Image" class="rounded " style="height: 400px; width: 100%; object-fit: cover;">
 				</div>
 			</div>
 			<div class="col-lg-4 mt-1">
-				<div class="col-lg-12 p-3 rounded shadow-sm bg-white" >
-					<h4 class="roboto">Jasa Tukang<span class="float-md-right">Rp. Upah</span> </h4>
+				<div class="col-lg-12 p-4 rounded shadow-sm bg-white">
+					<h4 class="roboto">Jasa Seller<span class="float-md-right">Rp. Upah</span> </h4>
 					<br><br>
 					<p>Antrian</p>
 					<br>
 					<p>Apakah anda yakin ingin memakai jasa <a href="{% url 'dashboard' object.user.username %}" class="font-weight-bold">{{ object.user }}</a> ?</p>
-					<a href="{% url 'minta' %}" type="button" class="btn btn-info btn-block">Lanjutkan ( Rp. Upah )</a>
-					<hr>
-					<button type="button" class="btn btn-outline-info btn-block" data-toggle="modal" data-target="#ModalContact">
-						Contact Tukang
-					</button>
+					<a href="{% url 'req-direct' pk=object.id slug=object.slug %}" type="button" class="btn btn-info btn-block">Lanjutkan ( Rp. Upah )</a>
+					<a href="#paket"><p class="roboto text-center mt-3 mb-0">Komparasi Paket</p></a>
 					<!-- Modal -->
 					<div class="modal fade" id="ModalContact" tabindex="-1" role="dialog" aria-labelledby="modalContact" aria-hidden="true">
 						<div class="modal-dialog modal-dialog-centered" role="document">
@@ -62,7 +67,7 @@
 											<h5 class="mt-0 roboto">{{ object.user }}</h5>
 											{{ object.user.profile.deskripsi }}
 										</div>
-									  </div>
+									</div>
 								</div>
 								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 									<span aria-hidden="true">&times;</span>
@@ -78,18 +83,23 @@
 						</div>
 					</div>
 				</div>
+				<div class="col-lg-12 p-4 rounded shadow-sm bg-grey">
+					<button type="button" class="btn btn-outline-info btn-block" data-toggle="modal" data-target="#ModalContact">
+						Contact Seller
+					</button>
+				</div>
 			</div>
-			<div class="col-lg-8 mt-1">
+			<div class="col-lg-8 mt-2">
 				<div class="col-lg-12 p-3 rounded shadow-sm bg-white">
 					<h4 class="roboto">About This Gig</h4>
 					<p class="text-justify">
-						{{ object.deskripsi }}
+						{{ object.deskripsi|linebreaks }}
 					</p>
 				</div>
 			</div>
-			<div class="col-lg-8 mt-1">
+			<div class="col-lg-8 mt-2">
 				<div class="col-lg-12 p-3 rounded shadow-sm bg-white">
-					<h4 class="roboto">About MyTukang</h4>
+					<h4 class="roboto">About Seller</h4>
 					<div class="media">
 						<img src="{{ object.user.profile.image.url }}" class="align-self-center mr-3 border" style="border-radius: 50%; width: 90px; height: 90px; object-fit: cover;">
 						<div class="media-body">
@@ -115,13 +125,73 @@
 						</div>
 						<div class="card-body">
 							<h5 class="card-title">About Me</h5>
-							<p class="card-text text-justify">{{ object.user.profile.deskripsi }}</p>
+							<p class="card-text text-justify">{{ object.user.profile.deskripsi|linebreaks }}</p>
 						</div>
 					</div>
 				</div>
 			</div>
+			<div class="col-lg-8 mt-2">
+				<div class="col-lg-12 p-3 rounded shadow-sm bg-white" id="paket">
+					<h4 class="roboto">Komparasi Paket</h4>
+					<table class="table border-left border-right border-bottom">
+						<tr class="bg-white">
+							<th class="">
+								<p class="font-weight-normal">Paket</p>
+							</th>
+							<th scope="col">
+								<p class="font-weight-light">IDR {{ object.basic }}</p>
+								<p class="font-weight-bold" style="font-size: 18px;">
+									Basic
+								</p>
+								<p class="font-weight-bold" style="font-size: 12px;">
+									BASIC PACKAGE - FOR START-UP
+								</p>
+								<p class="font-weight-normal">
+									deskripsi singkat banget udah
+								</p>
+							</th>
+							<th scope="col">
+								<p class="font-weight-light">IDR {{ object.standard }}</p>
+								<p class="font-weight-bold" style="font-size: 18px;">
+									Standard
+								</p>
+								<p class="font-weight-bold" style="font-size: 12px;">
+									STANDARD PACKAGE - TOP SELLING
+								</p>
+								<p class="font-weight-normal">
+									deskripsi singkat banget udah
+								</p>
+							</th>
+							<th scope="col">
+								<p class="font-weight-light">IDR {{ object.premium }}</p>
+								<p class="font-weight-bold" style="font-size: 18px;">
+									Premium
+								</p>
+								<p class="font-weight-bold" style="font-size: 12px;">
+									PREMIUM PACKAGE - FOR PROS !
+								</p>
+								<p class="font-weight-normal">
+									deskripsi singkat banget udah
+								</p>
+							</th>
+						</tr>
+						<tr>
+							<th scope="row" class="font-weight-normal">Brain</th>
+							<td class="font-weight-bold ">NO</td>
+							<td class="font-weight-bold ">NO</td>
+							<td class="font-weight-bold ">YES</td>
+						</tr>
+						<tr>
+							<th scope="row" class="font-weight-normal">Source File</th>
+							<td class="font-weight-bold ">YES</td>
+							<td class="font-weight-bold ">YES</td>
+							<td class="font-weight-bold ">YES</td>
+						</tr>
+					</table>
+				</div>
+			</div>
 		</div>
 	</div>
-</main>
+</section>
 <!-- End banner Area -->
 {% endblock %}

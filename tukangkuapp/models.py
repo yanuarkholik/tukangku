@@ -8,20 +8,16 @@ from django.dispatch import receiver
 from PIL import Image
 
 # Choices 
-GENDER_CHOICES = [
-    ('Pria', 'Pria'),
-    ('Wanita', 'Wanita'),
-]
 
-POSISI_CHOICES = [
-    ('Mandor', 'Mandor'),
-    ('Kontraktor', 'Kontraktor'),
-    ('Tukang', 'Tukang'),
-]
-
-TEAM_CHOICES = [
-    ('Perorangan', 'Perorangan'),
-    ('Team', 'Team')
+KATEGORI_CHOICES = [
+    ('Kategori', 'Kategori'),
+    ('Pemrograman & TI', 'Pemrograman & TI'),
+    ('Desain Grafis', 'Desain Grafis'),
+    ('Marketing', 'Marketing'),
+    ('Menulis', 'Menulis'),
+    ('Video & Animasi','Video & Animasi'),
+    ('Musik & Audio', 'Musik & Audio'),
+    ('Bisnis', 'Bisnis'),
 ]
 
 # Form Section
@@ -48,15 +44,18 @@ class Minta(models.Model):
 class Daftar(models.Model):
     judul       = models.CharField(max_length=254, null=True, blank=True)
     deskripsi   = models.TextField(null=True, blank=True, help_text='Deskripsikan keahlian anda disini**')
-    anggota     = models.CharField(choices=TEAM_CHOICES, default='Perorangan', max_length=30, help_text='Pilihan anggota atau perorangan**')
-    posisi      = models.CharField(max_length=20, choices=POSISI_CHOICES)
+    kategori    = models.CharField(choices=KATEGORI_CHOICES, max_length=50, default='Kategori')
     user        = models.ForeignKey(User, on_delete=models.CASCADE, related_name='author')
     buat        = models.DateTimeField(default=timezone.now)
     file        = models.FileField(blank=True)
     slug        = models.SlugField(unique=True, blank=True, null=True)
+    basic       = models.PositiveIntegerField(default=0)
+    standard    = models.PositiveIntegerField(default=0)
+    premium     = models.PositiveIntegerField(default=0)
+
 
     def get_absolute_url(self):
-        return reverse('daftar-detail', kwargs={'pk': self.pk})
+        return reverse('daftar-detail', kwargs={'pk': self.id, 'slug': self.slug})
 
     def save(self, *args, **kwargs):
         self.slug = self.slug or slugify(self.judul)
@@ -66,7 +65,7 @@ class Daftar(models.Model):
         verbose_name_plural = 'Data-Daftar'
 
 class PostDaftarImage(models.Model):
-    file        = models.ForeignKey(Daftar, default=None, on_delete=models.CASCADE)
+    user        = models.ForeignKey(Daftar, default=None, on_delete=models.CASCADE)
     images      = models.FileField(upload_to = 'upload/display/')
 
 
@@ -94,7 +93,7 @@ class Profile(models.Model):
     user        = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
     image       = models.ImageField(default='default.jpg', upload_to='upload')
     deskripsi   = models.TextField(null=True, blank=True)
-    buat        = models.DateTimeField(editable=False)
+    buat        = models.DateTimeField(auto_now=True)
     daftar      = models.ForeignKey(Daftar, on_delete=models.CASCADE, null=True, blank=True)
     
     def __str__(self):
@@ -136,14 +135,20 @@ class PesanAuthor(models.Model):
 
 class RequestDirectAuthor(models.Model):
     """ Data dari client yang request secara langsung ke author """
-    author      = models.ForeignKey(User, on_delete=models.CASCADE)
-    user        = models.OneToOneField(User, on_delete=models.CASCADE, related_name='requestDirect')
-    deskripsi   = models.TextField
+    author      = models.ForeignKey(User, on_delete=models.CASCADE, related_name='requestAuthor', blank=True)
+    to_author   = models.ForeignKey(User, on_delete=models.CASCADE, related_name='to_author', blank=True, null=True)
+    judul       = models.CharField(max_length=254, null=True)
+    deskripsi   = models.TextField()
+    kirim_ke    = models.CharField(max_length=254, null=True, blank=True)
     buat        = models.DateTimeField(default=timezone.now)
     files       = models.FileField(null=True, blank=True, help_text='Upload file permintaan anda jika perlu**')
+    slug        = models.SlugField(unique=True, blank=True, null=True)
 
     def get_absolute_url(self):
-        return reverse('request-author', kwargs={'pk': self.pk})
+        return reverse('req-direct', kwargs={'pk': self.pk, 'slug': self.get_slug()})
+
+    def get_slug(self):
+        return slugify(self.judul)
 
     class Meta: 
         verbose_name_plural = 'Data-Request Author'

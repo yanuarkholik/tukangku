@@ -5,23 +5,32 @@ from django.contrib.auth import views as auth_views
 
 
 from .views import (
-    index, landing, register, home, profile,
+    # Parents
+    index, landing, register, 
+    home, profile,
     
-    pesan, list_baru, list_populer, registerForm, reviewForm, 
+    # Childs
+    pesan, list_baru, list_populer, 
+    registerForm, reviewForm, 
 
-    MintaDetailView, MintaUpdateView, MintaDeleteView, DashboardDetailView,
-    DaftarDetailView, MintaCreateView, PesanAuthorCreateView, DaftarUpdateView,
-    TukangAllListView,
+    # Crud
+    MintaDetailView, MintaUpdateView, 
+    MintaDeleteView, DashboardDetailView,
+    DaftarDetailView, MintaCreateView, 
+    PesanAuthorCreateView, DaftarUpdateView,
+    TukangAllListView, RequestDirectForm,
+    RequestCekUlang,
 )
 
+
+
 urlpatterns = [
-    # Childs
-    path('post/', home, name='home'),
-    path('contact/', pesan, name='pesan' ),
-    path('list-terbaru/', list_baru, name='list_baru'),
-    path('list-terpopuler/', list_populer, name='list_populer'),
-    path('registerForm/', registerForm, name='registerForm'),
-    path('reviewForm/', reviewForm, name='reviewForm'),
+    # Parents
+    path('', landing, name='landing'),
+    path('index/', index, name='index'),
+    path('profile/', profile, name='profile'),
+    path('register/', register, name='register'),
+    
 
     # CRUD
     path('post/request/<slug:slug>/', MintaDetailView.as_view(), name='minta-detail'),
@@ -31,18 +40,21 @@ urlpatterns = [
     path('post/<int:pk>/update/', MintaUpdateView.as_view(), name='minta-update'),
     path('profile/daftar/<int:pk>/update/', DaftarUpdateView.as_view(template_name='tukangkuapp/daftar_update.html'), name='daftar-update'),
     path('post/<int:pk>/delete/', MintaDeleteView.as_view(), name='minta-delete'),
-
-    # Parents
-    path('', landing, name='landing'),
-    path('index/', index, name='index'),
-    path('profile/', profile, name='profile'),
-    path('register/', register, name='register'),
     path('post/mytukang/', TukangAllListView.as_view(), name='all-tukang'),
     path('post/<str:username>/', DashboardDetailView.as_view(template_name='tukangkuapp/dashboard_detail.html'), name='dashboard'),
     path('post/gigs/<slug:slug>/', DaftarDetailView.as_view(template_name='tukangkuapp/daftar_detail.html'), name='daftar-detail'),
     path('login/', auth_views.LoginView.as_view(template_name='tukangkuapp/login.html'), name='login'),
     path('logout/', auth_views.LogoutView.as_view(template_name='landing.html'), name='logout'),
+    path('post/order/<int:pk>-<slug:slug>/', RequestDirectForm.as_view(template_name='child/request_author.html'), name='req-direct'),
+    path('post/order/cek/', RequestCekUlang.as_view(template_name='child/request_cek.html'), name='req-cek'),
 
+    # Childs
+    path('post/', home, name='home'),
+    path('contact/', pesan, name='pesan' ),
+    path('list-terbaru/', list_baru, name='list_baru'),
+    path('list-terpopuler/', list_populer, name='list_populer'),
+    path('registerForm/', registerForm, name='registerForm'),
+    path('reviewForm/', reviewForm, name='reviewForm'),
 
 ]
 

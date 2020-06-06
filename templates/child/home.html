@@ -1,6 +1,10 @@
 {% extends '../index.html' %}
 {% load static %}
-{% load crispy_forms_tags %}
+{% load humanize %} 
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/grid.css' %}">
+{% endblock %}
 
 {% block url %}
 <li class="nav-item active"><a class="nav-link" href="{% url 'home' %}">Home</a></li>
@@ -19,12 +23,12 @@
 
 <!-- start banner Area -->
 {% block content %}
-<section class="banner-area mb-5" style="padding-top: 100px;">
-	<div class="container">
-		<div class="row  align-items-center justify-content-start">
+<section class="banner-area mb-5" style="padding-top: 130px;">
+	<div class="container" style="max-width: 95%;">
+		<div class="row align-items-center justify-content-start">
 			<div class="col-lg-12">
-				<div class=" owl-carousel">
-					<div class="row align-items-center d-flex ">
+				<div class=" owl-carousel ">
+					<div class="row justify-content-between d-flex ">
 						<div class="col-lg-3 shadow-sm rounded bg-white">
 							<div class="container">
 								<div class="mt-4 mb-5">
@@ -34,7 +38,7 @@
 								</div>
 							</div>
 						</div>
-						<div class="col-lg-9 ">
+						<div class="col-lg-9">
 							<div id="slider" class="carousel slide " data-ride="carousel" >
 								<ol class="carousel-indicators">
 								  <li data-target="#slide" data-slide-to="0" class="active"></li>
@@ -75,7 +79,7 @@
 <!-- End banner Area -->
 <!-- Start Konten Area -->
 <section class="owl-carousel mb-5">
-	<div class="container shadow-sm rounded bg-white p-4">
+	<div class="container" style="max-width: 95%;">
 		<div class="row justify-content-center">
 			<div class="col-lg-12">
 				<div class="section-title">
@@ -87,10 +91,10 @@
 		</div>
 		<div class="row">
 			{% for prof in profile %}
-			<div class="col-lg-3 col-md-3 col-sm-3 rounded">
-				<div class="card ">
+			<div class="grid ml-2 mr-2 mt-2">
+				<div class="card">
 					<a href="{% url 'daftar-detail' prof.slug %}">
-					<img class="card-img-top" src="{{ prof.file.url }}" alt="Image" style="height: 180px; object-fit: cover;">
+					<img class="card-img-top" src="{{ prof.file.url }}" alt="{{ prof.user }}" style="height: 180px; object-fit: cover;">
 					</a>
 					<div class="card-body">
 						<a href="{% url 'dashboard' prof.user.username %}">
@@ -99,15 +103,13 @@
 						<div class="price">
 							<p class="text-justify text-truncate" style="color:rgb(92, 92, 92);">{{ prof.deskripsi }}</p>
 						</div>
-						<div class="">
-							<p class="card-text text-uppercase font-weight-bold">
-								{{ prof.posisi }}
-							</p>
-						</div>
+						<p class="card-text text-uppercase font-weight-bold">
+							stars review
+						</p>
 					</div>
 					<div class="card-footer text-muted">
-						<p class="card-text text-right font-weight-light" style="font-size: large;">
-							
+						<p class="card-text text-right font-weight-light" style="font-size: medium;">
+							IDR {{ prof.basic|intcomma }}
 						</p>
 					</div>
 				</div>
@@ -121,7 +123,7 @@
 
 <!-- Start Bar Area -->
 <section class="features-area mb-5">
-	<div class="container">
+	<div class="container" style="max-width: 95%;">
 		<div class="row">
 			<div class="col-lg-12">
 				<div class="section-title">
@@ -131,10 +133,10 @@
 				</div>
 			</div>
 			{% for prof in profile %}
-			<div class="col-lg-3 col-md-3 col-sm-3 rounded">
+			<div class="rounded ml-2 mr-2 grid mt-2" >
 				<div class="card ">
 					<a href="{% url 'daftar-detail' prof.slug %}">
-					<img class="card-img-top" src="{{ prof.file.url }}" alt="Image" style="height: 180px; object-fit: cover;">
+					<img class="card-img-top" src="{{ prof.file.url }}" alt="Image" style="height: 150px; object-fit: cover;">
 					</a>
 					<div class="card-body">
 						<a href="{% url 'dashboard' prof.user.username %}">
@@ -146,15 +148,13 @@
 						<div class="price">
 							<p class="text-justify text-truncate" style="color:rgb(92, 92, 92);">{{ prof.deskripsi }}</p>
 						</div>
-						<div class="">
-							<p class="card-text text-uppercase font-weight-bold">
-								{{ prof.posisi }}
-							</p>
-						</div>
+						<p class="card-text text-uppercase font-weight-bold">
+							stars review
+						</p>
 					</div>
 					<div class="card-footer text-muted">
-						<p class="card-text text-right font-weight-light" style="font-size: large;">
-							
+						<p class="card-text text-right font-weight-light" style="font-size: medium;">
+							IDR {{ prof.basic|intcomma }}
 						</p>
 					</div>
 				</div>
@@ -166,7 +166,7 @@
 <!-- End Bar Area -->
 <!-- Start Request Area -->
 <section class="owl-carousel mb-5">
-	<div class="container shadow-sm rounded bg-white p-4">
+	<div class="container " style="max-width: 95%;">
 		<div class="row justify-content-center">
 			<div class="col-lg-12">
 				<div class="section-title">
@@ -178,8 +178,8 @@
 		</div>
 		<div class="row">
 			{% for req in request %}
-			<div class="col-lg-3 col-md-3 col-sm-3 rounded">
-				<div class="card ">
+			<div class="rounded grid ml-2 mr-2 mt-2">
+				<div class="card " >
 					<a href="{% url 'minta-detail' req.slug %}">
 						<img class="card-img-top" src="{{ req.author.profile.image.url }}" alt="Image" style="height: 180px; object-fit: cover;">
 					</a>
@@ -193,8 +193,8 @@
 						</div>
 					</div>
 					<div class="card-footer text-muted">
-						<p class="card-text text-right font-weight-light" style="font-size: large;">
-							<small class="text-uppercase" style="font-size: small;">upah</small> {{ req.upah}}
+						<p class="card-text text-right font-weight-light" style="font-size: medium;">
+							IDR {{ req.upah|intcomma }}
 						</p>
 					</div>
 				</div>

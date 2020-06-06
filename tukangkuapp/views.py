@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponseRedirect, JsonResponse
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
@@ -10,8 +10,27 @@ from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import UserCreationForm
 
 
-from .forms import DaftarForm, PesanForm, MintaForm, SignUpForm, UserUpdateForm, ProfileUpdateForm, ReviewForm, PesanAuthorForm
-from .models import Daftar, Pesan, Minta, Profile, PesanAuthor, PostDaftarImage
+from .forms import (
+    DaftarForm, 
+    PesanForm, 
+    MintaForm, 
+    SignUpForm, 
+    UserUpdateForm, 
+    ProfileUpdateForm, 
+    ReviewForm, 
+    PesanAuthorForm,
+    RequestDirectAuthorForm
+)
+
+from .models import ( 
+    Daftar, 
+    Pesan, 
+    Minta, 
+    Profile, 
+    PesanAuthor, 
+    PostDaftarImage,
+    RequestDirectAuthor,
+)
 
 # Parent
 def index(request):
@@ -117,11 +136,32 @@ from django.views.generic import (
     View
 )
 
+class RequestDirectForm(CreateView, LoginRequiredMixin):
+    """ Membuat Request Langsung pada Author oleh User """
+    model = RequestDirectAuthor
+    slug_url_kwarg = 'slug'
+    slug_field = 'slug'
+    fields  = ['deskripsi', 'files']
+
+    def form_valid(self, form):
+        form.instance.author    = self.request.user
+        form.instance.to_author = self.request.user
+        return super().form_valid(form)
+
+    
+
+class RequestCekUlang(ListView):
+    """ Menampilkan hasil Request pada Author """
+    model = RequestDirectAuthor
+    context_object_name = 'posts'
+    template_name = 'child/request_cek.html'
+
 def home(request):
     """ Menampilkan konten pada Home """
-    profile = Daftar.objects.order_by('-buat')[:4]
-    minta   = Minta.objects.order_by('-buat')[:4]
-    context = {'profile': profile, 'request': minta}
+    profile = Daftar.objects.order_by('-buat')[:5]
+    minta   = Minta.objects.order_by('-buat')[:5]
+    carousel= PostDaftarImage.objects.all()
+    context = {'profile': profile, 'request': minta, 'carousel': carousel}
     return render(request, 'child/home.html', context)
 
 class TukangAllListView(ListView):
@@ -213,7 +253,6 @@ class MintaUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         if self.request.user == minta.author:
             return True
         return False
-
 
 class MintaDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     """ Menghapus data Minta yang dipilih dan kembali ke Home """

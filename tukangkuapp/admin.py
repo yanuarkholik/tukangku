@@ -8,7 +8,7 @@ class PostImageAdmin(admin.TabularInline):
 
 @admin.register(RequestDirectAuthor)
 class RequestDirectAuthorAdmin(admin.ModelAdmin):  
-    list_display = ('author','user','buat', 'id')
+    list_display = ('author','to_author','buat', 'id')
     ordering = ('-buat',)
     search_fields = ()
 
@@ -23,7 +23,7 @@ class DaftarAdmin(admin.ModelAdmin):
     inlines = [
         PostImageAdmin,
         ]
-    list_display = ('user','posisi','buat', 'id')
+    list_display = ('user','kategori','buat', 'id')
     prepopulated_fields = {'slug': ('judul',)}
     ordering = ('-buat',)
     search_fields = ()
