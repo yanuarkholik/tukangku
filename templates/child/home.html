@@ -7,9 +7,9 @@
 {% endblock %}
 
 {% block url %}
-<li class="nav-item active"><a class="nav-link" href="{% url 'home' %}">Home</a></li>
+<li class="nav-item"><a class="nav-link" href="{% url 'home' %}">Home</a></li>
 <li class="nav-item"><a class="nav-link" href="{% url 'pesan' %}">Pesan</a></li>
-<li class="nav-item"><a class="nav-link" href="{% url 'all-tukang' %}">Tukang</a></li>
+<li class="nav-item"><a class="nav-link" href="{% url 'seller-registration' %}">Become Tukang</a></li>
 
 <img src="{{ user.profile.image.url }}" data-toggle="dropdown" data-toggle="dropdown" data-display="static" type="button" aria-haspopup="true" aria-expanded="false" class="img-profile dropdown mt-2 ">
 	<div class="dropdown-menu dropdown-menu-right dropdown-menu-lg-left">
@@ -94,14 +94,14 @@
 			<div class="grid ml-2 mr-2 mt-2">
 				<div class="card">
 					<a href="{% url 'daftar-detail' prof.slug %}">
-					<img class="card-img-top" src="{{ prof.file.url }}" alt="{{ prof.user }}" style="height: 180px; object-fit: cover;">
+					<img class="card-img-top" src="{{ prof.thumbnail.url }}" alt="{{ prof.user }}" style="height: 180px; object-fit: cover;">
 					</a>
 					<div class="card-body">
 						<a href="{% url 'dashboard' prof.user.username %}">
 						<h6 class="roboto"><img src="{{ prof.user.profile.image.url}}" class="img-profile "> {{ prof.user }}</h6>
 						</a>
 						<div class="price">
-							<p class="text-justify text-truncate" style="color:rgb(92, 92, 92);">{{ prof.deskripsi }}</p>
+							<p class="text-justify text-truncate" style="color:rgb(92, 92, 92);">{{ prof.deskripsi_singkat }}</p>
 						</div>
 						<p class="card-text text-uppercase font-weight-bold">
 							stars review
@@ -136,7 +136,7 @@
 			<div class="rounded ml-2 mr-2 grid mt-2" >
 				<div class="card ">
 					<a href="{% url 'daftar-detail' prof.slug %}">
-					<img class="card-img-top" src="{{ prof.file.url }}" alt="Image" style="height: 150px; object-fit: cover;">
+					<img class="card-img-top" src="{{ prof.thumbnail.url }}" alt="Image" style="height: 150px; object-fit: cover;">
 					</a>
 					<div class="card-body">
 						<a href="{% url 'dashboard' prof.user.username %}">
@@ -146,7 +146,7 @@
 							</h6>
 						</a>
 						<div class="price">
-							<p class="text-justify text-truncate" style="color:rgb(92, 92, 92);">{{ prof.deskripsi }}</p>
+							<p class="text-justify text-truncate" style="color:rgb(92, 92, 92);">{{ prof.deskripsi_singkat }}</p>
 						</div>
 						<p class="card-text text-uppercase font-weight-bold">
 							stars review
@@ -181,13 +181,13 @@
 			<div class="rounded grid ml-2 mr-2 mt-2">
 				<div class="card " >
 					<a href="{% url 'minta-detail' req.slug %}">
-						<img class="card-img-top" src="{{ req.author.profile.image.url }}" alt="Image" style="height: 180px; object-fit: cover;">
+						<img class="card-img-top" src="{{ req.user.profile.image.url }}" alt="Image" style="height: 180px; object-fit: cover;">
 					</a>
 					<div class="card-body">
 						<div class="card-text">
 							<h6 class="roboto">
-								<img src="{{ req.author.profile.image.url }}" class="mr-1" style=" width: 30px; height: 30px; object-fit: cover; border-radius: 50%;">  
-								{{ req.author }}
+								<img src="{{ req.user.profile.image.url }}" class="mr-1" style=" width: 30px; height: 30px; object-fit: cover; border-radius: 50%;">  
+								{{ req.user }}
 							</h6>
 							<p class="text-justify text-truncate" style="color:rgb(92, 92, 92);">{{ req.deskripsi }}</p>
 						</div>

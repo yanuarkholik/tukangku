@@ -40,9 +40,10 @@
             <div class="col-lg-12">
                 <div class="bg-white p-3 rounded shadow-sm mt-4">
                     <div class="list-orders">
-
-                        {% for p in posts %}
-                            {{ p.author }}
+                        {% for post in posts %}
+                            {{ post.user}} <br>
+                            {{ post.judul.judul }} <br>
+                            <a href="{{ post.document.url }}" download>{{ post.document }}</a>
                         {% endfor %}
                         <div class="col-lg-3">
                             <a href="">

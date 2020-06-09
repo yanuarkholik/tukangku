@@ -1,14 +1,13 @@
 from django.contrib import admin
 
-from .models import Daftar, Pesan, Minta, Profile, Review, PesanAuthor, PostDaftarImage, RequestDirectAuthor
-# Custom Column
+from .models import Pesan, Minta, Profile, Review, PesanAuthor
 
-class PostImageAdmin(admin.TabularInline):
-    model = PostDaftarImage
+from sellerapp.models import RequestDirectAuthor
+# Custom Column
 
 @admin.register(RequestDirectAuthor)
 class RequestDirectAuthorAdmin(admin.ModelAdmin):  
-    list_display = ('author','to_author','buat', 'id')
+    list_display = ('user','judul','buat', 'id')
     ordering = ('-buat',)
     search_fields = ()
 
@@ -17,19 +16,6 @@ class ProfileAdmin(admin.ModelAdmin):
     list_display = ('user','buat', 'id')
     ordering = ('-buat',)
     search_fields = ()
-
-@admin.register(Daftar)
-class DaftarAdmin(admin.ModelAdmin):  
-    inlines = [
-        PostImageAdmin,
-        ]
-    list_display = ('user','kategori','buat', 'id')
-    prepopulated_fields = {'slug': ('judul',)}
-    ordering = ('-buat',)
-    search_fields = ()
-
-    class Meta:
-           model = Daftar
 
 @admin.register(Review)
 class ReviewAdmin(admin.ModelAdmin):  
@@ -51,7 +37,7 @@ class PesanAdmin(admin.ModelAdmin):
 
 @admin.register(Minta)
 class MintaAdmin(admin.ModelAdmin):  
-    list_display = ('judul', 'kontak', 'upah', 'author', 'buat', 'id')
+    list_display = ('judul', 'kontak', 'upah', 'user', 'buat', 'id')
     prepopulated_fields = {'slug': ('judul',)}
     ordering = ('-buat',)
     search_fields = ('judul',)

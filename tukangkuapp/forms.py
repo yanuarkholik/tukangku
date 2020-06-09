@@ -3,7 +3,9 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from django import forms
 
-from .models import Daftar, Pesan, Minta, Profile, Review, PesanAuthor, RequestDirectAuthor
+from .models import Pesan, Minta, Profile, Review, PesanAuthor
+
+from sellerapp.models import RequestDirectAuthor
 
 class SignUpForm(UserCreationForm):
     email = forms.EmailField(max_length=254)
@@ -34,10 +36,6 @@ class RequestDirectAuthorForm(forms.ModelForm):
         model = RequestDirectAuthor
         fields = '__all__'
 
-class DaftarForm(forms.ModelForm):
-    class Meta:
-        model = Daftar
-        fields = '__all__'
 
 class PesanForm(forms.ModelForm):
     class Meta:
@@ -48,7 +46,6 @@ class PesanAuthorForm(forms.ModelForm):
     class Meta:
         model = PesanAuthor
         fields = '__all__'
-
 
 class MintaForm(forms.ModelForm):
     class Meta:

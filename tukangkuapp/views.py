@@ -1,35 +1,55 @@
-from django.shortcuts import render, get_object_or_404, redirect
-from django.http import HttpResponseRedirect, JsonResponse
-from django.urls import reverse, reverse_lazy
-from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.contrib.auth.decorators import login_required
-from django.views.generic import TemplateView, ListView 
+from django.db.models import Q
+from django.urls import reverse, reverse_lazy
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm
+from django.views.generic import TemplateView, ListView 
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseRedirect, JsonResponse
+from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.views.generic import (
+    ListView,
+    DetailView,
+    CreateView,
+    UpdateView,
+    DeleteView,
+    View
+)
 
 from .forms import (
-    DaftarForm, 
     PesanForm, 
     MintaForm, 
     SignUpForm, 
-    UserUpdateForm, 
-    ProfileUpdateForm, 
     ReviewForm, 
     PesanAuthorForm,
+    UserUpdateForm, 
+    ProfileUpdateForm, 
     RequestDirectAuthorForm
 )
 
 from .models import ( 
-    Daftar, 
     Pesan, 
     Minta, 
     Profile, 
     PesanAuthor, 
-    PostDaftarImage,
+)
+
+from sellerapp.models import ( 
+    Gigs,
+    ProInfo,
+    SellerGigsImage,
     RequestDirectAuthor,
+)
+
+from sellerapp.forms import (
+    GigsForm,
+    BecomeSellerForm,
+    SellerImageDisplayForm,
+    RequestDirectAuthorForm,
 )
 
 # Parent
@@ -44,6 +64,7 @@ def landing(request):
 def register(request):
     """ Parent page: Register """
     return render(request, 'tukangkuapp/register.html')
+
 
 # Child
 def pesan(request):
@@ -60,15 +81,15 @@ def pesan(request):
 
 def list_baru(request):
     """ Menampilkan list baru dari Daftar """
-    terbaru = Daftar.objects.order_by('-buat')
-    count_terbaru = Daftar.objects.all().count()
+    terbaru = Gigs.objects.order_by('-buat')
+    count_terbaru = Gigs.objects.all().count()
     context = {'baru': terbaru, 'count': count_terbaru }
     return render(request, 'child/list_baru.html', context)
 
 def list_populer(request):
     """ Menampilkan list populer dari Daftar """
-    terpopuler = Daftar.objects.order_by('-buat')
-    count_terbaru = Daftar.objects.all().count()
+    terpopuler = Gigs.objects.order_by('-buat')
+    count_terbaru = Gigs.objects.all().count()
     context = {'populer': terpopuler, 'count': count_terbaru}
     return render(request, 'child/list_populer.html', context)
 
@@ -110,67 +131,80 @@ def profile(request):
         if u_form.is_valid() and p_form.is_valid():
             u_form.save()
             p_form.save()
-            return redirect('profile')
+            return HttpResponseRedirect(reverse("profile"))
 
     else:
         u_form = UserUpdateForm(instance=request.user)
         p_form = ProfileUpdateForm(instance=request.user.profile)
 
-    posts = Daftar.objects.filter(user=request.user)
+    sellers = ProInfo.objects.filter(user=request.user)
+    posts = Gigs.objects.filter(user=request.user)
     context = {
         'u_form': u_form,
         'p_form': p_form,
         'posts': posts,
+        'sellers': sellers,
     }
 
     return render(request, 'tukangkuapp/profile.html', context)
 
 # CRUD
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.views.generic import (
-    ListView,
-    DetailView,
-    CreateView,
-    UpdateView,
-    DeleteView,
-    View
-)
+def RequestSelesai(request):
+    """ Request Selesai """
+    rincian = RequestDirectAuthor.objects.filter(auhtor=request.user)
+    return render(request, 'child/request_done.html')
 
-class RequestDirectForm(CreateView, LoginRequiredMixin):
+@login_required
+def RequestDirectForm(request, slug, pk):
     """ Membuat Request Langsung pada Author oleh User """
-    model = RequestDirectAuthor
-    slug_url_kwarg = 'slug'
-    slug_field = 'slug'
-    fields  = ['deskripsi', 'files']
+    if request.method == 'POST':
+        form = RequestDirectAuthorForm(request.POST, request.FILES, instance=request.user.profile)
+        if form.is_valid():
+            instance = RequestDirectAuthor(document=request.FILES['document'])
+            instance.save()
+            return redirect('/post/order/cek/')
+    else:
+        form = RequestDirectAuthorForm(instance=request.user.profile)
+    gigs = Gigs.objects.get(slug=slug, pk=pk)
+    context = {
+        'form': form,
+        'gigs': gigs
+    }
+    return render(request, 'child/request_author.html', context)
+
+class GigsFormCreate(CreateView):
+    """ Membuat Form Gig untuk Seller """
+    model = Gigs
+    fields = ['user', 'judul', 'deskripsi_singkat', 'kategori', 'basic', 'standard', 'premium', 'thumbnail']
+    succes_url = '/profile/'
 
     def form_valid(self, form):
-        form.instance.author    = self.request.user
-        form.instance.to_author = self.request.user
+        form.instance.user = self.request.user
         return super().form_valid(form)
 
-    
 
-class RequestCekUlang(ListView):
+class RequestCekUlang(ListView, LoginRequiredMixin):
     """ Menampilkan hasil Request pada Author """
     model = RequestDirectAuthor
     context_object_name = 'posts'
+    success_url = '/post/order/selesai/<int:pk>/'
     template_name = 'child/request_cek.html'
 
 def home(request):
     """ Menampilkan konten pada Home """
-    profile = Daftar.objects.order_by('-buat')[:5]
+    profile = Gigs.objects.order_by('-buat')[:5]
     minta   = Minta.objects.order_by('-buat')[:5]
-    carousel= PostDaftarImage.objects.all()
+    carousel= SellerGigsImage.objects.all()
     context = {'profile': profile, 'request': minta, 'carousel': carousel}
     return render(request, 'child/home.html', context)
 
 class TukangAllListView(ListView):
-    model = Daftar
+    model = Gigs
     template_name = 'child/tukang_all.html'
 
     def get_context_data(self, **kwargs):
         context = super(TukangAllListView, self).get_context_data(**kwargs)
-        context['daftar'] = Daftar.objects.all()
+        context['daftar'] = Gigs.objects.all()
         return context
 
 class MintaDetailView(DetailView):
@@ -181,28 +215,28 @@ class MintaDetailView(DetailView):
 
 class DashboardDetailView(ListView):
     """ Menampilkan detail author dan daftar gigs pada author """
-    model = Daftar
+    model = Gigs
     context_object_name = 'posts'
         
     def get_queryset(self):
         user = get_object_or_404(User, username=self.kwargs.get('username'))
-        return Daftar.objects.filter(user=user).order_by('-buat')
+        return Gigs.objects.filter(user=user).order_by('-buat')
 
 class DaftarDetailView(DetailView):
     """ Menampilkan slug pada url ke Daftar Detail """
-    model = Daftar
+    model = Gigs
     context_object_name = 'posts'
     slug_url_kwarg = 'slug'
     slug_field = 'slug'
 
 class DaftarListView(ListView):
     """ List daftar gigs pada profile """
-    model = Daftar
+    model = Gigs
     template_name = 'tukangkuapp/profile.html'
 
     def get_context_data(self, request, **kwargs):
         context = super( DaftarListView, self).get_context_data(**kwargs)
-        context['daftar'] = Daftar.objects.filter(user=request.user)
+        context['daftar'] = Gigs.objects.filter(user=request.user)
         return context
 
 class MintaCreateView(CreateView):
@@ -225,7 +259,7 @@ class PesanAuthorCreateView(LoginRequiredMixin, CreateView):
 
 class DaftarUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     """ Membuat update data pada Daftar dan kembali ke Profile """
-    model = Daftar
+    model = Gigs
     fields = ['deskripsi', 'anggota', 'posisi', 'file']
     success_url = '/profile/'
 
