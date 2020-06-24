@@ -18,7 +18,7 @@ from sellerapp.models import (
 from sellerapp.forms import (
     GigsForm,
     BecomeSellerForm,
-    SellerImageDisplayForm,
+
 )
 
 ### Seller Registration ###

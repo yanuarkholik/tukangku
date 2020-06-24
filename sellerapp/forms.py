@@ -4,26 +4,24 @@ from django import forms
 from sellerapp.models import (
     ProInfo,
     Gigs,
+    Images,
     SellerGigsImage,
     RequestDirectAuthor,
 )
 
+from tukangkuapp.models import (
+    Profile
+)
+
 class BecomeSellerForm(forms.ModelForm):
     class Meta:
-        model = ProInfo
+        model = Profile
         fields = '__all__'
 
 class GigsForm(forms.ModelForm):
     class Meta:
         model = Gigs
         fields = '__all__'
-
-class SellerImageDisplayForm(forms.ModelForm):
-    file_field = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': True}))
-
-    class Meta:
-        model = SellerGigsImage
-        fields = ['images', 'file_field']
 
 class RequestDirectAuthorForm(forms.ModelForm):
     class Meta:

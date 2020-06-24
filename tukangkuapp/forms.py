@@ -29,7 +29,7 @@ class ProfileUpdateForm(forms.ModelForm):
 class ReviewForm(forms.ModelForm):
     class Meta:
         model = Review
-        fields = ['review', 'author']
+        fields = ['review', 'author','nama', 'gambar']
 
 class RequestDirectAuthorForm(forms.ModelForm):
     class Meta:

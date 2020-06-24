@@ -25,7 +25,7 @@ class ReviewAdmin(admin.ModelAdmin):
 
 @admin.register(PesanAuthor)
 class PesanAuthorAdmin(admin.ModelAdmin):  
-    list_display = ('judul', 'kontak', 'upah', 'author', 'buat', 'id')
+    list_display = ('user', 'author', 'kontak', 'upah', 'buat', 'id')
     ordering = ('-buat',)
     search_fields = ('author',)
 

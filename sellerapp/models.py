@@ -8,18 +8,13 @@ from django.dispatch import receiver
 from PIL import Image
 # Create your models here.
 
-from tukangkuapp.models import Profile
-
 
 KATEGORI_CHOICES = [
     ('Kategori', 'Kategori'),
-    ('Pemrograman & TI', 'Pemrograman & TI'),
-    ('Desain Grafis', 'Desain Grafis'),
-    ('Marketing', 'Marketing'),
-    ('Menulis', 'Menulis'),
-    ('Video & Animasi','Video & Animasi'),
-    ('Musik & Audio', 'Musik & Audio'),
-    ('Bisnis', 'Bisnis'),
+    ('Arsitek', 'Arsitek'),
+    ('Design Interior', 'Design Interior'),
+    ('Kontraktor', 'Kontraktor'),
+    ('Design and Build', 'Design and Build'),
 ]
 
 STATUS_CHOICES = [
@@ -33,6 +28,22 @@ PAKET_CHOICES = [
     ('Premium', 'Premium'),
 ]
 
+PROVINSI_CHOICES = [
+    ('Aceh', 'Aceh'), ('Aceh', 'Aceh'), ('Aceh', 'Aceh'), ('Aceh', 'Aceh'), ('Aceh', 'Aceh'),
+    ('Aceh', 'Aceh'), ('Aceh', 'Aceh'), ('Aceh', 'Aceh'), ('Aceh', 'Aceh'), ('Aceh', 'Aceh'),
+    ('Aceh', 'Aceh'), ('Aceh', 'Aceh'), ('Aceh', 'Aceh'), ('Aceh', 'Aceh'), ('Aceh', 'Aceh'),
+    ('Aceh', 'Aceh'), ('Aceh', 'Aceh'), ('Aceh', 'Aceh'), ('Aceh', 'Aceh'), ('Aceh', 'Aceh'),
+    ('Aceh', 'Aceh'), ('Aceh', 'Aceh'), ('Aceh', 'Aceh'), ('Aceh', 'Aceh'), ('Aceh', 'Aceh'),
+    ('Aceh', 'Aceh'), ('Aceh', 'Aceh'), ('Aceh', 'Aceh'), ('Aceh', 'Aceh'), ('Aceh', 'Aceh'),
+    ('Aceh', 'Aceh'), ('Aceh', 'Aceh'), ('Aceh', 'Aceh'), ('Aceh', 'Aceh'),
+] 
+
+
+STATUS_CHOICES = [
+    ('Seller', 'Seller'),
+    ('Client', 'Client')
+]
+
 class ProInfo(models.Model):
     user        = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sellerProfile', null=True, blank=True)
     status      = models.CharField(max_length=30, choices=STATUS_CHOICES, default='Client')
@@ -41,7 +52,8 @@ class ProInfo(models.Model):
     profesi     = models.CharField(max_length=100)
     keahlian    = models.CharField(max_length=100)
     pengalaman  = models.CharField(max_length=100)
-    deskripsi   = models.TextField(null=True, blank=True)
+    deskripsi_singkat   = models.TextField(null=True, blank=True, help_text='Deskripsi singkat Profile anda**')
+    deskripsi  = models.CharField(max_length=50)
     pendidikan  = models.CharField(max_length=100)
     sertifikasi = models.CharField(max_length=100, blank=True, null=True)
     web         = models.CharField(max_length=100, blank=True, null=True)
@@ -51,18 +63,30 @@ class ProInfo(models.Model):
     class Meta:
         verbose_name_plural = 'Data-Seller'
 
-class Gigs(models.Model):
-    judul       = models.CharField(max_length=254, null=True, blank=True)
-    deskripsi_singkat   = models.CharField(max_length=50 , help_text='Deskripsi singkat Gigs anda**')
-    kategori    = models.CharField(choices=KATEGORI_CHOICES, max_length=50, default='Kategori')
-    user        = models.ForeignKey(User, on_delete=models.CASCADE, related_name='authorGigs', null=True, blank=True)
-    buat        = models.DateTimeField(default=timezone.now)
-    thumbnail   = models.FileField(blank=True)
-    slug        = models.SlugField(unique=True, blank=True, null=True)
-    basic       = models.PositiveIntegerField(default=0)
-    standard    = models.PositiveIntegerField(default=0)
-    premium     = models.PositiveIntegerField(default=0)
+class Images(models.Model):
+    user        = models.ForeignKey(User, default=None, on_delete=models.CASCADE, related_name='imgGigs', null=True, blank=True)
+    images      = models.ImageField(upload_to = 'upload/display/',null=True, blank=True)
+    buat        = models.DateTimeField(auto_now=True)
 
+    class Meta:
+        verbose_name_plural = 'Data-Seller Gigs Display'
+
+class Gigs(models.Model):
+    judul               = models.CharField(max_length=254, null=True, blank=True)
+    user                = models.ForeignKey(User, on_delete=models.PROTECT, related_name='usernameGigs', null=True, blank=True)
+    deskripsi_project   = models.TextField(blank=True, null=True)
+    kategori            = models.CharField(choices=KATEGORI_CHOICES, max_length=50, default='Kategori')
+    thumbnail           = models.FileField(blank=True)
+    img                 = models.ForeignKey(Images, on_delete=models.CASCADE, related_name='relatedImageGigs', null=True, blank=True)
+    slug                = models.SlugField(unique=True, blank=True, null=True)
+    estimasi_kecil      = models.PositiveIntegerField(default=0)
+    estimasi_besar      = models.PositiveIntegerField(default=0)
+    waktu_pengerjaan    = models.PositiveIntegerField(default=0)
+    banyak_revisi       = models.PositiveIntegerField(default=0)
+    kota                = models.CharField(max_length=100, blank=True, null=True)
+    provinsi            = models.CharField(max_length=100, choices=PROVINSI_CHOICES, default='Aceh')
+    alamat              = models.CharField(max_length=100, blank=True, null=True)
+    buat                = models.DateTimeField(auto_now=True)
 
     def get_absolute_url(self):
         return reverse('daftar-detail', kwargs={'pk': self.id, 'slug': self.slug})
@@ -73,7 +97,6 @@ class Gigs(models.Model):
 
     class Meta:
         verbose_name_plural = 'Data-Gigs'
-
 
 class SellerGigsImage(models.Model):
     user        = models.ForeignKey(Gigs, default=None, on_delete=models.CASCADE)
@@ -94,3 +117,16 @@ class RequestDirectAuthor(models.Model):
 
     class Meta: 
         verbose_name_plural = 'Data-Request Author'
+
+class AlbumTukang(models.Model):
+    """ Album rekam project Tukangku """
+    user        = models.ForeignKey(User, on_delete=models.CASCADE, related_name='albumProject', blank=True, null=True)
+    judul       = models.CharField(max_length=250)
+    deskripsi   = models.TextField(null=True, blank=True)
+    images      = models.ImageField(upload_to='upload')
+    kota        = models.CharField(max_length=250)
+    provinsi    = models.CharField(choices=PROVINSI_CHOICES, default='Aceh', max_length=50)
+
+    class Meta: 
+        verbose_name_plural = 'Data-Album Project'
+

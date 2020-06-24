@@ -3,18 +3,74 @@
 {% load crispy_forms_tags %}
 
 {% block url %}
-<li class="nav-item"><a class="nav-link" href="{% url 'home' %}">Home</a></li>
-<li class="nav-item"><a class="nav-link" href="{% url 'pesan' %}">Pesan</a></li>
-<li class="nav-item"><a class="nav-link" href="{% url 'seller-registration' %}">Become Tukang</a></li>
-
-<img src="{{ user.profile.image.url }}" data-toggle="dropdown" data-toggle="dropdown" data-display="static" type="button" aria-haspopup="true" aria-expanded="false" class="img-profile dropdown mt-2 ">
-	<div class="dropdown-menu dropdown-menu-right dropdown-menu-lg-left">
-		<a class="dropdown-item" href="{% url 'profile' %}">Profile, {{user.username }}</a>
-		<a class="dropdown-item" href="#">Another action</a>
-		<a class="dropdown-item" href="#">Something else here</a>
-		<div class="dropdown-divider"></div>
-		<a class="dropdown-item" href="{% url 'logout' %}">Log Out</a>
+<div class="d-flex justify-content-between m-auto">
+	<div class="nav-item active">
+		<a class="nav-link" href="{% url 'home' %}">Protofolio Desain</a>
 	</div>
+	<div class="nav-item">
+		<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" id="navbarDropdown" role="button">Data Produk</a>
+		<ul class="dropdown-menu megamenu m-2 border border-light" style="max-width: 98%;">
+			<div class="row">
+				<div class="col-md-3">
+					<ul>
+						<h6 class="list-header">List Header</h6>
+						<hr>
+						<li>
+							<a href="#">Lorem Ipsum</a>
+						</li>
+						<li>
+							<a href="#">Lorem Ipsum</a>
+						</li>
+						<li>
+							<a href="#">Lorem Ipsum</a>
+						</li>
+						<li>
+							<a href="#">Lorem Ipsum</a>
+						</li>
+						<li>
+							<a href="#">Lorem Ipsum</a>
+						</li>
+					</ul>
+				</div>
+				<div class="col-md-3">
+					<ul>
+						<h6 class="list-header">List Header</h6>
+						<hr>
+						<li>
+							<a href="#">Lorem Ipsum</a>
+						</li>
+						<li>
+							<a href="#">Lorem Ipsum</a>
+						</li>
+						<li>
+							<a href="#">Lorem Ipsum</a>
+						</li>
+						<li>
+							<a href="#">Lorem Ipsum</a>
+						</li>
+						<li>
+							<a href="#">Lorem Ipsum</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</ul>
+	</div>
+	<div class="nav-item">
+		<div class="dropdown">
+			<a class="dropdown-toggle nav-link" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+			  Dropdown link
+			</a>
+		  
+			<div class="dropdown-menu m-2 border border-light" aria-labelledby="dropdownMenuLink">
+			  <a class="dropdown-item" href="#">Action</a>
+			  <a class="dropdown-item" href="#">Another action</a>
+			  <a class="dropdown-item" href="#">Something else here</a>
+			</div>
+		  </div>
+		</ul>
+	</div>
+</div>
 {% endblock %}
 
 {% block content %}
@@ -22,125 +78,136 @@
 <section class="banner-area section_gap banner_gap">
 	<div class="container" style="max-width: 95%;">
 		<div class="row">
-			<div class=" col-lg-4">
-				<div class="col-lg-12 bg-white rounded shadow-sm pt-3 pb-3">
-					<div class="row mt-2 mb-2 ml-1 mr-1">
-						<div class="col-lg-12 d-flex justify-content-center ">
-							<img src="{{ user.profile.image.url }}" class="border" style="border-radius: 50%; width: 200px; height: 200px; object-fit: cover;"> 
-						</div>
-						<div class="col-lg-12 d-flex justify-content-center mt-3">
-							<h4 style="font-family: roboto;" class="roboto">{{ user.username }}</h4>
-						</div>
-						{% if user.profile.deskripsi == null %}
-						<div class="col-lg-12 d-flex justify-content-center text-justify mt-0">
-							<p>Belum ada deskripsi</p><span></span>
-						</div>
-						{% else %}
-						<div class="col-lg-12 d-flex justify-content-center text-justify mt-0 ">
-							<p>{{ user.profile.deskripsi }}</p><span></span>
-						</div>
-						{% endif %}
-						<div class="col-lg-12 mt-0">
-							<span class="d-flex justify-content-center">
-								<button type="button" class="btn btn-outline-primary btn-block ml-2 mr-2" data-toggle="modal" data-target="#exampleModal">
-									Edit Profile
-								</button>
-							</span>
-							<div class="row">
-								<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-									<div class="modal-dialog " role="document" style="max-width: 60%;">
-										<div class="modal-content">
-											<div class="modal-header">
-												<div class="col-lg-11 mb-0">
-													<h3 class="roboto">Profile Anda</h3>
-													<p>
-														Tell us a bit about your needs and get customized recommendations.
-														Don’t worry, this information will remain private, and will not be displayed on the platform
-													</p>
-												</div>
-												<div class="col-lg-1">
-													<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-														<span aria-hidden="true">&times;</span>
-													</button>
-												</div>
-												<hr>
-											</div>
-											<div class="modal-body">
-												<div class="col-lg-12">
-													<form method="POST" enctype="multipart/form-data">
-														{% csrf_token %}
-														{{ u_form|crispy }}
-														{{ p_form|crispy }}
-														<div class="modal-footer">
-															<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-															<button class="btn btn-primary" type="submit">Update</button>
-														</div>
-													 </form>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>      
-							</div>
-						</div>
+			<div class="col-lg-4 mt-3">
+				<div class="col-lg-12 bg-white rounded shadow-sm p-3">
+					<div class="col-lg-12 d-flex justify-content-center ">
+						<img src="{{ user.profile.image.url }}" class="border" style="border-radius: 50%; width: 200px; height: 200px; object-fit: cover;"> 
 					</div>
-				</div>
-				{% for seller in sellers %}
-				<div class="col-lg-12 bg-white rounded shadow-sm pt-3 pb-3 mt-4">
-					<div class="row mt-2 mb-2 ml-1 mr-1">
-						<div class="col-lg-12 d-flex justify-content-left ">
-							<p class="roboto">{{ seller.nama_depan }}{{ seller.nama_belakang }}</p>
-							<p class="roboto">{{ seller.profesi }}</p>
-							<p class="roboto">{{ seller.keahlian }}</p>
-							<p class="roboto">{{ seller.pengalaman }}</p>
-							<p class="roboto">{{ seller.deskripsi }}</p>
-							<p class="roboto">{{ seller.pendidikan }}</p>
-							<p class="roboto">{{ seller.sertifikasi }}</p>
-							<p class="roboto">{{ seller.web }}</p>
-							<p class="roboto">{{ seller.email }}</p>
-						</div>
+					<div class="col-lg-12 d-flex justify-content-center mt-3">
+						<h4 style="font-family: roboto;" class="roboto">{{ user.username }}</h4>
 					</div>
-				</div>
-				{% endfor %}
-			</div>
-			<div class="col-lg-8">
-				<div class="row">
-					<div class="col-lg-12 ml-2 bg-white rounded shadow-sm p-3">
-						<h3 class="ml-1 roboto">{{ user.username }}'s gigs</h3>
-						<hr>
-						<div class="ml-2 mr-2">
-							<div class="row">
-								{% for post in posts %}
-								<div class="col-lg-4 mt-2 ">
-									<div class="card">
-										<img class="card-img-top" src="{{ post.thumbnail.url }}" alt="" style="height: 180px; object-fit: cover;">
-										<div class="card-body">
-											<p class="card-text text-truncate">{{ post.deskripsi }}</p>
-											<span>
-												<a href="{% url 'daftar-update' post.id %}" role="button" class="btn btn-secondary btn-sm mr-2"><img src="{% static 'image/edit.png' %}" alt=""></a>
-												<button type="button" class="btn btn-danger btn-sm " data-toggle="modal" data-target="#ModalDelete">
-													<img src="{% static 'image/remove.png' %}" alt="">
+					{% if user.profile.deskripsi == null %}
+					<div class="col-lg-12 d-flex justify-content-center text-justify mt-0">
+						<p>Belum ada deskripsi</p><span></span>
+					</div>
+					{% else %}
+					<div class="col-lg-12 d-flex justify-content-center text-justify mt-0 ">
+						<p>{{ user.profile.deskripsi }}</p><span></span>
+					</div>
+					{% endif %}
+					<div class="col-lg-12 mt-0">
+						<span class="d-flex justify-content-center">
+							<button type="button" class="btn btn-primary btn-block ml-2 mr-2" data-toggle="modal" data-target="#exampleModal">
+								Edit Profile
+							</button>
+						</span>
+						<div class="row">
+							<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+								<div class="modal-dialog " role="document" style="max-width: 60%;">
+									<div class="modal-content">
+										<div class="modal-header">
+											<div class="col-lg-11 mb-0">
+												<h3 class="roboto">Profile Anda</h3>
+												<p>
+													Tell us a bit about your needs and get customized recommendations.
+													Don’t worry, this information will remain private, and will not be displayed on the platform
+												</p>
+											</div>
+											<div class="col-lg-1">
+												<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+													<span aria-hidden="true">&times;</span>
 												</button>
-											</span>
+											</div>
+											<hr>
+										</div>
+										<div class="modal-body">
+											<div class="col-lg-12">
+												<form method="POST" enctype="multipart/form-data">
+													{% csrf_token %}
+													{{ u_form|crispy }}
+													{{ p_form|crispy }}
+													<div class="modal-footer">
+														<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+														<button class="btn btn-primary" type="submit">Update</button>
+													</div>
+												 </form>
+											</div>
 										</div>
 									</div>
 								</div>
-								{% endfor %}
-							</div>
+							</div>      
 						</div>
 					</div>
+					{% if user.profile %}
+					<hr>
 					<div class="col-lg-12">
+						<p class="roboto">{{ user.profile.nama_depan }}{{ user.profile.nama_belakang }}</p>
+						<p class="roboto">{{ user.profile.profesi }}</p>
+						<p class="roboto">{{ user.profile.keahlian }}</p>
+						<p class="roboto">{{ user.profile.pengalaman }}</p>
+						<p class="roboto">{{ user.profile.pendidikan }}</p>
+						<p class="roboto">{{ user.profile.sertifikasi }}</p>
+						<p class="roboto">{{ user.profile.web }}</p>
+						<p class="roboto">{{ user.profile.email }}</p>
+					</div>
+					{% endif %}
+				</div>
+			</div>
+			<div class="col-lg-8 mt-3">
+				<div class="col-lg-12 bg-white rounded shadow-sm p-3">
+					<h3 class="ml-1 roboto">{{ user.username }}'s gigs</h3>
+					<hr>
+					<div class="ml-2 mr-2">
 						<div class="row">
-							<div class="col-lg-12 ml-2 mt-4 bg-white rounded shadow-sm p-3">
-								<div class="row">
-									<div class="col-lg-9">
-										<p class="roboto font-weight-normal">
-											It seems that you don't have any active Gigs. Get selling!
-										</p>
+							{% for post in posts %}
+							<div class="col-lg-4 mt-2 ">
+								<div class="card">
+									<div id="carousel{{ post.id }}" class="carousel slide" data-ride="carousel">
+                                        <div class="carousel-inner">
+                                            <div class="carousel-item active">
+                                                <img class="card-img-top" src="{{ post.thumbnail.url }}" alt="{{ post.user }}" style="height: 180px; object-fit: cover;">
+                                            </div>
+                                            <div class="carousel-item ">
+                                                <img class="card-img-top" src="{{ post.img.images.url }}" alt="{{ post.user }}" style="height: 180px; object-fit: cover;">
+                                            </div>
+                                        </div>
+                                        <a class="carousel-control-prev" href="#carousel{{ post.id }}" role="button" data-slide="prev">
+                                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                            <span class="sr-only">Previous</span>
+                                        </a>
+                                        <a class="carousel-control-next" href="#carousel{{ post.id }}" role="button" data-slide="next">
+                                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                            <span class="sr-only">Next</span>
+                                        </a>
+                                    </div>
+									<div class="card-body">
+										<p class="card-text text-truncate">{{ post.deskripsi_singkat }}</p>
+										<span>
+											<a href="{% url 'daftar-update' post.id %}" role="button" class="btn btn-secondary btn-sm mr-2"><img src="{% static 'image/edit.png' %}" alt=""></a>
+											<button type="button" class="btn btn-danger btn-sm " data-toggle="modal" data-target="#ModalDelete">
+												<img src="{% static 'image/remove.png' %}" alt="">
+											</button>
+										</span>
 									</div>
-									<div class="col-lg-3">
-										<a href="{% url 'gigs-create' %}" role="button" class="btn btn-primary btn-block">Create a New Gig</a>
-									</div>
+								</div>
+							</div>
+							{% endfor %}
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-12">
+					<div class="row">
+						<div class="col-lg-12 mt-4 bg-white rounded shadow-sm p-3">
+							<div class="row">
+								<div class="col-lg-9">
+									<p class="roboto font-weight-normal">
+										It seems that you don't have any active Gigs. Get selling!
+									</p>
+								</div>
+								<div class="col-lg-3">
+									<a href="{% url 'gigs-create' %}" role="button" type="button" class="btn btn-primary btn-block ml-2 mr-2">
+										Create New Gig
+									</a>
 								</div>
 							</div>
 						</div>
