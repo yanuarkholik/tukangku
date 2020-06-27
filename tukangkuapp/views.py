@@ -3,13 +3,9 @@ from django.db.models import Q
 from django.urls import reverse, reverse_lazy
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.forms import UserCreationForm
-from django.views.generic import TemplateView, ListView 
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, get_object_or_404, redirect
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic import (
     ListView,
@@ -209,18 +205,18 @@ def DashboardDetailView(request, username):
     gigs    = Gigs.objects.filter(user=author)
     req     = PesanAuthor.objects.filter(user=author).order_by('-id')
     if request.method == 'POST':
-        msg = PesanAuthorForm(request.POST or None, request.user)
+        msg = PesanAuthorForm(request.POST, instance=request.user)
         if msg.is_valid() :
             deskripsi   = request.POST.get('deskripsi')
             nama        = request.POST.get('nama')
             link        = request.POST.get('link')
             kontak      = request.POST.get('kontak')
             upah        = request.POST.get('upah')
-            authors      = PesanAuthor.objects.create(author=author, user=request.user.profile, deskripsi=deskripsi, link=link, kontak=kontak, upah=upah)
+            authors      = PesanAuthor.objects.create(author=username, user=request.user, deskripsi=deskripsi, link=link, kontak=kontak)
             authors.save()
             return HttpResponseRedirect('/home/')
     else :
-         msg = PesanAuthorForm(request.POST or None)
+         msg = PesanAuthorForm(request.POST)
     context = {
         'posts': gigs,
         'form': msg,
@@ -239,17 +235,14 @@ def DashboardDetailView(request, username):
     # def post(self, request, *args, **kwargs):
     #     return FormView.post(self, request, *args, **kwargs)
 
-
 class DaftarDetailView(DetailView, FormView):
     """ Menampilkan slug pada url ke Daftar Detail """
-    form_class = RequestDirectAuthorForm
+    model = Gigs
+    form_class = PesanAuthorForm
     context_object_name = 'gigs'
     slug_url_kwarg = 'slug'
     slug_field = 'slug'
-
-    def get_queryset(self, **kwargs):
-        user = get_object_or_404(User, username=self.kwargs.get('username'))
-        return Gigs.objects.filter(user=user).order_by('-buat')
+    username = 'username'
     
     def get_context_data(self, **kwargs):
         context = super(DaftarDetailView, self).get_context_data(**kwargs)
@@ -257,7 +250,21 @@ class DaftarDetailView(DetailView, FormView):
         return context
 
     def post(self, request, *args, **kwargs):
-        return FormView.post(self, request, *args, **kwargs)
+        self.object = self.get_object()
+        form = self.get_form()
+        if form.is_valid():
+            form.instance.author = self.username
+            form.instance.user = self.request.user.profile
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)  
+    
+    def form_valid(self, form):
+        return super(DaftarDetailView, self).form_valid(form)
+
+    def form_invalid(self, form):
+        #put logic here
+        return super(DaftarDetailView, self).form_invalid(form)
 
 class DaftarListView(ListView):
     """ List daftar gigs pada profile """

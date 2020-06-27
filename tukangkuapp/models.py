@@ -107,15 +107,16 @@ class PesanAuthor(models.Model):
     author      = models.ForeignKey(User, on_delete=models.CASCADE, related_name='reqtAuthor', blank=True, null=True)
     kontak      = models.CharField(max_length=50, help_text='Nomor telepon atau email**')
     link        = models.CharField(max_length=2000, help_text='Cantumkan link file keterangan bila perlu**', null=True, blank=True)
-    upah        = models.CharField(max_length=50)
+    upah        = models.ForeignKey(Gigs, on_delete=models.CASCADE, related_name='reqUpah', null=True, blank=True)
     deskripsi   = models.TextField(null=True, blank=True)
     buat        = models.DateTimeField(default=timezone.now)
 
     def get_absolute_url(self):
-        return reverse('pesan-author', kwargs={'pk': self.pk})
+        return reverse('pesan-author', kwargs={'pk': self.pk, 'username':self.user})
 
     class Meta: 
         verbose_name_plural = 'Data-Request Pesan Author'
+
 
 
 
