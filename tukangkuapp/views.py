@@ -73,7 +73,45 @@ def register(request):
 def home(request):
     """ Menampilkan konten pada Home """
     gigs = Gigs.objects.order_by('-buat')
-    context = {'gigs': gigs}
+
+    # kategori
+    arsitek = Gigs.objects.filter(kategori='Arsitek').count()
+    kontraktor = Gigs.objects.filter(kategori='Kontraktor').count()
+    design = Gigs.objects.filter(kategori='Design Interior').count()
+    build = Gigs.objects.filter(kategori='Design and Build').count()
+
+    # jenis ruangan 
+    kt = Gigs.objects.filter(jenis_ruangan='Kamar Tidur').count()
+    km = Gigs.objects.filter(jenis_ruangan='Kamar Mandi').count()
+    dp = Gigs.objects.filter(jenis_ruangan='Dapur').count()
+    rk = Gigs.objects.filter(jenis_ruangan='Ruang Keluarga').count()
+    tm = Gigs.objects.filter(jenis_ruangan='Taman').count()
+    tg = Gigs.objects.filter(jenis_ruangan='Tangga').count()
+    rm = Gigs.objects.filter(jenis_ruangan='Ruang Makan').count()
+    ex = Gigs.objects.filter(jenis_ruangan='Exterior').count()
+    rb = Gigs.objects.filter(jenis_ruangan='Ruang Belajar').count()
+    rj = Gigs.objects.filter(jenis_ruangan='Ruang Kerja').count()
+    pr = Gigs.objects.filter(jenis_ruangan='Perpustakaan').count()
+    context = {
+        'gigs': gigs,
+        'arts': arsitek, 
+        'kontraktor': kontraktor,
+        'design': design,
+        'build': build,
+
+        # jenis ruangan 
+        'kt': kt,
+        'km': km,
+        'dp': dp,
+        'rk': rk,
+        'tm': tm,
+        'tg': tg,
+        'rm': rm,
+        'ex': ex,
+        'rb': rb,
+        'rj': rj,
+        'pr': pr,
+    }
     return render(request, 'child/home.html', context)
 
 def pesan(request):

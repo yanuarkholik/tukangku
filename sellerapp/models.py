@@ -17,9 +17,19 @@ KATEGORI_CHOICES = [
     ('Design and Build', 'Design and Build'),
 ]
 
-STATUS_CHOICES = [
-    ('Seller', 'Seller'),
-    ('Client', 'Client')
+JENIS_RUANGAN = [
+    ('Jenis Ruangan', 'Jenis Ruangan'),
+    ('Kamar Tidur','Kamar Tidur'),
+    ('Kamar Mandi', 'Kamar Mandi'),
+    ('Dapur', 'Dapur'),
+    ('Ruang Keluarga', 'Ruang Keluarga'),
+    ('Taman', 'Taman'),
+    ('Tangga', 'Tangga'),
+    ('Ruang Makan', 'Ruang Makan'),
+    ('Exterior', 'Exterior'),
+    ('Ruang Belajar', 'Ruang Belajar'),
+    ('Ruang Kerja', 'Ruang Kerja'),
+    ('Perpustakaan', 'Perpustakaan'),
 ]
 
 PAKET_CHOICES = [
@@ -40,8 +50,9 @@ PROVINSI_CHOICES = [
 
 
 STATUS_CHOICES = [
-    ('Seller', 'Seller'),
-    ('Client', 'Client')
+    ('Dalam antrian', 'Dalam Antrian'),
+    ('Dalam Pengerjaan', 'Dalam Pengerjaan'),
+    ('Selesai', 'Selesai')
 ]
 
 class ProInfo(models.Model):
@@ -76,6 +87,7 @@ class Gigs(models.Model):
     user                = models.ForeignKey(User, on_delete=models.PROTECT, related_name='usernameGigs', null=True, blank=True)
     deskripsi_project   = models.TextField(blank=True, null=True)
     kategori            = models.CharField(choices=KATEGORI_CHOICES, max_length=50, default='Kategori')
+    jenis_ruangan       = models.CharField(choices=JENIS_RUANGAN, max_length=50, default='Jenis Ruangan')
     thumbnail           = models.FileField(blank=True)
     img                 = models.ForeignKey(Images, on_delete=models.CASCADE, related_name='relatedImageGigs', null=True, blank=True)
     slug                = models.SlugField(unique=True, blank=True, null=True)
