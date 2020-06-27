@@ -45,7 +45,7 @@ class PesanForm(forms.ModelForm):
 class PesanAuthorForm(forms.ModelForm):
     class Meta:
         model = PesanAuthor
-        fields = '__all__'
+        fields = ['user', 'author', 'kontak','link', 'upah', 'deskripsi']
 
 class MintaForm(forms.ModelForm):
     class Meta:
