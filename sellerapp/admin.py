@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from sellerapp.models import ProInfo, Gigs, Images, SellerGigsImage
+from sellerapp.models import Gigs, Images, SellerGigsImage
 # Register your models here.
 
 class ImagesAdmin(admin.TabularInline):
@@ -21,3 +21,4 @@ class GigsAdmin(admin.ModelAdmin):
 class ImagesAdmin(admin.ModelAdmin):
     list_display = ('user','images','buat')
     ordering = ('-buat',)
+

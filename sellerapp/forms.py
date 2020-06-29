@@ -2,7 +2,6 @@ from django.forms import ModelForm
 from django import forms
 
 from sellerapp.models import (
-    ProInfo,
     Gigs,
     Images,
     SellerGigsImage,

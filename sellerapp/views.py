@@ -11,7 +11,6 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
 from sellerapp.models import ( 
     Gigs, 
-    ProInfo,
     SellerGigsImage,
 )
 

@@ -40,7 +40,6 @@ INSTALLED_APPS = [
     'tukangkuapp',
     'sellerapp',
     'crispy_forms',
-    'star_ratings',
     'django.contrib.humanize',  
 ]
 

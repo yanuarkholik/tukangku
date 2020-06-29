@@ -97,9 +97,6 @@
 					<div class="nav-item">
 						<a href="#reviews" class="nav-link">Reviews</a>
 					</div>
-					<div class="nav-item">
-						<a href="#staticBackdrop" class="nav-link">Contact</a>
-					</div>
 				</div>
 			</div>
 		</div>
@@ -154,58 +151,7 @@
 					<img src="{{ gigs.user.profile.image.url }}" class="align-self-center mr-3" alt="{{ object.user }}" style=" width: 80px; height: 80px; object-fit: cover; border-radius: 50%;">
 					<div class="media-body">
 						<h5 class="mt-0"><a href="{% url 'dashboard' username=object.user.username %}">{{ object.user }}</a> <span class="text-muted"> | reviews</span></h5>
-						<p>{{ object.deskripsi }}</p>
-						<!-- Button trigger modal -->
-						<button type="button" class="btn btn-outline-secondary" data-toggle="modal" data-target="#staticBackdrop">
-							Contact <span class="text-capitalizen">{{ object.user }}</span>
-						</button>
-						  
-						  <!-- Modal -->
-						  <div class="modal fade" id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-							<div class="modal-dialog modal-dialog-centered" style="max-width: 50%;">
-							  <div class="modal-content">
-								<div class="modal-header">
-									<h5 class="modal-title" id="staticBackdropLabel">Contact <span class="text-capitalizen">{{ object.user }}</span></h5>
-									<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-										<span aria-hidden="true">&times;</span>
-									</button>
-								</div>
-								<div class="modal-body">
-									<form action="" method="POST">
-										{% csrf_token %}
-										<div class="row">
-											<div class="col-lg-6">
-												{{ form.user|as_crispy_field }}
-											</div>
-											<div class="col-lg-6">
-												{{ form.author|as_crispy_field }}
-											</div>
-											<div class="col-lg-6">
-												{{ form.kontak|as_crispy_field }}
-											</div>
-											<div class="col-lg-12">
-												{{ form.deskripsi|as_crispy_field }}
-											</div>
-											<div class="col-lg-12">
-												{{ form.link|as_crispy_field }}
-											</div>
-											<div class="col-lg-12">
-												{% if user.is_authenticated %}
-												<input type="submit" class="btn btn-primary" value="Kirim"></input>
-												{% else %}
-												<input type="submit" class="btn btn-primary " disabled value="Kirim"></input><br>
-												<small class="text-secondary">Anda harus login terlebih dahulu**</small>
-												{% endif %}
-											</div>
-										</div>
-									</form>
-								</div>
-								<div class="modal-footer">
-									<button type="button" class="btn btn-danger" data-dismiss="modal">Keluar</button>
-								</div>
-							  </div>
-							</div>
-						</div>
+						<p>{{ object.user.profile.deskripsi_singkat }}</p>
 					</div>
 				</div>
 				<div class="card mt-3" id="profile">
@@ -262,15 +208,13 @@
 					<p class="font-weight-normal" style="font-size: small;">
 						{{ object.deskripsi_singkat }}
 					</p>
-				</div><br>
+				</div>
 				<div class="nav-item">
 					<p class="font-weight-bold text-secondary" style="font-size: small;">
-						Perkiraan {{ object.waktu_pengerjaan }} hari, {{ object.banyak_revisi}} revisi
+						Pengerjaan <span class="text-dark">{{ object.waktu_pengerjaan }} hari <br></span>
+						Banyak Revisi <span class="text-dark">{{ object.banyak_revisi}}</span>
 					</p>
 				</div>
-				<button type="button" class="btn btn-info btn-block" data-toggle="modal" data-target="#staticBackdrop">
-					Contact Sekarang
-				</button>
 			</div>
 		</div>
     </div>

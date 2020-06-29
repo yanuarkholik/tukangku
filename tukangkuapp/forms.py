@@ -3,9 +3,9 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from django import forms
 
-from .models import Pesan, Minta, Profile, Review, PesanAuthor
+from .models import Profile, PesanAuthor
 
-from sellerapp.models import RequestDirectAuthor
+from sellerapp.models import Request
 
 class SignUpForm(UserCreationForm):
     email = forms.EmailField(max_length=254)
@@ -26,28 +26,12 @@ class ProfileUpdateForm(forms.ModelForm):
         model = Profile
         fields = ['image', 'deskripsi']
 
-class ReviewForm(forms.ModelForm):
+class UpdatePermintaan(forms.ModelForm):
     class Meta:
-        model = Review
-        fields = ['review', 'author','nama', 'gambar']
-
-class RequestDirectAuthorForm(forms.ModelForm):
-    class Meta:
-        model = RequestDirectAuthor
-        fields = '__all__'
-
-
-class PesanForm(forms.ModelForm):
-    class Meta:
-        model = Pesan
-        fields = '__all__'
+        model = Request
+        fields = ['nama_depan', 'nama_belakang', 'email', 'kontak', 'deskripsi', 'link', 'jenis_ruangan', 'services', 'jumlah_budget', 'provinsi', 'kota', 'alamat']
 
 class PesanAuthorForm(forms.ModelForm):
     class Meta:
         model = PesanAuthor
-        fields = ['user', 'author', 'kontak','link', 'upah', 'deskripsi']
-
-class MintaForm(forms.ModelForm):
-    class Meta:
-        model = Minta
-        fields = '__all__'
+        fields = ['nama_depan', 'nama_belakang', 'kontak','link', 'deskripsi']

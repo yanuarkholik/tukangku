@@ -6,6 +6,9 @@ from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from PIL import Image
+import time
+import os
+from uuid import uuid4
 # Create your models here.
 
 
@@ -54,25 +57,6 @@ STATUS_CHOICES = [
     ('Dalam Pengerjaan', 'Dalam Pengerjaan'),
     ('Selesai', 'Selesai')
 ]
-
-class ProInfo(models.Model):
-    user        = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sellerProfile', null=True, blank=True)
-    status      = models.CharField(max_length=30, choices=STATUS_CHOICES, default='Client')
-    nama_depan  = models.CharField(max_length=50, null=True, blank=True)
-    nama_belakang = models.CharField(max_length=100, null=True, blank=True)
-    profesi     = models.CharField(max_length=100)
-    keahlian    = models.CharField(max_length=100)
-    pengalaman  = models.CharField(max_length=100)
-    deskripsi_singkat   = models.TextField(null=True, blank=True, help_text='Deskripsi singkat Profile anda**')
-    deskripsi  = models.CharField(max_length=50)
-    pendidikan  = models.CharField(max_length=100)
-    sertifikasi = models.CharField(max_length=100, blank=True, null=True)
-    web         = models.CharField(max_length=100, blank=True, null=True)
-    email       = models.EmailField()
-    buat        = models.DateTimeField(auto_now=True)
-
-    class Meta:
-        verbose_name_plural = 'Data-Seller'
 
 class Images(models.Model):
     user        = models.ForeignKey(User, default=None, on_delete=models.CASCADE, related_name='imgGigs', null=True, blank=True)
@@ -130,15 +114,49 @@ class RequestDirectAuthor(models.Model):
     class Meta: 
         verbose_name_plural = 'Data-Request Author'
 
-class AlbumTukang(models.Model):
-    """ Album rekam project Tukangku """
-    user        = models.ForeignKey(User, on_delete=models.CASCADE, related_name='albumProject', blank=True, null=True)
-    judul       = models.CharField(max_length=250)
-    deskripsi   = models.TextField(null=True, blank=True)
-    images      = models.ImageField(upload_to='upload')
-    kota        = models.CharField(max_length=250)
-    provinsi    = models.CharField(choices=PROVINSI_CHOICES, default='Aceh', max_length=50)
+def path_and_rename(path):
+    def wrapper(instance, filename):
+        ext = filename.split('.')[-1]
+        if instance.pk:
+            filename = '{}.{}'.format(instance.oleh, ext)
+        else:
+            filename = '{}.{}'.format(uuid4().hex, ext)
+        return os.path.join(path, filename)
+    return wrapper
 
-    class Meta: 
-        verbose_name_plural = 'Data-Album Project'
+class Request(models.Model):
+    nama_depan      = models.CharField(max_length=100)
+    nama_belakang   = models.CharField(max_length=100)
+    email           = models.EmailField()
+    kontak          = models.CharField(max_length=14)
+    deskripsi       = models.TextField()
+    link            = models.URLField(null=True, blank=True)
+    jenis_ruangan   = models.CharField(choices=JENIS_RUANGAN, max_length=50, default='Jenis Ruangan')
+    files           = models.FileField(upload_to='upload/files/', default='default.jpg')
+    image           = models.ImageField(upload_to=path_and_rename('upload/display/{}'.format(time.strftime("%Y/%m/%d"))), default='default.jpg')
+    services        = models.CharField(choices=KATEGORI_CHOICES, max_length=50, default='Pilihan Service')
+    jumlah_budget   = models.PositiveIntegerField(default=0)
+    alamat          = models.CharField(max_length=500)
+    kota            = models.CharField(max_length=50)
+    provinsi        = models.CharField(choices=PROVINSI_CHOICES, max_length=50, default='Aceh')
+    status          = models.CharField(choices=STATUS_CHOICES, max_length=30, default='Dalam Antrian')
+    buat            = models.DateField(auto_now=True)
+    tanggal_pengerjaan  = models.DateField(auto_now_add=True)
+    tanggal_selesai     = models.DateField(auto_now_add=True)
+    oleh            = models.ForeignKey(User, on_delete=models.CASCADE, related_name='karyawanUser', null=True, blank=True)
 
+    def get_absolute_url(self):
+        return reverse('detail-permintaan', kwargs={'pk': self.pk})
+
+    def save(self, *args, **kwargs):
+        super(Request, self).save(*args, **kwargs)
+
+        img = Image.open(self.image.path)
+
+        if img.height > 300 or img.width > 300:
+            output_size = (300,300)
+            img.thumbnail(output_size)
+            img.save(self.image.path)
+    
+    class Meta:
+        verbose_name_plural = 'Data - Permintaan'

@@ -1,10 +1,9 @@
 from django.contrib.auth.models import User
-from django.db.models import Q
 from django.urls import reverse, reverse_lazy
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseRedirect, JsonResponse
+from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic import (
@@ -17,20 +16,15 @@ from django.views.generic import (
     View
 )
 
-from .forms import (
-    PesanForm, 
-    MintaForm, 
-    SignUpForm, 
-    ReviewForm, 
+from .forms import ( 
+    SignUpForm,  
     PesanAuthorForm,
     UserUpdateForm, 
     ProfileUpdateForm, 
-    RequestDirectAuthorForm
+    UpdatePermintaan,
 )
 
 from .models import ( 
-    Pesan, 
-    Minta, 
     Profile, 
     PesanAuthor, 
 )
@@ -38,27 +32,29 @@ from .models import (
 from sellerapp.models import ( 
     Gigs,
     Images,
-    ProInfo,
-    AlbumTukang,
-    SellerGigsImage,
-    RequestDirectAuthor,
+    Request,
 )
 
 from sellerapp.forms import (
     GigsForm,
-    BecomeSellerForm,
-    RequestDirectAuthorForm,
 )
 
 # Parent
 def index(request):
     """ Parent page: Index """
-    return render(request, 'index.html')
+    drop =  Gigs.objects.all()
+    context = {
+        'drop': drop,
+    }
+    return render(request, 'index.html', context)
 
 def landing(request):
     """ Parent page: Landing """
-    
-    return render(request, 'landing.html')
+    drop =  Gigs.objects.all()
+    context = {
+        'drop': drop,
+    }
+    return render(request, 'landing.html', context)
 
 def register(request):
     """ Parent page: Register """
@@ -69,72 +65,28 @@ def register(request):
 def home(request):
     """ Menampilkan konten pada Home """
     gigs = Gigs.objects.order_by('-buat')
-
-    # kategori
-    arsitek = Gigs.objects.filter(kategori='Arsitek').count()
-    kontraktor = Gigs.objects.filter(kategori='Kontraktor').count()
-    design = Gigs.objects.filter(kategori='Design Interior').count()
-    build = Gigs.objects.filter(kategori='Design and Build').count()
-
-    # jenis ruangan 
-    kt = Gigs.objects.filter(jenis_ruangan='Kamar Tidur').count()
-    km = Gigs.objects.filter(jenis_ruangan='Kamar Mandi').count()
-    dp = Gigs.objects.filter(jenis_ruangan='Dapur').count()
-    rk = Gigs.objects.filter(jenis_ruangan='Ruang Keluarga').count()
-    tm = Gigs.objects.filter(jenis_ruangan='Taman').count()
-    tg = Gigs.objects.filter(jenis_ruangan='Tangga').count()
-    rm = Gigs.objects.filter(jenis_ruangan='Ruang Makan').count()
-    ex = Gigs.objects.filter(jenis_ruangan='Exterior').count()
-    rb = Gigs.objects.filter(jenis_ruangan='Ruang Belajar').count()
-    rj = Gigs.objects.filter(jenis_ruangan='Ruang Kerja').count()
-    pr = Gigs.objects.filter(jenis_ruangan='Perpustakaan').count()
     context = {
         'gigs': gigs,
-        'arts': arsitek, 
-        'kontraktor': kontraktor,
-        'design': design,
-        'build': build,
-
-        # jenis ruangan 
-        'kt': kt,
-        'km': km,
-        'dp': dp,
-        'rk': rk,
-        'tm': tm,
-        'tg': tg,
-        'rm': rm,
-        'ex': ex,
-        'rb': rb,
-        'rj': rj,
-        'pr': pr,
     }
     return render(request, 'child/home.html', context)
 
-def pesan(request):
-    form = PesanForm()
+def detail_permintaan(request, pk):
+    """ Menampilkan detail Permintaan dan Update Permintaan """
+    ins = Request.objects.get(pk=pk)
+    req = Request.objects.filter(pk=pk).order_by('buat')
     if request.method == 'POST':
-        form = PesanForm(request.POST)
-        if form.is_valid():
+        form = UpdatePermintaan(request.POST, instance=ins)
+        if form.is_valid() :
             form.save()
-            return HttpResponseRedirect(reverse("pesan"))
-    else:
-        form = PesanForm()
-    context = {'form': form}
-    return render(request, 'child/pesan.html', context)
-
-def list_baru(request):
-    """ Menampilkan list baru dari Daftar """
-    terbaru = Gigs.objects.order_by('-buat')
-    count_terbaru = Gigs.objects.all().count()
-    context = {'baru': terbaru, 'count': count_terbaru }
-    return render(request, 'child/list_baru.html', context)
-
-def list_populer(request):
-    """ Menampilkan list populer dari Daftar """
-    terpopuler = Gigs.objects.order_by('-buat')
-    count_terbaru = Gigs.objects.all().count()
-    context = {'populer': terpopuler, 'count': count_terbaru}
-    return render(request, 'child/list_populer.html', context)
+            return redirect('detail_permintaan')
+    else :
+        form = UpdatePermintaan(request.POST)
+    context = {
+        'req': req,
+        'form': form,
+        'ins':ins,
+    }
+    return render(request, 'details/detail_permintaan.html', context)
 
 def registerForm(request):
     """ Membuat Form Register akun MyTukang """
@@ -167,7 +119,7 @@ def profile(request):
         u_form = UserUpdateForm(instance=request.user, prefix='user')
         p_form = ProfileUpdateForm(instance=request.user.profile, prefix='profile')
 
-    posts = Gigs.objects.filter(user=request.user)
+    posts = Request.objects.filter(oleh=request.user)
     context = {
         'u_form': u_form,
         'p_form': p_form,
@@ -177,50 +129,6 @@ def profile(request):
     return render(request, 'tukangkuapp/profile.html', context)
 
 # CRUD
-def RequestSelesai(request):
-    """ Request Selesai """
-    rincian = RequestDirectAuthor.objects.filter(auhtor=request.user)
-    return render(request, 'child/request_done.html')
-
-@login_required
-def RequestDirectForm(request, slug, pk):
-    """ Membuat Request Langsung pada Author oleh User """
-    if request.method == 'POST':
-        form = RequestDirectAuthorForm(request.POST, request.FILES, instance=request.user.profile)
-        if form.is_valid():
-            instance = RequestDirectAuthor(document=request.FILES['document'])
-            instance.save()
-            return redirect('/post/order/cek/')
-    else:
-        form = RequestDirectAuthorForm(instance=request.user.profile)
-    gigs = Gigs.objects.get(slug=slug, pk=pk)
-    context = {
-        'form': form,
-        'gigs': gigs
-    }
-    return render(request, 'child/request_author.html', context)
-
-def GigsFormCreate(request):
-    """ Membuat Form Gig untuk Seller """
-    if request.method == 'POST':
-        form = GigsForm(request.POST, request.FILES, instance=request.user.profile)
-        if form.is_valid():
-            form.save()
-            return redirect('/profile/')
-    else:
-        form = GigsForm(instance=request.user.profile)
-    context = {
-        'form': form,
-    }
-    return render(request, 'create/gig_create.html', context)
-    
-
-class RequestCekUlang(ListView, LoginRequiredMixin):
-    """ Menampilkan hasil Request pada Author """
-    model = RequestDirectAuthor
-    context_object_name = 'posts'
-    success_url = '/post/order/selesai/<int:pk>/'
-    template_name = 'child/request_cek.html'
 
 class TukangAllListView(ListView):
     model = Gigs
@@ -231,26 +139,20 @@ class TukangAllListView(ListView):
         context['daftar'] = Gigs.objects.all()
         return context
 
-class MintaDetailView(DetailView):
-    """ Menampilkan slug pada url ke Minta Detail """
-    model = Minta
-    slug_url_kwarg = 'slug'
-    slug_field = 'slug'
-
 def DashboardDetailView(request, username):
     """ Menampilkan detail author dan daftar gigs pada author """
     author  = get_object_or_404(User, username=username)
     gigs    = Gigs.objects.filter(user=author)
-    req     = PesanAuthor.objects.filter(user=author).order_by('-id')
     if request.method == 'POST':
         msg = PesanAuthorForm(request.POST, instance=request.user)
         if msg.is_valid() :
             deskripsi   = request.POST.get('deskripsi')
-            nama        = request.POST.get('nama')
+            nama_depan  = request.POST.get('nama_depan')
+            nama_belakang = request.POST.get('nama_belakang')
             link        = request.POST.get('link')
             kontak      = request.POST.get('kontak')
             upah        = request.POST.get('upah')
-            authors      = PesanAuthor.objects.create(author=username, user=request.user, deskripsi=deskripsi, link=link, kontak=kontak)
+            authors      = PesanAuthor.objects.create(nama_depan=nama_depan, nama_belakang=nama_belakang, deskripsi=deskripsi, link=link, kontak=kontak)
             authors.save()
             return HttpResponseRedirect('/home/')
     else :
@@ -259,19 +161,16 @@ def DashboardDetailView(request, username):
         'posts': gigs,
         'form': msg,
     }
-    return render(request, 'details/dashboard_detail.html', context)
-    # model = Gigs
-    # context_object_name = 'posts'
-    # form_class = RequestDirectAuthorForm
-        
+    return render(request, 'details/dashboard_detai.html', context)
 
-    # def get_context_data(self, **kwargs):
-    #     context = super(DashboardDetailView, self).get_context_data(**kwargs)
-    #     context['form'] = self.get_form()
-    #     return context
-
-    # def post(self, request, *args, **kwargs):
-    #     return FormView.post(self, request, *args, **kwargs)
+class CreateRequest(CreateView):
+    model = Request
+    template_name = 'child/pesan.html'
+    fields = ['nama_depan', 'nama_belakang', 'email', 'kontak', 'deskripsi', 'link', 'jenis_ruangan', 'services', 'jumlah_budget', 'provinsi', 'kota', 'alamat']
+    
+    def form_valid(self, form):
+        form.instance.oleh = self.request.user
+        return super().form_valid(form)
 
 class DaftarDetailView(DetailView, FormView):
     """ Menampilkan slug pada url ke Daftar Detail """
@@ -281,28 +180,10 @@ class DaftarDetailView(DetailView, FormView):
     slug_url_kwarg = 'slug'
     slug_field = 'slug'
     username = 'username'
-    
-    def get_context_data(self, **kwargs):
-        context = super(DaftarDetailView, self).get_context_data(**kwargs)
-        context['form'] = self.get_form()
-        return context
-
-    def post(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        form = self.get_form()
-        if form.is_valid():
-            form.instance.author = self.username
-            form.instance.user = self.request.user.profile
-            return self.form_valid(form)
-        else:
-            return self.form_invalid(form)  
+    success_url = '/home/'
     
     def form_valid(self, form):
-        return super(DaftarDetailView, self).form_valid(form)
-
-    def form_invalid(self, form):
-        #put logic here
-        return super(DaftarDetailView, self).form_invalid(form)
+        return super().form_valid(form)
 
 class DaftarListView(ListView):
     """ List daftar gigs pada profile """
@@ -313,65 +194,4 @@ class DaftarListView(ListView):
         context = super( DaftarListView, self).get_context_data(**kwargs)
         context['daftar'] = Gigs.objects.filter(user=request.user)
         return context
-
-# class MintaCreateView(CreateView):
-#     """ Membuat Request Job Dari User Untuk Seller """
-#     model   = Minta
-#     fields  = ['judul', 'kontak', 'upah', 'deskripsi', 'file']
-    
-#     def form_valid(self, form):
-#         form.instance.author = self.request.author
-#         return super().form_valid(form)
-
-# class PesanAuthorCreateView(LoginRequiredMixin, CreateView):
-#     """ Membuat Massage Dari User Untuk Seller """
-#     model = PesanAuthor
-#     fields  = ['user', 'kontak', 'upah', 'deskripsi', 'file']
-
-#     def form_valid(self, form):
-#         form.instance.author = self.request.user
-#         return super().form_valid(form)
-
-class DaftarUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
-    """ Membuat update data pada Daftar dan kembali ke Profile """
-    model = Gigs
-    fields = ['deskripsi', 'anggota', 'posisi', 'file']
-    success_url = '/profile/'
-
-    def form_valid(self, form):
-        form.instance.author = self.request.user
-        return super().form_valid(form)
-
-    def test_func(self):
-        post = self.get_object()
-        if self.request.user == post.author:
-            return True
-        return False
-
-# class MintaUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
-#     """ Membuat update data pada Minta  """
-#     model = Minta
-#     fields = ['judul', 'kontak', 'upah', 'deskripsi', 'file']
-
-#     def form_valid(self, form):
-#         form.instance.author = self.request.user
-#         return super().form_valid(form)
-
-#     def test_func(self):
-#         minta = self.get_object()
-#         if self.request.user == minta.author:
-#             return True
-#         return False
-
-# class MintaDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
-#     """ Menghapus data Minta yang dipilih dan kembali ke Home """
-#     model = Minta
-#     success_url = '/post/'
-
-#     def test_func(self):
-#         minta = self.get_object()
-#         if self.request.user == minta.author:
-#             return True
-#         return False
-
 

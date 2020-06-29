@@ -23,35 +23,6 @@ KATEGORI_CHOICES = [
 ]
 
 # Form Section
-class Minta(models.Model):
-    judul       = models.CharField(max_length=100)
-    kontak      = models.CharField(max_length=50, help_text='Nomor telepon atau email**')
-    upah        = models.CharField(max_length=50)
-    file        = models.FileField(null=True, blank=True, help_text='Upload file permintaan anda jika perlu**')
-    deskripsi   = models.TextField(null=True, blank=True)
-    buat        = models.DateTimeField(default=timezone.now)
-    user        = models.ForeignKey(User, on_delete=models.CASCADE)
-    slug        = models.SlugField(unique=True, blank=True, null=True)
-
-    def save(self, *args, **kwargs):
-        self.slug = self.slug or slugify(self.judul)
-        super().save(*args, **kwargs)
-
-    def get_absolute_url(self):
-        return reverse('minta')
-
-    class Meta: 
-        verbose_name_plural = 'Data-Request'
-
-class Pesan(models.Model):
-    nama        = models.CharField(max_length=100)
-    email       = models.EmailField()
-    subjek      = models.CharField(max_length=100, blank=True, null=True)
-    pesan       = models.TextField
-
-    class Meta:
-        verbose_name_plural = 'Data-Pesan'
-
 class Profile(models.Model):
     user        = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
     image       = models.ImageField(default='default.jpg', upload_to='upload')
@@ -89,25 +60,11 @@ def create_or_update_user_profile(sender, instance, created, **kwargs):
         Profile.objects.create(user=instance)
     instance.profile.save()
 
-class Review(models.Model):
-    author      = models.ForeignKey(Profile, on_delete=models.CASCADE)
-    nama        = models.CharField(max_length=250)
-    review      = models.TextField(blank=True)
-    gambar      = models.ImageField(upload_to='upload', blank=True, help_text='Masukkan gambar project anda jika perlu**')
-    buat        = models.DateField(auto_now=True)
-    
-    def get_absolute_url(self):
-        return reverse('review', kwargs={'pk': self.pk})
-
-    class Meta: 
-        verbose_name_plural = 'Data-Review'
-
 class PesanAuthor(models.Model):
-    user        = models.ForeignKey(User, on_delete=models.CASCADE, related_name='reqUser', null=True, blank=True)
-    author      = models.ForeignKey(User, on_delete=models.CASCADE, related_name='reqtAuthor', blank=True, null=True)
+    nama_depan  = models.CharField(max_length=100, null=True, blank=True)
+    nama_belakang  = models.CharField(max_length=100, null=True, blank=True)
     kontak      = models.CharField(max_length=50, help_text='Nomor telepon atau email**')
     link        = models.CharField(max_length=2000, help_text='Cantumkan link file keterangan bila perlu**', null=True, blank=True)
-    upah        = models.ForeignKey(Gigs, on_delete=models.CASCADE, related_name='reqUpah', null=True, blank=True)
     deskripsi   = models.TextField(null=True, blank=True)
     buat        = models.DateTimeField(default=timezone.now)
 
@@ -115,7 +72,7 @@ class PesanAuthor(models.Model):
         return reverse('pesan-author', kwargs={'pk': self.pk, 'username':self.user})
 
     class Meta: 
-        verbose_name_plural = 'Data-Request Pesan Author'
+        verbose_name_plural = 'Data-Pesanan'
 
 
 
