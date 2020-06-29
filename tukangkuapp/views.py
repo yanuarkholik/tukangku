@@ -70,15 +70,16 @@ def home(request):
     }
     return render(request, 'child/home.html', context)
 
+@login_required
 def detail_permintaan(request, pk):
     """ Menampilkan detail Permintaan dan Update Permintaan """
     ins = Request.objects.get(pk=pk)
     req = Request.objects.filter(pk=pk).order_by('buat')
     if request.method == 'POST':
-        form = UpdatePermintaan(request.POST, instance=ins)
+        form = UpdatePermintaan(request.POST, request.FILES, instance=ins)
         if form.is_valid() :
             form.save()
-            return redirect('detail_permintaan')
+            return redirect('profile')
     else :
         form = UpdatePermintaan(request.POST)
     context = {
@@ -119,7 +120,7 @@ def profile(request):
         u_form = UserUpdateForm(instance=request.user, prefix='user')
         p_form = ProfileUpdateForm(instance=request.user.profile, prefix='profile')
 
-    posts = Request.objects.filter(oleh=request.user)
+    posts = Request.objects.filter(oleh=request.user).order_by('status')
     context = {
         'u_form': u_form,
         'p_form': p_form,

@@ -7,7 +7,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from PIL import Image
 
-from sellerapp.models import Gigs
+from sellerapp.models import Gigs, Request
 
 # Choices 
 
@@ -35,7 +35,7 @@ class Profile(models.Model):
     sertifikasi = models.CharField(max_length=100, blank=True, null=True)
     web         = models.CharField(max_length=100, blank=True, null=True)
     pendidikan  = models.CharField(max_length=100, blank=True, null=True)
-    gigs        = models.ForeignKey(Gigs, on_delete=models.CASCADE, related_name='profileGigs', null=True, blank=True)
+    gigs        = models.ForeignKey(Request, on_delete=models.CASCADE, related_name='profileGigs', null=True, blank=True)
     buat        = models.DateTimeField(auto_now=True)
     
     def __str__(self):

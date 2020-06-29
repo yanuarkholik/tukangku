@@ -58,6 +58,12 @@ STATUS_CHOICES = [
     ('Selesai', 'Selesai')
 ]
 
+KEPUASAN_CHOICES = [
+    ('Tingkat Kepuasan', 'Tingkat Kepuasan'),
+    ('Puas', 'Puas'),
+    ('Tidak Puas', 'Tidak Puas'),
+]
+
 class Images(models.Model):
     user        = models.ForeignKey(User, default=None, on_delete=models.CASCADE, related_name='imgGigs', null=True, blank=True)
     images      = models.ImageField(upload_to = 'upload/display/',null=True, blank=True)
@@ -122,7 +128,7 @@ def path_and_rename(path):
         else:
             filename = '{}.{}'.format(uuid4().hex, ext)
         return os.path.join(path, filename)
-    return wrapper
+
 
 class Request(models.Model):
     nama_depan      = models.CharField(max_length=100)
@@ -141,22 +147,69 @@ class Request(models.Model):
     provinsi        = models.CharField(choices=PROVINSI_CHOICES, max_length=50, default='Aceh')
     status          = models.CharField(choices=STATUS_CHOICES, max_length=30, default='Dalam Antrian')
     buat            = models.DateField(auto_now=True)
-    tanggal_pengerjaan  = models.DateField(auto_now_add=True)
-    tanggal_selesai     = models.DateField(auto_now_add=True)
+    tanggal_pengerjaan  = models.DateField(null=True, blank=True)
+    tanggal_selesai     = models.DateField(null=True, blank=True)
     oleh            = models.ForeignKey(User, on_delete=models.CASCADE, related_name='karyawanUser', null=True, blank=True)
+    revisi          = models.TextField(null=True, blank=True)
 
     def get_absolute_url(self):
-        return reverse('detail-permintaan', kwargs={'pk': self.pk})
+        return reverse('detail-permintaan', kwargs={'pk': self.id})
 
+    def ids():
+        no = Request.objects.count()
+        if no == None:
+            return 1
+        else:
+            return no + 1
+    
+    emp_id = models.IntegerField(('Code'), default=ids, unique=True, editable=False)
+    
+    id = models.CharField(primary_key=True, editable=False, max_length=30)
     def save(self, *args, **kwargs):
-        super(Request, self).save(*args, **kwargs)
-
         img = Image.open(self.image.path)
 
         if img.height > 300 or img.width > 300:
             output_size = (300,300)
             img.thumbnail(output_size)
             img.save(self.image.path)
-    
+
+        if not self.id:
+            self.id = "{}{:08d}".format('YNK', self.emp_id)
+        super(Request, self).save(*args, **kwargs)
+
     class Meta:
         verbose_name_plural = 'Data - Permintaan'
+
+class Invoice(models.Model):
+    oleh            = models.ForeignKey(Request, on_delete=models.CASCADE, related_name='invoice', null=True, blank=True)
+    komentar        = models.TextField(null=True, blank=True)
+    buat            = models.DateField(auto_now_add=True)
+    kepuasan        = models.CharField(max_length=30, choices=KEPUASAN_CHOICES, default='Tingkat Kepuasan')
+
+    def get_absolute_url(self):
+        return reverse('profile', kwargs={'pk': self.id})
+
+    def ids():
+        no = Invoice.objects.count()
+        if no == None:
+            return 1
+        else:
+            return no + 1
+    
+    emp_id = models.IntegerField(('Code'), default=ids, unique=True, editable=False)
+
+    id = models.CharField(primary_key=True, editable=False, max_length=30)
+
+    def save(self, *args, **kwargs):
+        if not self.id:
+            self.id = "{}{:08d}/XX/VII/{}".format('INV', self.emp_id, self.oleh.id)
+        super(Invoice, self).save(*args, **kwargs)
+
+    class Meta:
+        verbose_name_plural = 'Data - Invoice'
+
+@receiver(post_save, sender=Request)
+def create_or_update_user_profile(sender, instance, created, **kwargs):
+    if created:
+        Invoice.objects.create(oleh=instance)
+    instance.oleh.save()

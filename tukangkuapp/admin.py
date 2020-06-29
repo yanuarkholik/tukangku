@@ -3,7 +3,7 @@ from django.contrib.admin.filters import RelatedOnlyFieldListFilter
 
 from .models import Profile, PesanAuthor
 
-from sellerapp.models import RequestDirectAuthor, Request
+from sellerapp.models import RequestDirectAuthor, Request, Invoice
 # Custom Column
 
 @admin.register(RequestDirectAuthor)
@@ -31,4 +31,12 @@ class RequestAdmin(admin.ModelAdmin):
     list_filter = (
         ('services'),
         ('status'),
+    )
+
+@admin.register(Invoice)
+class InvoiceAdmin(admin.ModelAdmin):
+    list_display = ('oleh', 'kepuasan',  'id')
+    ordering = ('-buat',)
+    list_filter = (
+        ('kepuasan'),
     )
