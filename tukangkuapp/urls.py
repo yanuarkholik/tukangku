@@ -14,17 +14,11 @@ from .views import (
     detail_permintaan,
 
     # Crud
-    DashboardDetailView,
-    DaftarDetailView, 
     CreateRequest,
-    DetailUpdatePermintaan
+    DetailUpdatePermintaan,
+    DetailDeleteView,
 
 )
-
-from sellerapp.views import (
-    Seller,
-)
-
 urlpatterns = [
     # Parents
     path('', landing, name='landing'),
@@ -32,19 +26,22 @@ urlpatterns = [
     path('profile/', profile, name='profile'),
     
     # CRUD
-    # path('post/gigs/create/', GigsFormCreate, name='gigs-create'),
-    path('post/<str:username>/', DashboardDetailView, name='dashboard'),
-    path('gigs/<str:username>/<slug:slug>/', DaftarDetailView.as_view(template_name='details/detail_gig.html'), name='gigs-detail'),
     path('request/create/', CreateRequest.as_view(), name='request-create'),
+    path('request/delete/<pk>/', DetailDeleteView.as_view(), name='delete-permintaan'),
 
     # Childs    
     path('home/', home, name='home'),
     path('register/', registerForm, name='registerForm'),
-    path('register/seller-registration/', Seller, name='seller-registration'),
-    path('detail/<pk>/', DetailUpdatePermintaan.as_view(), name='detail-permintaan'),
     path('detail/<str:username>/<pk>/', detail_permintaan, name='details'),
+    path('detail/<pk>/', DetailUpdatePermintaan.as_view(), name='detail-permintaan'),
     path('logout/', auth_views.LogoutView.as_view(template_name='landing.html'), name='logout'),
     path('login/', auth_views.LoginView.as_view(template_name='tukangkuapp/login.html'), name='login'),
+
+    # Pass Reset
+    path('password-reset/', auth_views.PasswordResetView.as_view(template_name='child/password_reset.html'), name='password_reset'),
+    path('password-reset/done/', auth_views.PasswordResetDoneView.as_view( template_name='users/password_reset_done.html' ), name='password_reset_done'),
+    path('password-reset-confirm/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view( template_name='users/password_reset_confirm.html' ), name='password_reset_confirm'),
+    path('password-reset-complete/', auth_views.PasswordResetCompleteView.as_view( template_name='users/password_reset_complete.html' ), name='password_reset_complete'),
 ]
 
 if settings.DEBUG:

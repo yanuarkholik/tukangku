@@ -7,7 +7,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from PIL import Image
 
-from sellerapp.models import Gigs, Request
+from sellerapp.models import Request
 
 # Choices 
 
@@ -27,15 +27,6 @@ class Profile(models.Model):
     user        = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
     image       = models.ImageField(default='default.jpg', upload_to='upload')
     deskripsi   = models.TextField(null=True, blank=True, help_text='Deskripsi singkat Profile anda**')
-    deskripsi_singkat   = models.CharField(max_length=50, null=True, blank=True)
-    nama_depan  = models.CharField(max_length=50, null=True, blank=True)
-    nama_belakang = models.CharField(max_length=100, null=True, blank=True)
-    profesi     = models.CharField(max_length=100, blank=True, null=True)
-    pengalaman  = models.CharField(max_length=100, blank=True, null=True)
-    sertifikasi = models.CharField(max_length=100, blank=True, null=True)
-    web         = models.CharField(max_length=100, blank=True, null=True)
-    pendidikan  = models.CharField(max_length=100, blank=True, null=True)
-    gigs        = models.ForeignKey(Request, on_delete=models.CASCADE, related_name='profileGigs', null=True, blank=True)
     buat        = models.DateTimeField(auto_now=True)
     
     def __str__(self):

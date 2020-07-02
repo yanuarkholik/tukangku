@@ -26,7 +26,7 @@
 	<nav class="navbar navbar-expand-lg navbar-white bg-white  main_box border-bottom p-2">
 		<div class="container" style="max-width: 95%;">
 			<!-- Brand and toggle get grouped for better mobile display -->
-			<a class="navbar-brand logo_h" href="{% url 'landing' %}"><img src="{% static 'upload/img/logo.png' %}" class="p-0" alt=""></a>
+			<a class="navbar-brand font-weight-bold text-warning" href="{% url 'landing' %}" style="font-size: xx-large;">TUKANGKU</a>
 			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
 			 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 				<span class="icon-bar"></span>
@@ -37,18 +37,18 @@
 			<!-- Collect the nav links, forms, and other content for toggling -->
 			<div class="collapse navbar-collapse offset" id="navbarSupportedContent">
 				<ul class="nav navbar-nav menu_nav ml-auto">
-					<li class="nav-item m-auto"><a class="nav-link" href="{% url 'landing' %}">Home</a></li>
-					<li class="nav-item m-auto"><a class="nav-link" href="{% url 'request-create' %}">Buat Pemesanan</a></li>
+					<li class="nav-item m-auto"><a class="nav-link font-weight-normal text-secondary" href="{% url 'landing' %}">HOME</a></li>
+					<li class="nav-item m-auto"><a class="nav-link font-weight-normal text-secondary" href="{% url 'request-create' %}">BUAT PEMESANAN</a></li>
 					{% if user.is_authenticated %}
-					<li class="nav-item m-auto"><a class="nav-link" href="{% url 'logout' %}">Log Out</a></li>
+					<li class="nav-item m-auto"><a class="nav-link font-weight-normal text-secondary" href="{% url 'logout' %}">LOG OUT</a></li>
 					<li class="nav-item ml-1">
 						<a class="nav-link" href="{% url 'profile' %}">
 							<img src="{{ user.profile.image.url }}" class="m-auto" style=" width: 30px; height: 30px; object-fit: cover; border-radius: 50%;">
 						</a>
 					</li>
 					{% else %}
-					<li class="nav-item m-auto"><a class="nav-link" href="{% url 'registerForm' %}">Daftar</a></li>
-					<li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Masuk</a></li>
+					<li class="nav-item m-auto"><a class="nav-link font-weight-normal text-secondary" href="{% url 'registerForm' %}">DAFTAR</a></li>
+					<li class="nav-item"><a class="nav-link font-weight-normal text-secondary" href="{% url 'login' %}">MASUK</a></li>
 					{% endif %}
 				</ul>
 			</div>

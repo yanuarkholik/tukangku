@@ -6,70 +6,35 @@
 {% block url %}
 <div class="d-flex justify-content-between m-auto">
 	<div class="nav-item active">
-		<a class="nav-link" href="{% url 'home' %}">Protofolio Desain</a>
-	</div>
-	<div class="nav-item">
-		<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" id="navbarDropdown" role="button">Data Produk</a>
-		<ul class="dropdown-menu megamenu m-2 border border-light" style="max-width: 98%;">
-			<div class="row">
-				<div class="col-md-3">
-					<ul>
-						<h6 class="list-header">List Header</h6>
-						<hr>
-						<li>
-							<a href="#">Lorem Ipsum</a>
-						</li>
-						<li>
-							<a href="#">Lorem Ipsum</a>
-						</li>
-						<li>
-							<a href="#">Lorem Ipsum</a>
-						</li>
-						<li>
-							<a href="#">Lorem Ipsum</a>
-						</li>
-						<li>
-							<a href="#">Lorem Ipsum</a>
-						</li>
-					</ul>
-				</div>
-				<div class="col-md-3">
-					<ul>
-						<h6 class="list-header">List Header</h6>
-						<hr>
-						<li>
-							<a href="#">Lorem Ipsum</a>
-						</li>
-						<li>
-							<a href="#">Lorem Ipsum</a>
-						</li>
-						<li>
-							<a href="#">Lorem Ipsum</a>
-						</li>
-						<li>
-							<a href="#">Lorem Ipsum</a>
-						</li>
-						<li>
-							<a href="#">Lorem Ipsum</a>
-						</li>
-					</ul>
-				</div>
-			</div>
-		</ul>
+		<a class="nav-link font-weight-normal text-secondary" href="{% url 'home' %}">Semua Desain</a>
 	</div>
 	<div class="nav-item">
 		<div class="dropdown">
-			<a class="dropdown-toggle nav-link" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-			  Dropdown link
+			<a class="dropdown-toggle nav-link font-weight-normal text-secondary" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+				Daftar Ruangan
 			</a>
 		  
-			<div class="dropdown-menu m-2 border border-light" aria-labelledby="dropdownMenuLink">
-			  <a class="dropdown-item" href="#">Action</a>
-			  <a class="dropdown-item" href="#">Another action</a>
-			  <a class="dropdown-item" href="#">Something else here</a>
+			<div class="dropdown-menu m-2 bg-light border border-light" aria-labelledby="dropdownMenuLink">
+				{% for d in gigs %}
+				<a class="dropdown-item" href="#">{{ d.jenis_ruangan }}</a>
+				{% endfor %}
 			</div>
 		  </div>
-		</ul>
+		</div>
+	</div>
+	<div class="nav-item">
+		<div class="dropdown">
+			<a class="dropdown-toggle nav-link font-weight-normal text-secondary" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+				Daftar Professional
+			</a>
+		  
+			<div class="dropdown-menu m-2 bg-light border border-light" aria-labelledby="dropdownMenuLink">
+				{% for d in gigs %}
+				<a class="dropdown-item" href="#">{{ d.kategori }}</a>
+				{% endfor %}
+			</div>
+		  </div>
+		</div>
 	</div>
 </div>
 {% endblock %}
@@ -80,26 +45,83 @@
 		<div class="row">
 			<div class="col-lg-8">
 				<div class="col-lg-12 p-3 bg-white rounded shadow-sm">
-                    {% for i in req %}
-					{{ i.id }}
-					{{ i.oleh }}
-					{{ i.nama_depan }}
-					{{ i.nama_belakang }}
-					{{ i.status }}
-					
-					{{ i.buat|date:'M d, Y' }}
-						{% if i.status == 'Dalam Pengerjaan' %}
-							{{ i.tanggal_pengerjaan|date:'M d,Y'}}
-						{% elif i.status == 'Selesai' %}
-							{{ i.tanggal_pengerjaan|date:'M d,Y'}}
-							{{ i.tanggal_selesai|date:'M d,Y'}}
-                        {% endif %}
-                    {% endfor %}
+					<nav>
+						<div class="d-flex justify-content-between">
+							<small class="text-uppercase text-warning font-weight-bold">
+								Dalam Antrian
+							</small>
+							<small class="text-uppercase text-primary font-weight-bold">
+								Dalam Pengerjaan
+							</small>
+							<small class="text-uppercase text-success font-weight-bold">
+								Selesai
+							</small>
+						</div>
+					</nav>
+					{% for i in req %}
+					{% if i.status == 'Dalam Pengerjaan' %}
+					<div class="progress m-3" style="height: 3px;">
+						<div class="progress-bar" role="progressbar" style="width: 50%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+					</div>
+					{% elif i.status == 'Selesai' %}
+					<div class="progress m-3" style="height: 3px;">
+						<div class="progress-bar bg-success" role="progressbar" style="width: 100%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+					</div>
+					{% else %}
+					<div class="progress m-3" style="height: 3px;">
+						<div class="progress-bar bg-danger" role="progressbar" style="width: 1%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+					</div>
+					{% endif %}
+					<img class="card-img-top mt-3 mt-3" src="{{ i.image.url }}" alt="{{ i.oleh }}" style="height: 300px; object-fit: cover;">
+					<small class="text-secondary ">Gambar telah di kompresi**</small> <br> <br>
+					<img src="{{ i.oleh.profile.image.url }}" class="m-auto" style=" width: 30px; height: 30px; object-fit: cover; border-radius: 50%;">
+					<nav class="mt-3 mb-4">
+						<div class="mb-2 d-flex justify-content-between mb-3">
+							<small class="text-uppercase font-weight-bold">
+								No. ID
+							</small>
+							<small class="text-uppercase font-weight-normal">
+								{{ i.id }}
+							</small>
+						</div>
+						<div class="mb-2 d-flex justify-content-between mb-3">
+							<small class="text-uppercase font-weight-bold">
+								Nama
+							</small>
+							<small class="text-uppercase font-weight-normal">
+								{{ i.nama_depan }} ***
+							</small>
+						</div>
+						<div class="mb-3 d-flex justify-content-between">
+							<small class="text-uppercase font-weight-bold">
+								Status
+							</small>
+							<small class="text-uppercase font-weight-bold">
+								{{ i.status }}
+							</small>
+						</div>
+						<div class="mb-3 d-flex justify-content-between">
+							<small class="text-uppercase font-weight-bold">
+								Alamat
+							</small>
+							<small class="text-uppercase font-weight-normal text-right">
+								{{ i.kota }}, {{ i.provinsi }} <br>
+							</small>
+						</div>
+					</nav>
+					<small class="text-uppercase font-weight-bold mt-3 mb-3">
+						Deskripsi <br>
+					</small>
+					<small class="text-uppercase font-weight-normal mt-3 mb-3">
+						{{ i.deskripsi|linebreaks }} <br>
+					</small>
+					<br>
+					<br>
 				</div>
 			</div>
 			<div class="col-lg-4 ">
 				<div class="sticky shadow-sm rounded p-4 bg-white">
-					<nav class="nav-one navbar navbar-expand-sm navbar-white d-flex justify-content-between m-auto p-0">
+					<nav class=" d-flex justify-content-between m-auto p-0">
 						<div class="nav-item ">
 							<p class="font-weight-bold" style="font-size: large;">
 								Estimasi Biaya
@@ -110,18 +132,61 @@
 								IDR {{ i.jumlah_budget|intcomma }}
 							</p>
 						</div>
-					</nav><br><br>
-					<div class="nav-item">
-						<p class="font-weight-normal" style="font-size: small;">
-							{{ i.deskripsi_singkat }}
-						</p>
-					</div>
-					<div class="nav-item">
-						<p class="font-weight-bold text-secondary" style="font-size: small;">
-							Pengerjaan <span class="text-dark">{{ i.waktu_pengerjaan }} hari <br></span>
-							Banyak Revisi <span class="text-dark">{{ i.banyak_revisi}}</span>
-						</p>
-					</div>
+					</nav>
+					
+					<nav class="d-flex justify-content-between m-auto p-0">
+						<div class="nav-item">
+							<p class="font-weight-bold text-secondary" style="font-size: small;">
+								Tanggal Pemesanan
+							</p>
+						</div>
+						<div class="nav-item">
+							<p class="font-weight-normal text-secondary" style="font-size: small;">
+								{{ i.buat|date:'M d,Y' }}
+							</p>
+						</div>
+					</nav>
+					{% if i.status == 'Dalam Pengerjaan' %}
+					<nav class="d-flex justify-content-between m-auto p-0">
+						<div class="nav-item">
+							<p class="font-weight-bold text-secondary" style="font-size: small;">
+								Tanggal Pengerjaan
+							</p>
+						</div>
+						<div class="nav-item">
+							<p class="font-weight-normal text-secondary" style="font-size: small;">
+								{{ i.tanggal_pengerjaan|date:'M d,Y'}}
+							</p>
+						</div>
+					</nav>
+					{% elif i.status == 'Selesai' %}		
+					<nav class="d-flex justify-content-between m-auto p-0">
+						<div class="nav-item">
+							<p class="font-weight-bold text-secondary" style="font-size: small;">
+								Tanggal Pengerjaan
+							</p>
+						</div>
+						<div class="nav-item">
+							<p class="font-weight-normal text-secondary" style="font-size: small;">
+								{{ i.tanggal_pengerjaan|date:'M d,Y'}}
+							</p>
+						</div>
+					</nav>
+					<nav class="d-flex justify-content-between m-auto p-0">
+						<div class="nav-item">
+							<p class="font-weight-bold text-secondary" style="font-size: small;">
+								Tanggal Selesai
+							</p>
+						</div>
+						<div class="nav-item">
+							<p class="font-weight-normal text-secondary" style="font-size: small;">
+								{{ i.tanggal_selesai|date:'M d,Y'}}
+							</p>
+						</div>
+					</nav>
+					
+					{% endif %}
+					{% endfor %}
 				</div>
 			</div>
         </div>

@@ -26,23 +26,18 @@ from .forms import (
 
 from .models import ( 
     Profile, 
-    PesanAuthor, 
 )
 
 from sellerapp.models import ( 
-    Gigs,
-    Images,
     Request,
+    Invoice,
 )
 
-from sellerapp.forms import (
-    GigsForm,
-)
+################################ PARENTS ################################ 
 
-# Parent
 def index(request):
     """ Parent page: Index """
-    drop =  Gigs.objects.all()
+    drop =  Request.objects.all()
     context = {
         'drop': drop,
     }
@@ -50,7 +45,7 @@ def index(request):
 
 def landing(request):
     """ Parent page: Landing """
-    drop =  Gigs.objects.all()
+    drop =  Request.objects.all()
     context = {
         'drop': drop,
     }
@@ -61,7 +56,8 @@ def register(request):
     return render(request, 'tukangkuapp/register.html')
 
 
-# Child
+################################ CHILDS ################################ 
+
 def home(request):
     """ Menampilkan konten pada Home """
     gigs = Request.objects.filter(status='Selesai')
@@ -81,10 +77,9 @@ class DetailUpdatePermintaan(DetailView, LoginRequiredMixin, UserPassesTestMixin
         context['form'] = self.get_form()
         return context
 
-    def post(self, request, *args, **kwargs):
-        form.instance.pk = Request.objects.get(pk=pk)
-        form.save()
-        return FormView.post(self, request, *args, **kwargs)
+    def form_valid(self, form):
+        form.instance.oleh = self.request.user
+        return super().form_valid(form)
 
     def test_func(self):
         post = self.get_object()
@@ -96,7 +91,7 @@ class DetailUpdatePermintaan(DetailView, LoginRequiredMixin, UserPassesTestMixin
 @login_required
 def detail_permintaan(request, username, pk):
     """ Menampilkan detail Permintaan dan Update Permintaan """
-    ins = Request.objects.get(pk=pk)
+    ins = Invoice.objects.filter(pk=pk)
     req = Request.objects.filter(pk=pk)
     context = {
         'req': req,
@@ -144,42 +139,11 @@ def profile(request):
 
     return render(request, 'tukangkuapp/profile.html', context)
 
-# CRUD
+################################ CRUD ################################ 
 
-class TukangAllListView(ListView):
-    model = Gigs
-    template_name = 'child/tukang_all.html'
-
-    def get_context_data(self, **kwargs):
-        context = super(TukangAllListView, self).get_context_data(**kwargs)
-        context['daftar'] = Gigs.objects.all()
-        return context
-
-def DashboardDetailView(request, username):
-    """ Menampilkan detail author dan daftar gigs pada author """
-    author  = get_object_or_404(User, username=username)
-    gigs    = Gigs.objects.filter(user=author)
-    if request.method == 'POST':
-        msg = PesanAuthorForm(request.POST, instance=request.user)
-        if msg.is_valid() :
-            deskripsi   = request.POST.get('deskripsi')
-            nama_depan  = request.POST.get('nama_depan')
-            nama_belakang = request.POST.get('nama_belakang')
-            link        = request.POST.get('link')
-            kontak      = request.POST.get('kontak')
-            upah        = request.POST.get('upah')
-            authors      = PesanAuthor.objects.create(nama_depan=nama_depan, nama_belakang=nama_belakang, deskripsi=deskripsi, link=link, kontak=kontak)
-            authors.save()
-            return HttpResponseRedirect('/home/')
-    else :
-         msg = PesanAuthorForm(request.POST)
-    context = {
-        'posts': gigs,
-        'form': msg,
-    }
-    return render(request, 'details/dashboard_detai.html', context)
-
+# REQUEST
 class CreateRequest(CreateView):
+    """ Membuat pesanan pasa Request """
     model = Request
     template_name = 'child/pesan.html'
     fields = ['nama_depan', 'nama_belakang', 'email', 'kontak', 'deskripsi', 'link', 'jenis_ruangan', 'services', 'jumlah_budget', 'provinsi', 'kota', 'alamat']
@@ -188,26 +152,34 @@ class CreateRequest(CreateView):
         form.instance.oleh = self.request.user
         return super().form_valid(form)
 
-class DaftarDetailView(DetailView, FormView):
-    """ Menampilkan slug pada url ke Daftar Detail """
-    model = Gigs
-    form_class = PesanAuthorForm
-    context_object_name = 'gigs'
-    slug_url_kwarg = 'slug'
-    slug_field = 'slug'
-    username = 'username'
-    success_url = '/home/'
-    
-    def form_valid(self, form):
-        return super().form_valid(form)
+class DetailUpdatePermintaan(DetailView, LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    """ Mengupdate pesanan pada detail view """
+    model = Request
+    form_class = UpdatePermintaan
+    template_name = 'details/detail_permintaan.html'
 
-class DaftarListView(ListView):
-    """ List daftar gigs pada profile """
-    model = Gigs
-    template_name = 'tukangkuapp/profile.html'
-
-    def get_context_data(self, request, **kwargs):
-        context = super( DaftarListView, self).get_context_data(**kwargs)
-        context['daftar'] = Gigs.objects.filter(user=request.user)
+    def get_context_data(self, **kwargs):
+        context = super(DetailUpdatePermintaan, self).get_context_data(**kwargs)
+        context['form'] = self.get_form()
         return context
 
+    def form_valid(self, form):
+        form.instance.oleh = self.request.user
+        return super().form_valid(form)
+
+    def test_func(self):
+        post = self.get_object()
+        if self.request.user == post.oleh:
+            return True
+        return False
+
+class DetailDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    """ Cancel pemesanan pada """
+    model = Request
+    success_url = '/profile/'
+
+    def test_func(self):
+        post = self.get_object()
+        if self.request.user == post.oleh:
+            return True
+        return False
