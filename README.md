@@ -10,7 +10,7 @@ Installasi sebagai berikut:
 
 ### Run program application
 
-`git clone `
+`git clone https://github.com/yanuarkholik/tukangku.git`
 
 `pip install -r requirements.txt`
 
