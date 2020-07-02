@@ -64,30 +64,45 @@ def register(request):
 # Child
 def home(request):
     """ Menampilkan konten pada Home """
-    gigs = Gigs.objects.order_by('-buat')
+    gigs = Request.objects.filter(status='Selesai')
     context = {
         'gigs': gigs,
     }
     return render(request, 'child/home.html', context)
 
+
+class DetailUpdatePermintaan(DetailView, LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    model = Request
+    form_class = UpdatePermintaan
+    template_name = 'details/detail_permintaan.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(DetailUpdatePermintaan, self).get_context_data(**kwargs)
+        context['form'] = self.get_form()
+        return context
+
+    def post(self, request, *args, **kwargs):
+        form.instance.pk = Request.objects.get(pk=pk)
+        form.save()
+        return FormView.post(self, request, *args, **kwargs)
+
+    def test_func(self):
+        post = self.get_object()
+        if self.request.user == post.oleh:
+            return True
+        return False
+
+
 @login_required
-def detail_permintaan(request, pk):
+def detail_permintaan(request, username, pk):
     """ Menampilkan detail Permintaan dan Update Permintaan """
     ins = Request.objects.get(pk=pk)
-    req = Request.objects.filter(pk=pk).order_by('buat')
-    if request.method == 'POST':
-        form = UpdatePermintaan(request.POST, request.FILES, instance=ins)
-        if form.is_valid() :
-            form.save()
-            return redirect('profile')
-    else :
-        form = UpdatePermintaan(request.POST)
+    req = Request.objects.filter(pk=pk)
     context = {
         'req': req,
-        'form': form,
         'ins':ins,
     }
-    return render(request, 'details/detail_permintaan.html', context)
+    return render(request, 'details/detail.html', context)
 
 def registerForm(request):
     """ Membuat Form Register akun MyTukang """

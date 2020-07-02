@@ -80,21 +80,21 @@
 		<div class="row">
 			<div class="col-lg-8">
 				<div class="col-lg-12 p-3 bg-white rounded shadow-sm">
-					{% for i in req %}
-					{{ i.id }}
-					{{ i.oleh }}
-					{{ i.nama_depan }}
-					{{ i.nama_belakang }}
-					{{ i.status }}
-					{{ i.buat|date:'M d, Y' }}
-						{% if i.status == 'Dalam Pengerjaan' %}
-							{{ i.tanggal_pengerjaan|date:'M d,Y'}}
-						{% elif i.status == 'Selesai' %}
-							{{ i.tanggal_pengerjaan|date:'M d,Y'}}
-							{{ i.tanggal_selesai|date:'M d,Y'}}
+					{{ object.id }}
+					{{ object.oleh }}
+					{{ object.nama_depan }}
+					{{ object.nama_belakang }}
+					{{ object.status }}
+					
+					{{ object.buat|date:'M d, Y' }}
+						{% if object.status == 'Dalam Pengerjaan' %}
+							{{ object.tanggal_pengerjaan|date:'M d,Y'}}
+						{% elif object.status == 'Selesai' %}
+							{{ object.tanggal_pengerjaan|date:'M d,Y'}}
+							{{ object.tanggal_selesai|date:'M d,Y'}}
 						{% endif %}
 					
-						{% if i.status == 'Dalam Pengerjaan' %}
+						{% if object.status == 'Dalam Pengerjaan' %}
 							<!-- Button trigger modal -->
 							<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#btnUbah" disabled>
 								Ubah
@@ -157,9 +157,7 @@
 													</div><br>
 													<div class="col-lg-3 mt-4">
 														{% if user.is_authenticated %}
-														<a href="{% url 'detail-permintaan' pk=i.id %}">
-															<input class="btn btn-outline-info btn-block" type="submit" name="Kirim" id="" value="Kirim">
-														</a>
+														<input class="btn btn-outline-info btn-block" type="submit" name="Kirim" id="" value="Kirim">
 														{% else %}
 														<input class="btn btn-outline-info btn-block" type="submit" name="Kirim" id="" value="Kirim" disabled>
 														<small class="text-secondary">Anda harus login terlebih <dahulu></dahulu></small>
@@ -176,7 +174,7 @@
 								</div>
 							</div>
 							</div>
-						{% elif i.status == 'Selesai' %}
+						{% elif object.status == 'Selesai' %}
 							<p>kembali</p>
 						{% else %}
 							<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#btnUbah">
@@ -258,7 +256,6 @@
 							</div>
 							</div>
 						{% endif %}
-					{% endfor %}
 				</div>
 			</div>
 			<div class="col-lg-4 ">
@@ -271,7 +268,7 @@
 						</div>
 						<div class="nav-item">
 							<p class="font-weight-normal" style="font-size: larger;">
-								IDR {{ object.estimasi_kecil|intcomma }}
+								IDR {{ object.jumlah_budget|intcomma }}
 							</p>
 						</div>
 					</nav><br><br>

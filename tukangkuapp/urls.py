@@ -17,6 +17,7 @@ from .views import (
     DashboardDetailView,
     DaftarDetailView, 
     CreateRequest,
+    DetailUpdatePermintaan
 
 )
 
@@ -40,7 +41,8 @@ urlpatterns = [
     path('home/', home, name='home'),
     path('register/', registerForm, name='registerForm'),
     path('register/seller-registration/', Seller, name='seller-registration'),
-    path('detail/<pk>/', detail_permintaan, name='detail-permintaan'),
+    path('detail/<pk>/', DetailUpdatePermintaan.as_view(), name='detail-permintaan'),
+    path('detail/<str:username>/<pk>/', detail_permintaan, name='details'),
     path('logout/', auth_views.LogoutView.as_view(template_name='landing.html'), name='logout'),
     path('login/', auth_views.LoginView.as_view(template_name='tukangkuapp/login.html'), name='login'),
 ]
