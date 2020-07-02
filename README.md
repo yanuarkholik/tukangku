@@ -6,10 +6,7 @@
 
 `python -m pip install Django==2.2.10` ( Windows )
 
-### Run program application
-
-`git clone https://github.com/yanuarkholik/tukangku.git`
-( jika sudah install [git](https://git-scm.com/downloads) )
+### Run program
 
 `pip install -r requirements.txt`
 
