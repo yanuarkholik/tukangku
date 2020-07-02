@@ -1,7 +1,5 @@
 # tukangku
 
-##Installasi sebagai berikut:
-
 ### Set up [Python](https://www.python.org/downloads/) dan Django
 
 `python==3.8.3`
