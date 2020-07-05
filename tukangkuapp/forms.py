@@ -29,4 +29,4 @@ class ProfileUpdateForm(forms.ModelForm):
 class UpdatePermintaan(forms.ModelForm):
     class Meta:
         model = Request
-        fields = ['nama_depan','revisi', 'nama_belakang', 'email', 'kontak', 'deskripsi', 'link', 'jenis_ruangan', 'services', 'jumlah_budget', 'provinsi', 'kota', 'alamat', 'feedback', 'lainnya', 'setujui', 'kepuasan']
+        fields = ['nama_depan','revisi', 'bukti', 'nama_belakang', 'email', 'kontak', 'deskripsi', 'link', 'jenis_ruangan', 'services', 'jumlah_budget', 'provinsi', 'kota', 'alamat', 'feedback', 'lainnya', 'setujui', 'kepuasan']

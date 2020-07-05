@@ -85,10 +85,11 @@ class Request(models.Model):
     tanggal_pengerjaan  = models.DateField(null=True, blank=True)
     tanggal_selesai     = models.DateField(null=True, blank=True)
     files           = models.FileField(upload_to='upload/files/', default='default.jpg')
+    bukti           = models.ImageField(upload_to='upload/bukti/', null=True, blank=True)
     feedback        = models.TextField(null=True, blank=True)
-    setujui         = models.CharField(max_length=50, choices=SETUJU_CHOICES, default='Beri Persetujuan')
+    setujui         = models.CharField(max_length=50, choices=SETUJU_CHOICES, default='Beri Persetujuan',null=True, blank=True)
     revisi          = models.TextField(null=True, blank=True)
-    kepuasan        = models.CharField(max_length=30, choices=KEPUASAN_CHOICES, default='Puas')
+    kepuasan        = models.CharField(max_length=30, choices=KEPUASAN_CHOICES, default='Puas', null=True, blank=True)
 
     def get_absolute_url(self):
         return reverse('detail-permintaan', kwargs={'pk': self.id})

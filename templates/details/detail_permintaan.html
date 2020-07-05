@@ -66,6 +66,9 @@
 							<small class="text-uppercase text-primary font-weight-bold">
 								Dalam Pengerjaan
 							</small>
+							<small class="text-uppercase text-info font-weight-bold">
+								Menunggu Pembayaran
+							</small>
 							<small class="text-uppercase text-success font-weight-bold">
 								Selesai
 							</small>
@@ -83,6 +86,10 @@
 					</div>
 					<!-- <img class="card-img-top mt-3 mt-3" src="{{ object.image.url }}" alt="{{ object.oleh }}" style="height: 300px; object-fit: cover;"> -->
 					<small class="text-secondary">Gambar telah di kompresi, preview selengkapnya ada di download document**</small>  <br> <br>
+					{% elif object.status == 'Menunggu Pembayaran' %}
+					<div class="progress m-3" style="height: 3px;">
+						<div class="progress-bar bg-info" role="progressbar" style="width: 75%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+					</div>
 					{% else %}
 					<div class="progress m-3" style="height: 3px;">
 						<div class="progress-bar bg-danger" role="progressbar" style="width: 1%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
@@ -116,7 +123,7 @@
 						</div>
 						<div class="mb-3 d-flex justify-content-between">
 							<small class="text-uppercase font-weight-bold">
-								Katrgori
+								Kategori
 							</small>
 							<small class="font-weight-normal text-right">
 								{{ object.jenis_ruangan }}
@@ -154,6 +161,18 @@
 							</small>
 						</div>
 					</nav>
+					{% if object.setujui %}
+					<nav>
+						<div class="mb-3 d-flex justify-content-between">
+							<small class="text-uppercase font-weight-bold">
+								Persetujuan
+							</small>
+							<small class="font-weight-normal text-right">
+								{{ object.setujui }}
+							</small>
+						</div>
+					</nav>
+					{% endif %}
 					<small class="text-uppercase font-weight-bold mt-3 mb-3">
 						Deskripsi <br>
 					</small>
@@ -229,7 +248,80 @@
 									</div>
 								</div>
 							</form>
+						{% elif object.status == 'Menunggu Pembayaran' %}
+								<!-- Button trigger modal -->
+								<form action="" method="POST">
+									{% csrf_token %}
+									<div class="row">
+										<div class="col-lg-6" hidden>
+											{{ form.nama_depan|as_crispy_field }}
+										</div>
+										<div class="col-lg-6" hidden>
+											{{ form.nama_belakang|as_crispy_field }}
+										</div>
+										<div class="col-lg-3" hidden>
+											{{ form.email|as_crispy_field }}
+										</div>
+										<div class="col-lg-3" hidden>
+											{{ form.kontak|as_crispy_field }}
+										</div>
+										<div class="col-lg-3" hidden>
+											{{ form.jumlah_budget|as_crispy_field }}
+										</div>
+										<div class="col-lg-3" hidden>
+											{{ form.services|as_crispy_field }}
+										</div>
+										<div class="col-lg-12 mt-5 mb-3" hidden>
+											<h5 class="">Pastikan isi alamat anda dengan benar</h5>
+										</div>
+										<div class="col-lg-4" hidden>
+											{{ form.alamat|as_crispy_field }}
+										</div>
+										<div class="col-lg-4"hidden>
+											{{ form.kota|as_crispy_field }}
+										</div>
+										<div class="col-lg-4" hidden>
+											{{ form.provinsi|as_crispy_field }}
+										</div><br>
+										<div class="col-lg-12" hidden>
+											{{ form.deskripsi|as_crispy_field }}
+										</div>
+										<div class="col-lg-6" hidden>
+											{{ form.link|as_crispy_field }}
+											<small class="text-secondary mt-0">Cantumkan link dokumen deskripsi jika perlu**</small>
+										</div>
+										<div class="col-lg-6" hidden>
+											{{ form.jenis_ruangan|as_crispy_field }}
+										</div>
+										<div class="col-lg-12" hidden>
+											{{ form.setujui|as_crispy_field }}
+										</div>
+										<div class="col-lg-12" hidden>
+											<button class="btn btn-outline-secondary" type="button" data-toggle="collapse" data-target="#collapserevisi" aria-expanded="false" aria-controls="collapserevisi">
+												Beri Revisi
+											</button>
+										</div>
+										<div class="col-lg-12" hidden>
+											<div class="collapse" id="collapserevisi">
+												{{ form.revisi|as_crispy_field }}
+											</div>
+										</div>
+										<div class="col-lg-12">
+											{{ form.bukti|as_crispy_field }}
+										</div>
+										<br>
+										<div class="col-lg-3 mt-4">
+											<input class="btn btn-outline-info btn-block" type="submit" name="Kirim" id="" value="Kirim">
+										</div>
+										<div class="col-lg-3 mt-4">
+											<a role="button" href="{% url 'profile' %}"  class="btn btn-primary btn-block">Kembali</a>
+										</div>
+									</div>
+								</form>
 						{% elif object.status == 'Selesai' %}
+							{% if object.bukti %}
+								<img src="{{ object.bukti.url }}" alt="" style="max-width: 100%; max-height: 200px;">
+							{% endif %} <br> <br>
 						<a role="button" href="{% url 'profile' %}"  class="btn btn-primary">Kembali</a>
 						{% else %}
 							<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#btnUbah">
@@ -342,6 +434,21 @@
 						</div>
 					</nav>
 					{% if object.status == 'Dalam Pengerjaan' %}
+					<nav class="d-flex justify-content-between m-auto p-0">
+						<div class="nav-item">
+							<p class="font-weight-bold text-secondary" style="font-size: small;">
+								Tanggal Pengerjaan
+							</p>
+						</div>
+						<div class="nav-item">
+							<p class="font-weight-normal text-secondary" style="font-size: small;">
+								{{ object.tanggal_pengerjaan|date:'M d,Y'}}
+							</p>
+						</div>
+					</nav>
+					<button type="submit" class="btn btn-primary btn-block" onclick="window.open('{{ object.files.url }}')">Download Document</button>
+					<small class="text-secondary">Download file extensi .jpeg, .jpg, .png, .tar, .zip, .pdf, .rar **</small>
+					{% elif object.status == 'Menunggu Pembayaran' %}
 					<nav class="d-flex justify-content-between m-auto p-0">
 						<div class="nav-item">
 							<p class="font-weight-bold text-secondary" style="font-size: small;">
