@@ -3,7 +3,7 @@ from django.contrib.admin.filters import RelatedOnlyFieldListFilter
 
 from .models import Profile
 
-from sellerapp.models import Request, Invoice
+from sellerapp.models import Request, Invoice, Images
 # Custom Column
 
 
@@ -13,8 +13,14 @@ class ProfileAdmin(admin.ModelAdmin):
     ordering = ('-buat',)
     search_fields = []
 
+class ImagesAdminInline(admin.TabularInline):
+    model = Images
+
 @admin.register(Request)
 class RequestAdmin(admin.ModelAdmin):
+    inlines = [
+        ImagesAdminInline,
+    ]
     list_display = ('oleh', 'nama_depan', 'nama_belakang', 'email', 'kontak', 'provinsi', 'kota', 'status', 'buat', 'id')
     ordering = ('-buat',)
     list_filter = (

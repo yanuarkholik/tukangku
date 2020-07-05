@@ -2,17 +2,30 @@
 {% load static %}
 {% load crispy_forms_tags %}
 
+{% block pemesanan %}
+<li class="nav-item m-auto"><a class="nav-link font-weight-normal text-secondary" href="{% url 'request-create' %}">BUAT PEMESANAN</a></li>
+{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/grid.css' %}">
+{% endblock %}
+
 {% block url %}
 <div class="d-flex justify-content-between m-auto">
-	<div class="nav-item active">
-		<a class="nav-link font-weight-normal text-secondary" href="{% url 'home' %}">Semua Desain</a>
+	<div class="nav-item">
+		<small>
+			<a class="nav-link font-weight-normal text-uppercase text-secondary" href="{% url 'home' %}">
+				semua design
+			</a>
+		</small>
 	</div>
 	<div class="nav-item">
 		<div class="dropdown">
-			<a class="dropdown-toggle nav-link font-weight-normal text-secondary" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-				Daftar Ruangan
-			</a>
-		  
+			<small>
+				<a class="dropdown-toggle nav-link font-weight-normal text-uppercase text-secondary" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					Daftar Ruangan
+				</a>
+			</small>
 			<div class="dropdown-menu m-2 bg-light border border-light" aria-labelledby="dropdownMenuLink">
 				{% for d in gigs %}
 				<a class="dropdown-item" href="#">{{ d.jenis_ruangan }}</a>
@@ -23,16 +36,16 @@
 	</div>
 	<div class="nav-item">
 		<div class="dropdown">
-			<a class="dropdown-toggle nav-link font-weight-normal text-secondary" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-				Daftar Professional
-			</a>
-		  
+			<small>
+				<a class="dropdown-toggle nav-link text-uppercase font-weight-normal text-secondary" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					Daftar Professional
+				</a>
+			</small>
 			<div class="dropdown-menu m-2 bg-light border border-light" aria-labelledby="dropdownMenuLink">
 				{% for d in gigs %}
 				<a class="dropdown-item" href="#">{{ d.kategori }}</a>
 				{% endfor %}
 			</div>
-		  </div>
 		</div>
 	</div>
 </div>
@@ -122,16 +135,19 @@
 							<div class="col-lg-12">
 								<ul class="nav nav-tabs" id="myTab" role="tablist">
 									<li class="nav-item">
-										<a class="nav-link active" id="home-tab" data-toggle="tab" href="#semua" role="tab" aria-controls="home" aria-selected="true">Semua</a>
+										<a class="nav-link active" id="home-tab" data-toggle="tab" href="#semua" role="tab" aria-controls="home" aria-selected="true"><small class="text-secondary">SEMUA</small></a>
 									</li>
 									<li class="nav-item">
-										<a class="nav-link" id="profile-tab" data-toggle="tab" href="#antrian" role="tab" aria-controls="profile" aria-selected="false">Dalam Antrian</a>
+										<a class="nav-link" id="profile-tab" data-toggle="tab" href="#antrian" role="tab" aria-controls="profile" aria-selected="false"><small class="text-secondary">DALAM ANTRIAN</small></a>
 									</li>
 									<li class="nav-item">
-										<a class="nav-link" id="contact-tab" data-toggle="tab" href="#pengerjaan" role="tab" aria-controls="contact" aria-selected="false">Dalam Pengerjaan</a>
+										<a class="nav-link" id="contact-tab" data-toggle="tab" href="#pengerjaan" role="tab" aria-controls="contact" aria-selected="false"><small class="text-secondary">DALAM PENGERJAAN</small></a>
 									</li>
 									<li class="nav-item">
-										<a class="nav-link" id="contact-tab" data-toggle="tab" href="#selesai" role="tab" aria-controls="contact" aria-selected="false">Selesai</a>
+										<a class="nav-link" id="profile-tab" data-toggle="tab" href="#menunggu" role="tab" aria-controls="profile" aria-selected="false"><small class="text-secondary">MENUNGGU PEMBAYARAN</small></a>
+									</li>
+									<li class="nav-item">
+										<a class="nav-link" id="contact-tab" data-toggle="tab" href="#selesai" role="tab" aria-controls="contact" aria-selected="false"><small class="text-secondary">SELESAI</small></a>
 								  </li>
 								</ul>
 								<div class="tab-content" id="myTabContent">
@@ -147,6 +163,10 @@
 													<div class="progress mb-2" style="height: 3px;">
 														<div class="progress-bar bg-success" role="progressbar" style="width: 100%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
 													</div>
+													{% elif post.status == 'Menunggu Pembayaran' %}
+													<div class="progress mb-2" style="height: 3px;">
+														<div class="progress-bar bg-primary" role="progressbar" style="width: 75%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+													</div>
 													{% else %}
 													<div class="progress mb-2" style="height: 3px;">
 														<div class="progress-bar bg-danger" role="progressbar" style="width: 1%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
@@ -157,6 +177,8 @@
 														<img class="align-self-center mr-3" src="{% static 'image/work.png' %}" alt="{{ user.username }}">
 														{% elif post.status == 'Selesai' %}
 														<img class="align-self-center mr-3" src="{% static 'image/selesai.png' %}" alt="{{ user.username }}">
+														{% elif post.status == 'Menunggu Pembayaran' %}
+														<img class="align-self-center mr-3" src="{% static 'image/wait.png' %}" alt="{{ user.username }}">
 														{% else %}
 														<img class="align-self-center mr-3" src="{% static 'image/queue.png' %}" alt="{{ user.username }}">
 														{% endif %}
@@ -178,6 +200,10 @@
 																	</span>
 																	{% elif post.status == 'Selesai' %}
 																	<span class="font-weight-bold text-success">
+																		{{ post.status }} <a href="{% url 'cetak-invoice' post.id %}" class="badge badge-primary">Cetak Invoice</a><br>
+																	</span>
+																	{% elif post.status == 'Menunggu Pembayaran' %}
+																	<span class="font-weight-bold text-info">
 																		{{ post.status }}
 																	</span>
 																	{% else %}
@@ -195,7 +221,7 @@
 									</div>
 									<div class="tab-pane fade" id="antrian" role="tabpanel" aria-labelledby="profile-tab">
 										{% for post in posts %}
-											{% if post.status != 'Dalam Pengerjaan' and post.status != 'Selesai' %}
+											{% if post.status != 'Dalam Pengerjaan' and post.status != 'Selesai' and post.status != 'Menunggu Pembayaran' %}
 											<div class="card mb-3" style="max-width: 100%; width: 100%;">
 												<div class="card-body">
 													<div class="progress mb-2" style="height: 3px;">
@@ -217,13 +243,43 @@
 																	</span>
 																	{% elif post.status == 'Selesai' %}
 																	<span class="font-weight-bold text-success">
-																		{{ post.status }}
+																		{{ post.status }} <a href="{% url 'cetak-invoice' post.id %}" class="badge badge-primary">Cetak Invoice</a><br>
 																	</span>
 																	{% else %}
 																	<span class="font-weight-bold text-warning">
 																		{{ post.status }}
 																	</span>
 																	{% endif %}
+																</span>
+															</small>
+														</div>
+													</div>
+												</div>
+											</div>
+											{% endif %}
+										{% endfor %}
+									</div>
+									<div class="tab-pane fade" id="menunggu" role="tabpanel" aria-labelledby="profile-tab">
+										{% for post in posts %}
+											{% if post.status == 'Menunggu Pembayaran' %}
+											<div class="card mb-3" style="max-width: 100%; width: 100%;">
+												<div class="card-body">
+													<div class="progress mb-2" style="height: 3px;">
+														<div class="progress-bar" role="progressbar" style="width: 50%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+													</div>
+													<div class="media">
+														<img class="align-self-center mr-3" src="{% static 'image/wait.png' %}" alt="{{ user.username }}">
+														<div class="media-body">
+															<small class="font-weight-normal">
+																<span class="text-right">No.ID {{ post.id }}</span>
+															</small><br>
+															<small class="m-0 font-weight-bold text-dark text-capitalize">
+																{{ post.nama_depan }} {{ post.nama_belakang }} <a href="{% url 'detail-permintaan' post.id %}" class="badge badge-primary">Selengkapnya</a><br>
+																<span class="font-weight-normal">
+																	{{ post.buat|date:'M d, Y'}} | 
+																	<span class="font-weight-bold text-info">
+																		{{ post.status }}
+																	</span>
 																</span>
 															</small>
 														</div>

@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'tukangkuapp',
     'sellerapp',
     'crispy_forms',
+    'address',
     'django.contrib.humanize',  
 ]
 
@@ -120,6 +121,8 @@ USE_L10N = True
 
 USE_TZ = True
 
+
+GOOGLE_API_KEY =  'AIzaSyCTeOBjTmeEdAA-lCp_4xkH4r93NF0Sgs4q'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/

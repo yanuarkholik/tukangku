@@ -11,7 +11,8 @@ from .views import (
     
     # Childs 
     registerForm, 
-    detail_permintaan,
+    DetailDisplay,
+    cetakPDF,
 
     # Crud
     CreateRequest,
@@ -32,8 +33,9 @@ urlpatterns = [
     # Childs    
     path('home/', home, name='home'),
     path('register/', registerForm, name='registerForm'),
-    path('detail/<str:username>/<pk>/', detail_permintaan, name='details'),
+    path('detail/<str:username>/<pk>/', DetailDisplay.as_view(template_name='details/detail.html'), name='details'),
     path('detail/<pk>/', DetailUpdatePermintaan.as_view(), name='detail-permintaan'),
+    path('cetak/<pk>/', cetakPDF, name='cetak-invoice'),
     path('logout/', auth_views.LogoutView.as_view(template_name='landing.html'), name='logout'),
     path('login/', auth_views.LoginView.as_view(template_name='tukangkuapp/login.html'), name='login'),
 

@@ -3,17 +3,30 @@
 {% load humanize %} 
 {% load crispy_forms_tags %}
 
+{% block pemesanan %}
+<li class="nav-item m-auto"><a class="nav-link font-weight-normal text-secondary" href="{% url 'request-create' %}">BUAT PEMESANAN</a></li>
+{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/grid.css' %}">
+{% endblock %}
+
 {% block url %}
 <div class="d-flex justify-content-between m-auto">
-	<div class="nav-item active">
-		<a class="nav-link font-weight-normal text-secondary" href="{% url 'home' %}">Semua Desain</a>
+	<div class="nav-item">
+		<small>
+			<a class="nav-link font-weight-normal text-uppercase text-secondary" href="{% url 'home' %}">
+				semua design
+			</a>
+		</small>
 	</div>
 	<div class="nav-item">
 		<div class="dropdown">
-			<a class="dropdown-toggle nav-link font-weight-normal text-secondary" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-				Daftar Ruangan
-			</a>
-		  
+			<small>
+				<a class="dropdown-toggle nav-link font-weight-normal text-uppercase text-secondary" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					Daftar Ruangan
+				</a>
+			</small>
 			<div class="dropdown-menu m-2 bg-light border border-light" aria-labelledby="dropdownMenuLink">
 				{% for d in gigs %}
 				<a class="dropdown-item" href="#">{{ d.jenis_ruangan }}</a>
@@ -24,16 +37,16 @@
 	</div>
 	<div class="nav-item">
 		<div class="dropdown">
-			<a class="dropdown-toggle nav-link font-weight-normal text-secondary" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-				Daftar Professional
-			</a>
-		  
+			<small>
+				<a class="dropdown-toggle nav-link text-uppercase font-weight-normal text-secondary" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					Daftar Professional
+				</a>
+			</small>
 			<div class="dropdown-menu m-2 bg-light border border-light" aria-labelledby="dropdownMenuLink">
 				{% for d in gigs %}
 				<a class="dropdown-item" href="#">{{ d.kategori }}</a>
 				{% endfor %}
 			</div>
-		  </div>
 		</div>
 	</div>
 </div>
@@ -43,7 +56,7 @@
 <section class="mt-3 mb-3">
 	<div class="container" style="max-width: 95%;">
 		<div class="row">
-			<div class="col-lg-8">
+			<div class="col-lg-8 mb-3">
 				<div class="col-lg-12 p-3 bg-white rounded shadow-sm">
 					<nav>
 						<div class="d-flex justify-content-between">
@@ -62,17 +75,19 @@
 					<div class="progress m-3" style="height: 3px;">
 						<div class="progress-bar" role="progressbar" style="width: 50%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
 					</div>
+					<!-- <img class="card-img-top mt-3 mt-3" src="{{ object.image.url }}" alt="{{ object.oleh }}" style="height: 300px; object-fit: cover;"> -->
+					<small class="text-secondary">Gambar telah di kompresi, preview selengkapnya ada di download document**</small>  <br> <br>
 					{% elif object.status == 'Selesai' %}
 					<div class="progress m-3" style="height: 3px;">
 						<div class="progress-bar bg-success" role="progressbar" style="width: 100%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
 					</div>
+					<!-- <img class="card-img-top mt-3 mt-3" src="{{ object.image.url }}" alt="{{ object.oleh }}" style="height: 300px; object-fit: cover;"> -->
+					<small class="text-secondary">Gambar telah di kompresi, preview selengkapnya ada di download document**</small>  <br> <br>
 					{% else %}
 					<div class="progress m-3" style="height: 3px;">
 						<div class="progress-bar bg-danger" role="progressbar" style="width: 1%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
 					</div>
 					{% endif %}
-					<img class="card-img-top mt-3 mt-3" src="{{ object.image.url }}" alt="{{ object.oleh }}" style="height: 300px; object-fit: cover;">
-					<small class="text-secondary">Gambar telah di kompresi, preview selengkapnya ada di download document**</small>  <br> <br>
 					<nav class="mt-3 mb-4">
 						<div class="mb-2 d-flex justify-content-between mb-3">
 							<small class="text-uppercase font-weight-bold">
@@ -101,9 +116,22 @@
 						</div>
 						<div class="mb-3 d-flex justify-content-between">
 							<small class="text-uppercase font-weight-bold">
+								Katrgori
+							</small>
+							<small class="font-weight-normal text-right">
+								{{ object.jenis_ruangan }}
+								{% if object.jenis_ruangan == 'Lainnya' %}
+									<span>
+										, {{ object.lainnya }}
+									</span>
+								{% endif %}
+							</small>
+						</div>
+						<div class="mb-3 d-flex justify-content-between">
+							<small class="text-uppercase font-weight-bold">
 								Link
 							</small>
-							<small class="text-uppercase font-weight-normal text-right">
+							<small class="font-weight-normal text-right">
 								{{ object.link }}
 							</small>
 						</div>
@@ -129,87 +157,78 @@
 					<small class="text-uppercase font-weight-bold mt-3 mb-3">
 						Deskripsi <br>
 					</small>
-					<small class="text-uppercase font-weight-normal mt-3 mb-3">
+					<small class=" font-weight-normal mt-3 mb-3">
 						{{ object.deskripsi|linebreaks }} <br>
 					</small>
 					<br>
 					<br>
 					{% if object.status == 'Dalam Pengerjaan' %}
 							<!-- Button trigger modal -->
-							<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#btnUbah" disabled>
-								Ubah
-							</button>
-							
-							<!-- Modal -->
-							<div class="modal fade" id="btnUbah" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-								<div class="modal-dialog modal-dialog-centered" role="document"  style="max-width: 95%;">
-								<div class="modal-content">
-									<div class="modal-header">
-									<h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
-									<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-										<span aria-hidden="true">&times;</span>
-									</button>
+							<form action="" method="POST">
+								{% csrf_token %}
+								<div class="row">
+									<div class="col-lg-6" hidden>
+										{{ form.nama_depan|as_crispy_field }}
 									</div>
-									<div class="modal-body">
-										<div class="col-lg-12">
-											<form action="" method="POST">
-												{% csrf_token %}
-												<div class="row">
-													<div class="col-lg-6">
-														{{ form.nama_depan|as_crispy_field }}
-													</div>
-													<div class="col-lg-6">
-														{{ form.nama_belakang|as_crispy_field }}
-													</div>
-													<div class="col-lg-3">
-														{{ form.email|as_crispy_field }}
-													</div>
-													<div class="col-lg-3">
-														{{ form.kontak|as_crispy_field }}
-													</div>
-													<div class="col-lg-3">
-														{{ form.jumlah_budget|as_crispy_field }}
-													</div>
-													<div class="col-lg-3">
-														{{ form.services|as_crispy_field }}
-													</div>
-													<div class="col-lg-12 mt-5 mb-3">
-														<h5 class="">Pastikan isi alamat anda dengan benar</h5>
-													</div>
-													<div class="col-lg-4">
-														{{ form.alamat|as_crispy_field }}
-													</div>
-													<div class="col-lg-4">
-														{{ form.kota|as_crispy_field }}
-													</div>
-													<div class="col-lg-4">
-														{{ form.provinsi|as_crispy_field }}
-													</div><br>
-													<div class="col-lg-12">
-														{{ form.deskripsi|as_crispy_field }}
-													</div>
-													<div class="col-lg-6">
-														{{ form.link|as_crispy_field }}
-														<small class="text-secondary mt-0">Cantumkan link dokumen deskripsi jika perlu**</small>
-													</div>
-													<div class="col-lg-6">
-														{{ form.jenis_ruangan|as_crispy_field }}
-													</div><br>
-													<div class="col-lg-3 mt-4">
-														{% if user.is_authenticated %}
-														<input class="btn btn-outline-info btn-block" type="submit" name="Kirim" id="" value="Kirim">
-														{% else %}
-														<input class="btn btn-outline-info btn-block" type="submit" name="Kirim" id="" value="Kirim" disabled>
-														<small class="text-secondary">Anda harus login terlebih <dahulu></dahulu></small>
-														{% endif %}
-													</div>
-												</div>
-											</form>
+									<div class="col-lg-6" hidden>
+										{{ form.nama_belakang|as_crispy_field }}
+									</div>
+									<div class="col-lg-3" hidden>
+										{{ form.email|as_crispy_field }}
+									</div>
+									<div class="col-lg-3" hidden>
+										{{ form.kontak|as_crispy_field }}
+									</div>
+									<div class="col-lg-3" hidden>
+										{{ form.jumlah_budget|as_crispy_field }}
+									</div>
+									<div class="col-lg-3" hidden>
+										{{ form.services|as_crispy_field }}
+									</div>
+									<div class="col-lg-12 mt-5 mb-3" hidden>
+										<h5 class="">Pastikan isi alamat anda dengan benar</h5>
+									</div>
+									<div class="col-lg-4" hidden>
+										{{ form.alamat|as_crispy_field }}
+									</div>
+									<div class="col-lg-4"hidden>
+										{{ form.kota|as_crispy_field }}
+									</div>
+									<div class="col-lg-4" hidden>
+										{{ form.provinsi|as_crispy_field }}
+									</div><br>
+									<div class="col-lg-12" hidden>
+										{{ form.deskripsi|as_crispy_field }}
+									</div>
+									<div class="col-lg-6" hidden>
+										{{ form.link|as_crispy_field }}
+										<small class="text-secondary mt-0">Cantumkan link dokumen deskripsi jika perlu**</small>
+									</div>
+									<div class="col-lg-6" hidden>
+										{{ form.jenis_ruangan|as_crispy_field }}
+									</div>
+									<div class="col-lg-12">
+										{{ form.setujui|as_crispy_field }}
+									</div>
+									<div class="col-lg-12" >
+										<button class="btn btn-outline-secondary" type="button" data-toggle="collapse" data-target="#collapserevisi" aria-expanded="false" aria-controls="collapserevisi">
+										 	Beri Revisi
+										</button>
+									</div>
+									<div class="col-lg-12">
+										<div class="collapse" id="collapserevisi">
+											{{ form.revisi|as_crispy_field }}
 										</div>
 									</div>
+									<br>
+									<div class="col-lg-3 mt-4">
+										<input class="btn btn-outline-info btn-block" type="submit" name="Kirim" id="" value="Kirim">
+									</div>
+									<div class="col-lg-3 mt-4">
+										<a role="button" href="{% url 'profile' %}"  class="btn btn-primary btn-block">Kembali</a>
+									</div>
 								</div>
-							</div>
-							</div>
+							</form>
 						{% elif object.status == 'Selesai' %}
 						<a role="button" href="{% url 'profile' %}"  class="btn btn-primary">Kembali</a>
 						{% else %}
@@ -272,7 +291,11 @@
 													</div>
 													<div class="col-lg-6">
 														{{ form.jenis_ruangan|as_crispy_field }}
-													</div><br>
+													</div>
+													<div class="col-lg-12">
+														{{ form.lainnya|as_crispy_field }}
+													</div>
+													<br>
 													<div class="col-lg-3 mt-4">
 														{% if user.is_authenticated %}
 														<input class="btn btn-outline-info btn-block" type="submit" name="Kirim" id="" value="Kirim">
@@ -285,14 +308,10 @@
 											</form>
 										</div>
 									</div>
-									<div class="modal-footer">
-									<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-									<button type="button" class="btn btn-primary">Save changes</button>
-									</div>
 								</div>
 							</div>
-							</div>
-						{% endif %}
+						</div>
+					{% endif %}
 				</div>
 			</div>
 			<div class="col-lg-4 ">
@@ -361,6 +380,89 @@
 						</div>
 					</nav>
 					<button type="submit" class="btn btn-primary btn-block" onclick="window.open('{{ object.files.url }}')">Download Document</button>
+					<small class="text-secondary">Download file extensi .jpeg, .jpg, .png, .tar, .zip, .pdf, .rar **</small>
+					<hr>
+					{% if object.feedback and object.kepuasan %}
+					<nav class="d-flex justify-content-between m-auto p-0">
+						<div class="nav-item">
+							<p class="font-weight-bold text-secondary" style="font-size: small;">
+								Feedback Anda
+							</p>
+						</div>
+						<div class="nav-item">
+							<p class="font-weight-normal text-secondary" style="font-size: small;">
+								{{ object.kepuasan}}!
+							</p>
+						</div>
+					</nav>
+					<small class="text-dark">
+						{{ object.feedback|linebreaks }}
+					</small>
+					{% else %}
+					<form action="" method="POST">
+						{% csrf_token %}
+						<div class="row">
+							<div class="col-lg-6" hidden>
+								{{ form.nama_depan|as_crispy_field }}
+							</div>
+							<div class="col-lg-6" hidden>
+								{{ form.nama_belakang|as_crispy_field }}
+							</div>
+							<div class="col-lg-3" hidden>
+								{{ form.email|as_crispy_field }}
+							</div>
+							<div class="col-lg-3" hidden>
+								{{ form.kontak|as_crispy_field }}
+							</div>
+							<div class="col-lg-3" hidden>
+								{{ form.jumlah_budget|as_crispy_field }}
+							</div>
+							<div class="col-lg-3" hidden>
+								{{ form.services|as_crispy_field }}
+							</div>
+							<div class="col-lg-12 mt-5 mb-3" hidden>
+								<h5 class="">Pastikan isi alamat anda dengan benar</h5>
+							</div>
+							<div class="col-lg-4" hidden>
+								{{ form.alamat|as_crispy_field }}
+							</div>
+							<div class="col-lg-4"hidden>
+								{{ form.kota|as_crispy_field }}
+							</div>
+							<div class="col-lg-4" hidden>
+								{{ form.provinsi|as_crispy_field }}
+							</div><br>
+							<div class="col-lg-12" hidden>
+								{{ form.deskripsi|as_crispy_field }}
+							</div>
+							<div class="col-lg-6" hidden>
+								{{ form.link|as_crispy_field }}
+								<small class="text-secondary mt-0">Cantumkan link dokumen deskripsi jika perlu**</small>
+							</div>
+							<div class="col-lg-6" hidden>
+								{{ form.jenis_ruangan|as_crispy_field }}
+							</div>
+							<div class="col-lg-12" hidden>
+								{{ form.setujui|as_crispy_field }}
+							</div>
+							<div class="col-lg-12" >
+								{{ form.kepuasan|as_crispy_field }}
+							</div>
+							<div class="col-lg-12" >
+								{{ form.feedback|as_crispy_field }}
+							</div>
+							<br>
+							<div class="col-lg-3 mt-4">
+								{% if user.is_authenticated %}
+								<input class="btn btn-outline-info btn-block" type="submit" name="Kirim" id="" value="Kirim">
+								{% else %}
+								<input class="btn btn-outline-info btn-block" type="submit" name="Kirim" id="" value="Kirim" disabled>
+								<small class="text-secondary">Anda harus login terlebih <dahulu></dahulu></small>
+								{% endif %}
+							</div>
+						</div>
+					</form>
+					{% endif %}
 					{% endif %}
 				</div>
 			</div>

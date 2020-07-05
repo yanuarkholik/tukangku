@@ -33,47 +33,37 @@ JENIS_RUANGAN = [
     ('Ruang Belajar', 'Ruang Belajar'),
     ('Ruang Kerja', 'Ruang Kerja'),
     ('Perpustakaan', 'Perpustakaan'),
-]
-
-PAKET_CHOICES = [
-    ('Basic', 'Basic'),
-    ('Standard', 'Standard'),
-    ('Premium', 'Premium'),
+    ('Lainnya', 'Lainnya')
 ]
 
 PROVINSI_CHOICES = [
-    ('Aceh', 'Aceh'), ('Aceh', 'Aceh'), ('Aceh', 'Aceh'), ('Aceh', 'Aceh'), ('Aceh', 'Aceh'),
-    ('Aceh', 'Aceh'), ('Aceh', 'Aceh'), ('Aceh', 'Aceh'), ('Aceh', 'Aceh'), ('Aceh', 'Aceh'),
-    ('Aceh', 'Aceh'), ('Aceh', 'Aceh'), ('Aceh', 'Aceh'), ('Aceh', 'Aceh'), ('Aceh', 'Aceh'),
-    ('Aceh', 'Aceh'), ('Aceh', 'Aceh'), ('Aceh', 'Aceh'), ('Aceh', 'Aceh'), ('Aceh', 'Aceh'),
-    ('Aceh', 'Aceh'), ('Aceh', 'Aceh'), ('Aceh', 'Aceh'), ('Aceh', 'Aceh'), ('Aceh', 'Aceh'),
-    ('Aceh', 'Aceh'), ('Aceh', 'Aceh'), ('Aceh', 'Aceh'), ('Aceh', 'Aceh'), ('Aceh', 'Aceh'),
-    ('Aceh', 'Aceh'), ('Aceh', 'Aceh'), ('Aceh', 'Aceh'), ('Aceh', 'Aceh'),
+    ('Aceh', 'Aceh'), ('Sumatra Utara', 'Sumatra Utara'), ('Sumatra Barat', 'Sumatra Barat'), ('Riau', 'Riau'), ('Kepulauan Riau', 'Kepulauan Riau'),
+    ('Jambi	', 'Jambi'), ('Bengkulu', 'Bengkulu'), ('Sumatra Selatan', ' Sumatra Selatan'), (' Kepulauan Bangka Belitung', ' Kepulauan Bangka Belitung'), ('Lampung', 'Lampung'),
+    ('Banten', 'Banten'), ('Jawa Barat', 'Jawa Barat'), ('Jakarta', 'Jakarta'), ('Jawa Tengah', 'Jawa Tengah'), ('Yogyakarta', 'Yogyakarta'),
+    ('Jawa Timur', 'Jawa Timur'), ('Bali', 'Bali'), ('Nusa Tenggara Barat', 'Nusa Tenggara Barat'), ('Nusa Tenggara Timur', 'Nusa Tenggara Timur'), ('Kalimantan Barat', 'Kalimantan Barat'),
+    ('Kalimantan Selatan', 'Kalimantan Selatan'), ('Kalimantan Tengah', 'Kalimantan Tengah'), ('Kalimantan Timur', 'Kalimantan Timur'), ('Kalimantan Utara', 'Kalimantan Utara'), ('Gorontalo', 'Gorontalo'),
+    ('Sulawesi Barat', 'Sulawesi Barat'), ('Sulawesi Selatan', 'Sulawesi Selatan'), ('Sulawesi Tengah', 'Sulawesi Tengah'), ('Sulawesi Tenggara', 'Sulawesi Tenggara'), ('Sulawesi Utara', 'Sulawesi Utara'),
+    ('Maluku', 'Maluku'), ('Maluku Utara', 'Maluku Utara'), ('Papua Barat', 'Papua Barat'), ('Papua', 'Papua'),
 ] 
 
 
 STATUS_CHOICES = [
-    ('Dalam antrian', 'Dalam Antrian'),
+    ('Dalam Antrian', 'Dalam Antrian'),
     ('Dalam Pengerjaan', 'Dalam Pengerjaan'),
+    ('Menunggu Pembayaran', 'Menunggu Pembayaran'),
     ('Selesai', 'Selesai')
 ]
 
 KEPUASAN_CHOICES = [
-    ('Tingkat Kepuasan', 'Tingkat Kepuasan'),
     ('Puas', 'Puas'),
     ('Tidak Puas', 'Tidak Puas'),
 ]
 
-def path_and_rename(path):
-    def wrapper(instance, filename):
-        ext = filename.split('.')[-1]
-        if instance.pk:
-            filename = '{}.{}'.format(instance.oleh, ext)
-        else:
-            filename = '{}.{}'.format(uuid4().hex, ext)
-        return os.path.join(path, filename)
-    # return wrapper
-
+SETUJU_CHOICES = [
+    ('Beri Persetujuan', 'Beri Persetujuan'),
+    ('Setuju', 'Setuju'),
+    ('Tidak Setuju', 'Tidak Setuju'),
+]
 
 class Request(models.Model):
     oleh            = models.ForeignKey(User, on_delete=models.CASCADE, related_name='karyawanUser', null=True, blank=True)
@@ -83,19 +73,22 @@ class Request(models.Model):
     kontak          = models.CharField(max_length=14)
     link            = models.URLField(null=True, blank=True)
     jenis_ruangan   = models.CharField(choices=JENIS_RUANGAN, max_length=50, default='Jenis Ruangan')
+    lainnya         = models.CharField(max_length=1000, null=True, blank=True)
     services        = models.CharField(choices=KATEGORI_CHOICES, max_length=50, default='Pilihan Service')
     jumlah_budget   = models.PositiveIntegerField(default=0)
     alamat          = models.CharField(max_length=500)
     kota            = models.CharField(max_length=50)
-    provinsi        = models.CharField(choices=PROVINSI_CHOICES, max_length=50, default='Aceh')
+    provinsi        = models.CharField(max_length=50, choices=PROVINSI_CHOICES, default='Aceh')
     deskripsi       = models.TextField()
     status          = models.CharField(choices=STATUS_CHOICES, max_length=30, default='Dalam Antrian')
     buat            = models.DateField(auto_now=True)
     tanggal_pengerjaan  = models.DateField(null=True, blank=True)
     tanggal_selesai     = models.DateField(null=True, blank=True)
     files           = models.FileField(upload_to='upload/files/', default='default.jpg')
-    image           = models.ImageField(upload_to=path_and_rename('upload/display/{}'.format(time.strftime("%Y/%m/%d"))), default='default.jpg')
     feedback        = models.TextField(null=True, blank=True)
+    setujui         = models.CharField(max_length=50, choices=SETUJU_CHOICES, default='Beri Persetujuan')
+    revisi          = models.TextField(null=True, blank=True)
+    kepuasan        = models.CharField(max_length=30, choices=KEPUASAN_CHOICES, default='Puas')
 
     def get_absolute_url(self):
         return reverse('detail-permintaan', kwargs={'pk': self.id})
@@ -111,13 +104,6 @@ class Request(models.Model):
     
     id = models.CharField(primary_key=True, editable=False, max_length=30)
     def save(self, *args, **kwargs):
-        img = Image.open(self.image.path)
-
-        if img.height > 300 or img.width > 300:
-            output_size = (300,300)
-            img.thumbnail(output_size)
-            img.save(self.image.path)
-
         if not self.id:
             self.id = "{}{:08d}".format('TKG', self.emp_id)
         super(Request, self).save(*args, **kwargs)
@@ -125,10 +111,26 @@ class Request(models.Model):
     class Meta:
         verbose_name_plural = 'Data - Permintaan'
 
+class Images(models.Model):
+    oleh            = models.ForeignKey(Request, on_delete=models.CASCADE, related_name='images', null=True, blank=True)
+    image           = models.ImageField(upload_to='upload/display/{}'.format(time.strftime("%Y/%m/%d")))
+    image_1         = models.ImageField(upload_to='upload/display/{}'.format(time.strftime("%Y/%m/%d")))
+    image_2         = models.ImageField(upload_to='upload/display/{}'.format(time.strftime("%Y/%m/%d")))
+    image_3         = models.ImageField(upload_to='upload/display/{}'.format(time.strftime("%Y/%m/%d")))
+
+    def save(self, *args, **kwargs):
+        img = Image.open(self.image.path)
+
+        if img.height > 300 or img.width > 300:
+            output_size = (300,300)
+            img.thumbnail(output_size)
+            img.save(self.image.path)
+        super(Images, self).save(*args, **kwargs)
+
 class Invoice(models.Model):
-    oleh            = models.ForeignKey(Request, on_delete=models.CASCADE, related_name='invoice', null=True, blank=True)
+    oleh            = models.OneToOneField(Request, on_delete=models.CASCADE, related_name='invoice', null=True, blank=True)
     buat            = models.DateField(auto_now_add=True)
-    kepuasan        = models.CharField(max_length=30, choices=KEPUASAN_CHOICES, default='Tingkat Kepuasan')
+    kepuasan        = models.CharField(max_length=30, choices=KEPUASAN_CHOICES, default='')
 
     def get_absolute_url(self):
         return reverse('profile', kwargs={'pk': self.id})

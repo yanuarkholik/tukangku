@@ -3,21 +3,30 @@
 {% load humanize %} 
 
 
+{% block pemesanan %}
+<li class="nav-item m-auto"><a class="nav-link font-weight-normal text-secondary" href="{% url 'request-create' %}">BUAT PEMESANAN</a></li>
+{% endblock %}
+
 {% block css %}
 <link rel="stylesheet" href="{% static 'css/grid.css' %}">
 {% endblock %}
 
 {% block url %}
 <div class="d-flex justify-content-between m-auto">
-	<div class="nav-item active">
-		<a class="nav-link font-weight-normal text-secondary" href="{% url 'home' %}">Semua Desain</a>
+	<div class="nav-item">
+		<small>
+			<a class="nav-link font-weight-bold text-uppercase text-secondary" href="{% url 'home' %}">
+				semua design
+			</a>
+		</small>
 	</div>
 	<div class="nav-item">
 		<div class="dropdown">
-			<a class="dropdown-toggle nav-link font-weight-normal text-secondary" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-				Daftar Ruangan
-			</a>
-		  
+			<small>
+				<a class="dropdown-toggle nav-link font-weight-normal text-uppercase text-secondary" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					Daftar Ruangan
+				</a>
+			</small>
 			<div class="dropdown-menu m-2 bg-light border border-light" aria-labelledby="dropdownMenuLink">
 				{% for d in gigs %}
 				<a class="dropdown-item" href="#">{{ d.jenis_ruangan }}</a>
@@ -28,16 +37,16 @@
 	</div>
 	<div class="nav-item">
 		<div class="dropdown">
-			<a class="dropdown-toggle nav-link font-weight-normal text-secondary" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-				Daftar Professional
-			</a>
-		  
+			<small>
+				<a class="dropdown-toggle nav-link text-uppercase font-weight-normal text-secondary" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					Daftar Professional
+				</a>
+			</small>
 			<div class="dropdown-menu m-2 bg-light border border-light" aria-labelledby="dropdownMenuLink">
 				{% for d in gigs %}
 				<a class="dropdown-item" href="#">{{ d.kategori }}</a>
 				{% endfor %}
 			</div>
-		  </div>
 		</div>
 	</div>
 </div>
@@ -58,28 +67,161 @@
 						Foto inspirasi dan ide desain rumah minimalis, apartemen modern, kamar tidur industrial, dapur, ruang keluarga, tangga, ruang makan, dan lain - lain.
 					</p>
 					<div class="row">
-
 						{% for gig in gigs %}
-						<div class="col-lg-3 col-md-3 mt-3">
-							<div class="card">
-								<a href="{% url 'details' username=gig.oleh pk=gig.id %}">
-									<img class="card-img-top" src="{{ gig.image.url }}" alt="{{ gig.user }}" style="height: 180px; object-fit: cover;">
-								</a>
-								<div class="card-body">
-									<div class="price">
-										<p class="text-justify text-truncate" style="color:rgb(92, 92, 92);">
-											{{ gig.oleh }} <br>
-											<small class="mt-0 text-dark">{{ gig.services }}</small>
-										</p>
-										
+						{% if gig.oleh.status == 'Selesai' %}
+							<div class="col-lg-3 col-md-3 mt-3">
+								<div class="card">
+									<a href="#modal{{ gig.id }}" data-toggle="modal" data-target="#modal{{ gig.id }}">
+										<div id="carousel{{ gig.id }}" class="carousel slide carousel-fade" data-ride="carousel">
+											<div class="carousel-inner">
+												<div class="carousel-item active">
+													<img class="card-img-top" src="{{ gig.image.url }}" alt="{{ gig.user }}" style="height: 180px; object-fit: cover;">
+												</div>
+												<div class="carousel-item">
+													<img class="card-img-top" src="{{ gig.image_1.url }}" alt="{{ gig.user }}" style="height: 180px; object-fit: cover;">
+												</div>
+												<div class="carousel-item">
+													<img class="card-img-top" src="{{ gig.image_2.url }}" alt="{{ gig.user }}" style="height: 180px; object-fit: cover;">
+												</div>
+												<div class="carousel-item">
+													<img class="card-img-top" src="{{ gig.image_3.url }}" alt="{{ gig.user }}" style="height: 180px; object-fit: cover;">
+												</div>
+											</div>
+											<a class="carousel-control-prev" href="#carousel{{ gig.id }}" role="button" data-slide="prev">
+												<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+												<span class="sr-only">Previous</span>
+											</a>
+											<a class="carousel-control-next" href="#carousel{{ gig.id }}" role="button" data-slide="next">
+												<span class="carousel-control-next-icon" aria-hidden="true"></span>
+												<span class="sr-only">Next</span>
+											</a>
+										</div>
+									</a>
+									  <!-- Modal -->
+									  <div class="modal fade ml-2" id="modal{{ gig.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+										<div class="modal-dialog" role="document" style="max-width: 100%;">
+										  <div class="modal-content">
+											<div class="modal-header">
+												<div class="media">
+													<img src="{{ gig.oleh.oleh.profile.image.url }}" class="m-auto " style=" width: 30px; height: 30px; object-fit: cover; border-radius: 50%;">
+													<div class="media-body ml-2	">
+														<h6 class="mt-0">{{ gig.oleh.oleh }} <br>
+															<small class="mt-0 text-dark">{{ gig.oleh.kepuasan }}</small>
+															{% if gig.oleh.tanggal_selesai %}
+															<small class=" font-weight-normal">
+																| {{ gig.oleh.tanggal_selesai }}
+															</small>
+															{% endif %}
+														</h6>	
+													</div>
+												</div>
+												<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+												  	<span aria-hidden="true">&times;</span>
+												</button>
+											</div>
+											<div class="modal-body">
+												<div class="row">
+													<div class="col-lg-8">
+														<div id="pop{{ gig.id }}" class="carousel slide carousel-fade" data-ride="carousel">
+															<div class="carousel-inner">
+																<div class="carousel-item active">
+																	<img class="card-img-top" src="{{ gig.image.url }}" alt="{{ gig.user }}" style="max-height: 500px; object-fit: cover;">
+																</div>
+																<div class="carousel-item">
+																	<img class="card-img-top" src="{{ gig.image_1.url }}" alt="{{ gig.user }}" style="max-height: 500px; object-fit: cover;">
+																</div>
+																<div class="carousel-item">
+																	<img class="card-img-top" src="{{ gig.image_2.url }}" alt="{{ gig.user }}" style="max-height: 500px; object-fit: cover;">
+																</div>
+																<div class="carousel-item">
+																	<img class="card-img-top" src="{{ gig.image_3.url }}" alt="{{ gig.user }}" style="max-height: 500px; object-fit: cover;">
+																</div>
+															</div>
+															<a class="carousel-control-prev" href="#pop{{ gig.id }}" role="button" data-slide="prev">
+																<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+																<span class="sr-only">Previous</span>
+															</a>
+															<a class="carousel-control-next" href="#pop{{ gig.id }}" role="button" data-slide="next">
+																<span class="carousel-control-next-icon" aria-hidden="true"></span>
+																<span class="sr-only">Next</span>
+															</a>
+														</div>
+														<small class="text-secondary">Gambar telah di kompresi**</small>
+													</div>
+													<div class="col-lg-4">
+														<nav >
+															<div class="mb-3 d-flex justify-content-between">
+																<small class="text-uppercase font-weight-bold">
+																	Status
+																</small>
+																<small class="text-uppercase font-weight-bold">
+																	{{ gig.oleh.status }}
+																</small>
+															</div>
+															<div class="mb-3 d-flex justify-content-between">
+																<small class="text-uppercase font-weight-bold">
+																	Alamat
+																</small>
+																<small class="text-uppercase font-weight-normal text-right">
+																	{{ gig.oleh.kota }}, {{ gig.oleh.provinsi }} <br>
+																</small>
+															</div>
+															<div class="mb-3 d-flex justify-content-between">
+																<small class="text-uppercase font-weight-bold">
+																	Layanan
+																</small>
+																<small class="text-uppercase font-weight-normal text-right">
+																	{{ gig.oleh.services }}
+																</small>
+															</div>
+															<div class="mb-3 d-flex justify-content-between">
+																<small class="text-uppercase font-weight-bold">
+																	Kategori
+																</small>
+																<small class="text-uppercase font-weight-normal text-right">
+																	{{ gig.oleh.jenis_ruangan }}
+																</small>
+															</div>
+														</nav>
+														<div class="card p-3">
+															<div class="media">
+																<img src="{{ gig.oleh.oleh.profile.image.url }}" class="mt-1" style=" width: 30px; height: 30px; object-fit: cover; border-radius: 50%;">
+																<div class="media-body ml-2	">
+																	<h6 class="mt-0">
+																		{{ gig.oleh.oleh }} <br>
+																		<small class="mt-0 text-dark">{{ gig.oleh.kepuasan }}</small>
+																	</h6>	
+																</div>
+															</div>
+															<hr>
+															{% if gig.oleh.feedback %}
+															<small class=" font-weight-normal text-left">
+																{{ gig.oleh.feedback|linebreaks }}
+															</small>
+															{% else %}
+															<small>Tidak ada tanggapan</small>
+															{% endif %}
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									</div>
+									<div class="media p-2">
+										<img src="{{ gig.oleh.oleh.profile.image.url }}" class="m-auto " style=" width: 30px; height: 30px; object-fit: cover; border-radius: 50%;">
+										<div class="media-body ml-2	">
+											<h6 class="mt-0">{{ gig.oleh.oleh }} <br>
+												<small class="mt-0 text-dark">{{ gig.oleh.kepuasan }}</small>
+											</h6>	
+										</div>
 									</div>
 								</div>
 							</div>
-						</div>
+							{% endif %}
 						{% endfor %}
 					</div>
 					<hr>
-					
 				</div>
 			</div>
 		</div>

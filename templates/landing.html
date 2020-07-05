@@ -10,9 +10,10 @@
 	<meta name="author" content="CodePixar">
 	<meta name="description" content="">
 	<meta name="keywords" content="">
-	<title>Tukangku | One Tukang for Every Need</title>
-	{% block map %}
-	{% endblock %}
+	<title>
+		Tukangku | One Tukang for Every Need
+		
+	</title>
 	<!-- CSS -->
 	<link rel="stylesheet" href="{% static 'css/style.css' %}">
 <!-- CSS only -->
@@ -34,7 +35,7 @@
 			<!-- Collect the nav links, forms, and other content for toggling -->
 			<div class="collapse navbar-collapse offset" id="navbarSupportedContent">
 				<ul class="nav navbar-nav menu_nav ml-auto">
-					<li class="nav-item m-auto"><a class="nav-link font-weight-normal text-secondary" href="{% url 'landing' %}">HOME</a></li>
+					<li class="nav-item m-auto"><a class="nav-link font-weight-bold text-dark" href="{% url 'landing' %}">HOME</a></li>
 					<li class="nav-item m-auto"><a class="nav-link font-weight-normal text-secondary" href="{% url 'request-create' %}">BUAT PEMESANAN</a></li>
 					{% if user.is_authenticated %}
 					<li class="nav-item m-auto"><a class="nav-link font-weight-normal text-secondary" href="{% url 'logout' %}">LOG OUT</a></li>
@@ -52,21 +53,27 @@
 		</div>
 	</nav>
 </div>
+
 <div class="sticky-top shadow-sm border-bottom">
 	<nav class="navbar navbar-expand-sm bg-white navbar-white p-0">
 		<div class="container " style="max-width: 95%;">
 			<div class="d-flex justify-content-between m-auto">
 				<div class="d-flex justify-content-between m-auto">
 					<div class="d-flex justify-content-between m-auto">
-						<div class="nav-item active">
-							<a class="nav-link font-weight-normal text-secondary" href="{% url 'home' %}">Semua Desain</a>
+						<div class="nav-item">
+							<small>
+								<a class="nav-link font-weight-normal text-uppercase text-secondary" href="{% url 'home' %}">
+									semua design
+								</a>
+							</small>
 						</div>
 						<div class="nav-item">
 							<div class="dropdown">
-								<a class="dropdown-toggle nav-link font-weight-normal text-secondary" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-									Daftar Ruangan
-								</a>
-							  
+								<small>
+									<a class="dropdown-toggle nav-link font-weight-normal text-uppercase text-secondary" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+										Daftar Ruangan
+									</a>
+								</small>
 								<div class="dropdown-menu m-2 bg-light border border-light" aria-labelledby="dropdownMenuLink">
 									{% for d in gigs %}
 									<a class="dropdown-item" href="#">{{ d.jenis_ruangan }}</a>
@@ -77,16 +84,16 @@
 						</div>
 						<div class="nav-item">
 							<div class="dropdown">
-								<a class="dropdown-toggle nav-link font-weight-normal text-secondary" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-									Daftar Professional
-								</a>
-							  
+								<small>
+									<a class="dropdown-toggle nav-link text-uppercase font-weight-normal text-secondary" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+										Daftar Professional
+									</a>
+								</small>
 								<div class="dropdown-menu m-2 bg-light border border-light" aria-labelledby="dropdownMenuLink">
 									{% for d in gigs %}
 									<a class="dropdown-item" href="#">{{ d.kategori }}</a>
 									{% endfor %}
 								</div>
-							  </div>
 							</div>
 						</div>
 					</div>
@@ -107,12 +114,16 @@
 					<div class="row single-slide align-items-center d-flex" >
 						<div class="col-lg-5 col-md-6">
 							<div class="banner-content">
-								<h1>Nike New <br>Collection!</h1>
-								<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-									dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.</p>
+								<h1>
+									Tukangku <br>
+								    Build Your Dream!
+								</h1>
+								<p>
+									Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
+									dolore magna aliqua.
+								</p>
 								<div class="add-bag d-flex align-items-center">
-									<a class="add-btn" href=""><span class="lnr lnr-cross"></span></a>
-									<h4 class="col-lg-4 roboto btn btn-warning text-white font-weight-bold text-uppercase">tanyakan</h4>
+									<a role="button" href="{% url 'request-create' %}" class="col-lg-4 btn btn-warning text-white font-weight-bold text-uppercase">Request</a>
 								</div>
 							</div>
 						</div>
@@ -137,7 +148,7 @@
 				<div class="row p-5">
 					<div class="col-lg-4">
 						<img src="{% static 'image/shield.png' %}" alt="house-display" class="p-3 mx-auto d-block" style="object-fit:cover; max-width:100%;">
-						<h4 class="roboto">
+						<h4 class="">
 							100% Jaminan proyek selesai atau uang kembali
 						</h4>
 						<p>
@@ -146,7 +157,7 @@
 					</div>
 					<div class="col-lg-4">
 						<img src="{% static 'image/fee.png' %}" alt="house-display"  class="p-3 mx-auto d-block"  style="object-fit:cover; max-width:100%;">
-						<h4 class="roboto">
+						<h4 class="">
 							Tanpa ada biaya tambahan
 						</h4>
 						<p>
@@ -155,11 +166,11 @@
 					</div>
 					<div class="col-lg-4">
 						<img src="{% static 'image/task.png' %}" alt="house-display"  class="p-3 mx-auto d-block"  style="object-fit:cover; max-width:100%;">
-						<h4 class="roboto">
-							Dapatkan pengawalan dari Tim Arsitag
+						<h4 class="">
+							Dapatkan pengawalan dari Tim Tukangku
 						</h4>
 						<p>
-							Pantau laporan dari tim Arsitag yang mengecek langsung di lapangan.
+							Pantau laporan dari tim Tukangku yang mengecek langsung di lapangan.
 						</p>
 					</div>
 				</div>
@@ -178,26 +189,26 @@
 					<div class="col-lg-3 col-sm-3 mt-3 mb-3">
 						<div class="rounded shadow-lg p-4">
 							<img src="{% static 'image/ask.png' %}" alt="house-display"  class="p-3 mx-auto d-block"  style="object-fit:cover; max-width:100%;">
-							<h4 class="text-waning text-center roboto">1. Konsultasi</h4>
-							<p class="roboto text-center">
+							<h4 class="text-waning text-center">1. Konsultasi</h4>
+							<p class=" text-center">
 								Dapatkan semua jawaban dari pertanyaan Anda seputar pembangunan: budget, desain, dan tahapan proyek.
 							</p>
 						</div>
 					</div> 
 					<div class="col-lg-3 col-sm-3 mt-3 mb-3">
 						<div class="rounded shadow-lg p-4">
-							<img src="{% static 'image/request.png' %}" alt="house-display"  class="p-3 mx-auto d-block"  style="object-fit:cover; max-width:100%;">
-							<h4 class="text-waning text-center roboto">2. Penawaran</h4>
-							<p class="roboto text-center">
-								Anda akan mendapatkan penawaran harga desain hingga bangun dari mitra terbaik Arsitag yang sudah terverifikasi.
+							<img src="{% static 'image/request.png' %}" alt="house-display"  class="p-3 mx-auto d-block"  style="object-fit:cover; max-width:100%; ">
+							<h4 class="text-waning text-center ">2. Penawaran</h4>
+							<p class=" text-center">
+								Anda akan mendapatkan penawaran harga desain hingga bangun dari mitra terbaik yang sudah terverifikasi.
 							</p>
 						</div>
 					</div>
 					<div class="col-lg-3 col-sm-3 mt-3 mb-3">
 						<div class="rounded shadow-lg p-4">
 							<img src="{% static 'image/pay.png' %}" alt="house-display"  class="p-3 mx-auto d-block"  style="object-fit:cover; max-width:100%;">
-							<h4 class="text-waning text-center roboto">3. Bayar dan pantau</h4>
-							<p class="roboto text-center">
+							<h4 class="text-waning text-center ">3. Bayar dan pantau</h4>
+							<p class=" text-center">
 								Aplikasi kami menjaga keamanan pembayaran dan pantau progres proyek Anda secara mudah.
 							</p>
 						</div>
@@ -205,8 +216,8 @@
 					<div class="col-lg-3 col-sm-3 mt-3 mb-3">
 						<div class="rounded shadow-lg p-4">
 							<img src="{% static 'image/done.png' %}" alt="house-display"  class="p-3 mx-auto d-block"  style="object-fit:cover; max-width:100%;">
-							<h4 class="text-waning text-center roboto">4. Proyek Selesai</h4>
-							<p class="roboto text-center">
+							<h4 class="text-waning text-center ">4. Proyek Selesai</h4>
+							<p class=" text-center">
 								Nikmati properti impian Anda dengan garansi 100% proyek selesai atau uang kembali.
 							</p>
 						</div>
@@ -223,58 +234,30 @@
 		<div class="row">
 			<div class="col-lg-12 p-3">
 				<h1 class="text-center">Testimoni <span class="text-warning">Tukangku</span></h1>
-				<div id="carouselExampleCaptions" class="carousel slide carousel-fade mt-3 mb-3" data-ride="carousel">
+				{% for i in drop %}
+				<div id="carouselExampleCaptions{{ i.id }}" class="carousel slide carousel-fade mt-3 mb-3" data-ride="carousel">
 					<ol class="carousel-indicators">
-						<li data-target="#carouselExampleCaptions" data-slide-to="0" class="active"></li>
-						<li data-target="#carouselExampleCaptions" data-slide-to="1"></li>
-						<li data-target="#carouselExampleCaptions" data-slide-to="2"></li>
+						<li data-target="#carouselExampleCaptions{{i.id}}" data-slide-to="carouselExampleCaptions{{i.id}}" class="{% if forloop.first %}active{% endif %}"></li>
 					</ol>
 					<div class="carousel-inner">
-						<div class="carousel-item active">
-							<img src="https://imgs.abduzeedo.com/files/francois/wallpapers/wpw393/wpw.jpg" class="d-block w-100" alt="image">
+						<div class="carousel-item {% if forloop.first %}active{% endif %}">
+							<img src="{{ i.image.url }}" class="d-block w-100" style="max-width: 100%; max-height: 500px;" alt="image">
 							<div class="carousel-caption d-none d-md-block">
-							<h5>First slide label</h5>
-							<p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
-							</div>
-						</div>
-						<div class="carousel-item">
-							<img src="https://images2.alphacoders.com/663/thumb-1920-66310.jpg" class="d-block w-100" alt="image">
-							<div class="carousel-caption d-none d-md-block">
-							<h5>Second slide label</h5>
-							<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-							</div>
-						</div>
-						<div class="carousel-item">
-							<img src="https://i.pinimg.com/originals/2c/57/26/2c5726c25d0b9756fb3ff84d9e6c9f3f.jpg" class="d-block w-100" alt="image">
-							<div class="carousel-caption d-none d-md-block">
-							<h5>Third slide label</h5>
-							<p>Praesent commodo cursus magna, vel scelerisque nisl consectetur.</p>
+							<h5>{{ i.oleh.oleh }}</h5>
+							<p>{{ i.oleh.feedback }}</p>
 							</div>
 						</div>
 					</div>
-					<a class="carousel-control-prev" href="#carouselExampleCaptions" role="button" data-slide="prev">
+					<a class="carousel-control-prev" href="#carouselExampleCaptions{{ i.id}}" role="button" data-slide="prev">
 						<span class="carousel-control-prev-icon" aria-hidden="true"></span>
 						<span class="sr-only">Previous</span>
 					</a>
-					<a class="carousel-control-next" href="#carouselExampleCaptions" role="button" data-slide="next">
+					<a class="carousel-control-next" href="#carouselExampleCaptions{{ i.id }}" role="button" data-slide="next">
 						<span class="carousel-control-next-icon" aria-hidden="true"></span>
 						<span class="sr-only">Next</span>
 					</a>
+					{% endfor %}
 				</div>
-			</div>
-		</div>
-	</div>
-</section>
-
-
-<section style=" height: 200px; max-width: 100%; background: url('https://lh3.googleusercontent.com/proxy/0fLdqY8uQfuvkP4kU-nWq0W7S9W5le1T7DWRXVcl0hWj8hJ1wrECJTTOZRYbekKVeattpQ09-iRAv2ADwzutwd46Jk3Eor1pMZ1K3PmeaTMmPkKiDtjLyY0sipjq2Om6k_s');">
-	<div class="container" style="max-width: 95%;">
-		<div class="row">
-			<div class="col-lg-6 p-3 ">
-				<h1 class="text-left text-white">Wujudkan proyek impian anda dengan <span class="text-warning">Tukangku</span></h1>
-				<a href="" class="btn btn-warning text-uppercase text-white">
-					Konsultasi Gratis
-				</a>
 			</div>
 		</div>
 	</div>
@@ -283,11 +266,88 @@
 
 <!-- Footer -->
 <footer class="mt-2 border-top">
-	<div class="container " style="max-width: 95%;">
-		meong
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-3 mt-3 mb-3 p-3 text-center">
+				<h4 class="font-weight-bold">
+					ABOUT
+				</h4>
+				<div class="mb-2 text-left">
+					<small>
+						Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
+						dolore magna aliqua. <br> <br>
+						Lorem ipsum dolor sit amet, consectetur adipisicing elit. <br> 
+					</small>
+				</div>
+			</div>
+			<div class="col-lg-3 mt-3 mb-3 p-3 text-center">
+				<h4 class="font-weight-bold">
+					TERBARU
+				</h4>
+				<div class="mb-2">
+					<img src="https://www.instagram.com/p/BtOMIs1BdWhT_vUhUXqpVBOiDzgFigQMXpAgII0/" alt="">
+				</div>
+			</div>
+			<div class="col-lg-3 mt-3 mb-3 p-3 text-center">
+				<h4 class="font-weight-bold">
+					KONTAK
+				</h4>
+				<div class="mb-2">
+					<small>
+						WA 0866-6666-6666
+					</small>
+				</div>
+				<div class="mb-2">
+					<small>
+						E-Mail
+					</small>
+				</div>
+				<div class="mb-2">
+					<small class="text-center">
+						LinkedIn
+					</small>
+				</div>
+				<div class="mb-2">
+					<small class="text-center">
+						Fiverr
+					</small>
+				</div>
+			</div>
+			<div class="col-lg-3 mt-3 mb-3 p-3 text-center">
+				<h4 class="font-weight-bold">
+					TEAM
+				</h4>
+				<div class="mb-2">
+					<small>
+						Elthansa Raksa Gama
+					</small>
+				</div>
+				<div class="mb-2">
+					<small class="text-center">
+						Frans Dedi P.
+					</small>
+				</div>
+				<div class="mb-2">
+					<small class="text-center">
+						I Gede Bima Divantara
+					</small>
+				</div>
+				<div class="mb-2">
+					<small class="text-center">
+						Yanuar Kholik
+					</small>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-lg-12 border-top">
+		<div class="text-center p-3">
+			<small>All rights served Tukangku Team</small>
+		</div>
 	</div>
 </footer>
 <!-- End Footer -->
+
 <!-- JS, Popper.js, and jQuery -->
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>

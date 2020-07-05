@@ -51,20 +51,6 @@ def create_or_update_user_profile(sender, instance, created, **kwargs):
         Profile.objects.create(user=instance)
     instance.profile.save()
 
-class PesanAuthor(models.Model):
-    nama_depan  = models.CharField(max_length=100, null=True, blank=True)
-    nama_belakang  = models.CharField(max_length=100, null=True, blank=True)
-    kontak      = models.CharField(max_length=50, help_text='Nomor telepon atau email**')
-    link        = models.CharField(max_length=2000, help_text='Cantumkan link file keterangan bila perlu**', null=True, blank=True)
-    deskripsi   = models.TextField(null=True, blank=True)
-    buat        = models.DateTimeField(default=timezone.now)
-
-    def get_absolute_url(self):
-        return reverse('pesan-author', kwargs={'pk': self.pk, 'username':self.user})
-
-    class Meta: 
-        verbose_name_plural = 'Data-Pesanan'
-
 
 
 

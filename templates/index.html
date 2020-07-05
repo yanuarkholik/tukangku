@@ -38,7 +38,8 @@
 			<div class="collapse navbar-collapse offset" id="navbarSupportedContent">
 				<ul class="nav navbar-nav menu_nav ml-auto">
 					<li class="nav-item m-auto"><a class="nav-link font-weight-normal text-secondary" href="{% url 'landing' %}">HOME</a></li>
-					<li class="nav-item m-auto"><a class="nav-link font-weight-normal text-secondary" href="{% url 'request-create' %}">BUAT PEMESANAN</a></li>
+					{% block pemesanan %}
+					{% endblock %}
 					{% if user.is_authenticated %}
 					<li class="nav-item m-auto"><a class="nav-link font-weight-normal text-secondary" href="{% url 'logout' %}">LOG OUT</a></li>
 					<li class="nav-item ml-1">
@@ -72,6 +73,91 @@
 {% block content %}
 {% endblock %}
 <!-- End Content Area -->
+
+<!-- Footer -->
+<br>
+<br>
+<footer class="mt-5 border-top bg-white">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-3 mt-3 mb-3 p-3 text-center">
+				<h4 class="font-weight-bold">
+					ABOUT
+				</h4>
+				<div class="mb-2 text-left">
+					<small>
+						Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
+						dolore magna aliqua. <br> <br>
+						Lorem ipsum dolor sit amet, consectetur adipisicing elit. <br> 
+					</small>
+				</div>
+			</div>
+			<div class="col-lg-3 mt-3 mb-3 p-3 text-center">
+				<h4 class="font-weight-bold">
+					TERBARU
+				</h4>
+				<div class="mb-2">
+				</div>
+			</div>
+			<div class="col-lg-3 mt-3 mb-3 p-3 text-center">
+				<h4 class="font-weight-bold">
+					KONTAK
+				</h4>
+				<div class="mb-2">
+					<small>
+						WA 0866-6666-6666
+					</small>
+				</div>
+				<div class="mb-2">
+					<small>
+						EMAIL
+					</small>
+				</div>
+				<div class="mb-2">
+					<small class="text-center">
+						LinkedIn
+					</small>
+				</div>
+				<div class="mb-2">
+					<small class="text-center">
+						Fiverr
+					</small>
+				</div>
+			</div>
+			<div class="col-lg-3 mt-3 mb-3 p-3 text-center">
+				<h4 class="font-weight-bold">
+					TEAM
+				</h4>
+				<div class="mb-2">
+					<small>
+						Elthansa Raksa Gama
+					</small>
+				</div>
+				<div class="mb-2">
+					<small class="text-center">
+						Frans Dedi P.
+					</small>
+				</div>
+				<div class="mb-2">
+					<small class="text-center">
+						I Gede Bima Divantara
+					</small>
+				</div>
+				<div class="mb-2">
+					<small class="text-center">
+						Yanuar Kholik
+					</small>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-lg-12 border-top">
+		<div class="text-center p-3">
+			<small>All rights served Tukangku Team</small>
+		</div>
+	</div>
+</footer>
+<!-- End Footer -->
 
 <!-- JS, Popper.js, and jQuery -->
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>

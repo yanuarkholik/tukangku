@@ -18,7 +18,6 @@ from django.views.generic import (
 
 from .forms import ( 
     SignUpForm,  
-    PesanAuthorForm,
     UserUpdateForm, 
     ProfileUpdateForm, 
     UpdatePermintaan,
@@ -31,8 +30,33 @@ from .models import (
 from sellerapp.models import ( 
     Request,
     Invoice,
+    Images
 )
 
+################################ CETAK INVOICE ################################ 
+
+from io import StringIO, BytesIO
+from xhtml2pdf import pisa
+from django.template.loader import get_template
+from django.template import Context
+from django.http import HttpResponse
+import cgitb
+
+
+def render_to_pdf(template_src, context_dict):
+    template = get_template(template_src)
+    context = Context(context_dict)
+    html  = template.render(context_dict)
+    result = BytesIO()
+
+    pdf = pisa.pisaDocument(BytesIO(html.encode("utf-8")), result)
+    if not pdf.err:
+        return HttpResponse(result.getvalue(), content_type='application/pdf')
+    return HttpResponse('Ada yang error nich<pre>%s</pre>' % escape(html))
+
+def cetakPDF(request, pk):
+    gig = Request.objects.filter(pk=pk)
+    return render_to_pdf( 'invoice/invoice.html', { 'pagesize':'A4', 'gig': gig}, )
 ################################ PARENTS ################################ 
 
 def index(request):
@@ -45,7 +69,7 @@ def index(request):
 
 def landing(request):
     """ Parent page: Landing """
-    drop =  Request.objects.all()
+    drop =  Images.objects.all()
     context = {
         'drop': drop,
     }
@@ -60,9 +84,12 @@ def register(request):
 
 def home(request):
     """ Menampilkan konten pada Home """
-    gigs = Request.objects.filter(status='Selesai')
+    # gigs = Request.objects.filter(status='Selesai')
+    gigs    = Images.objects.all().order_by('-id')
+    puas    = Invoice.objects.all().order_by('-id')
     context = {
         'gigs': gigs,
+        'puas': puas
     }
     return render(request, 'child/home.html', context)
 
@@ -87,17 +114,21 @@ class DetailUpdatePermintaan(DetailView, LoginRequiredMixin, UserPassesTestMixin
             return True
         return False
 
+class DetailDisplay(DetailView):
+    model = Request
 
-@login_required
-def detail_permintaan(request, username, pk):
-    """ Menampilkan detail Permintaan dan Update Permintaan """
-    ins = Invoice.objects.filter(pk=pk)
-    req = Request.objects.filter(pk=pk)
-    context = {
-        'req': req,
-        'ins':ins,
-    }
-    return render(request, 'details/detail.html', context)
+    # def get_queryset(self):
+    #     ins = Invoice.objects.get(pk=id)
+    #     content = { 'ins': ins}
+    #     return context
+
+# def detail_permintaan(request, username, pk):
+#     """ Menampilkan detail Permintaan dan Update Permintaan """
+#     ins = Invoice.objects.filter(pk=pk)
+#     context = {
+#         'ins':ins,
+#     }
+#     return render(request, 'details/detail.html', context)
 
 def registerForm(request):
     """ Membuat Form Register akun MyTukang """
@@ -130,7 +161,7 @@ def profile(request):
         u_form = UserUpdateForm(instance=request.user, prefix='user')
         p_form = ProfileUpdateForm(instance=request.user.profile, prefix='profile')
 
-    posts = Request.objects.filter(oleh=request.user).order_by('status')
+    posts = Request.objects.filter(oleh=request.user)
     context = {
         'u_form': u_form,
         'p_form': p_form,
@@ -146,7 +177,7 @@ class CreateRequest(CreateView):
     """ Membuat pesanan pasa Request """
     model = Request
     template_name = 'child/pesan.html'
-    fields = ['nama_depan', 'nama_belakang', 'email', 'kontak', 'deskripsi', 'link', 'jenis_ruangan', 'services', 'jumlah_budget', 'provinsi', 'kota', 'alamat']
+    fields = ['nama_depan', 'nama_belakang', 'email', 'kontak', 'deskripsi', 'link', 'jenis_ruangan', 'services', 'jumlah_budget', 'provinsi', 'kota', 'alamat', 'lainnya']
     
     def form_valid(self, form):
         form.instance.oleh = self.request.user

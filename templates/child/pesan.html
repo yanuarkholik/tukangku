@@ -2,47 +2,57 @@
 {% load static %}
 {% load crispy_forms_tags %}
 
+
+{% block pemesanan %}
+<li class="nav-item m-auto"><a class="nav-link font-weight-bold text-secondary" href="{% url 'request-create' %}">BUAT PEMESANAN</a></li>
+{% endblock %}
+
 {% block url %}
 <div class="d-flex justify-content-between m-auto">
-	<div class="nav-item active">
-		<a class="nav-link font-weight-normal text-secondary" href="{% url 'home' %}">Semua Desain</a>
-	</div>
-	<div class="nav-item">
-		<div class="dropdown">
-			<a class="dropdown-toggle nav-link font-weight-normal text-secondary" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-				Daftar Ruangan
-			</a>
-		  
-			<div class="dropdown-menu m-2 bg-light border border-light" aria-labelledby="dropdownMenuLink">
-				{% for d in gigs %}
-				<a class="dropdown-item" href="#">{{ d.jenis_ruangan }}</a>
-				{% endfor %}
-			</div>
-		  </div>
-		</div>
-	</div>
-	<div class="nav-item">
-		<div class="dropdown">
-			<a class="dropdown-toggle nav-link font-weight-normal text-secondary" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-				Daftar Professional
-			</a>
-		  
-			<div class="dropdown-menu m-2 bg-light border border-light" aria-labelledby="dropdownMenuLink">
-				{% for d in gigs %}
-				<a class="dropdown-item" href="#">{{ d.kategori }}</a>
-				{% endfor %}
-			</div>
-		  </div>
-		</div>
-	</div>
+    <div class="nav-item">
+        <small>
+            <a class="nav-link font-weight-normal text-uppercase text-secondary" href="{% url 'home' %}">
+                semua design
+            </a>
+        </small>
+    </div>
+    <div class="nav-item">
+        <div class="dropdown">
+            <small>
+                <a class="dropdown-toggle nav-link font-weight-normal text-uppercase text-secondary" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Daftar Ruangan
+                </a>
+            </small>
+            <div class="dropdown-menu m-2 bg-light border border-light" aria-labelledby="dropdownMenuLink">
+                {% for d in gigs %}
+                <a class="dropdown-item" href="#">{{ d.jenis_ruangan }}</a>
+                {% endfor %}
+            </div>
+          </div>
+        </div>
+    </div>
+    <div class="nav-item">
+        <div class="dropdown">
+            <small>
+                <a class="dropdown-toggle nav-link text-uppercase font-weight-normal text-secondary" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Daftar Professional
+                </a>
+            </small>
+            <div class="dropdown-menu m-2 bg-light border border-light" aria-labelledby="dropdownMenuLink">
+                {% for d in gigs %}
+                <a class="dropdown-item" href="#">{{ d.kategori }}</a>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}
 
 {% block content %}
-<section class="banner-area section_gap banner_gap">
+<section class="">
 	<div class="container" style="max-width: 100%;">
 		<div class="row justify-content-center">
-            <div class="col-lg-9 p-5">
+            <div class="col-lg-9 p-3 mt-4 bg-white rounded shadow-sm">
                 <h1 class="text-center">
                     Formulir Permintaan 
                 </h1>
@@ -73,15 +83,19 @@
                         <div class="col-lg-12 mt-5 mb-3">
                             <h5 class="">Pastikan isi alamat anda dengan benar</h5>
                         </div>
-                        <div class="col-lg-4">
-                            {{ form.alamat|as_crispy_field }}
+                        <div class="col-lg-6">
+                            {{ form.provinsi|as_crispy_field }}
                         </div>
-                        <div class="col-lg-4">
+                        <div class="col-lg-6">
                             {{ form.kota|as_crispy_field }}
                         </div>
-                        <div class="col-lg-4">
-                            {{ form.provinsi|as_crispy_field }}
-                        </div><br>
+                        <div class="col-lg-12">
+                            {{ form.alamat|as_crispy_field }}
+                        </div>
+                        <br>
+                        <div class="col-lg-12 mt-5 mb-3">
+                            <h5 class="">Deskripsikan pesanan, jika perlu sertakan link document persyaratan anda</h5>
+                        </div>
                         <div class="col-lg-12">
                             {{ form.deskripsi|as_crispy_field }}
                         </div>
@@ -91,7 +105,11 @@
                         </div>
                         <div class="col-lg-6">
                             {{ form.jenis_ruangan|as_crispy_field }}
-                        </div><br>
+                        </div>
+                        <div class="col-lg-12">
+                            {{ form.lainnya|as_crispy_field }}
+                        </div>
+                        <br>
                         <div class="col-lg-3 mt-4">
                             {% if user.is_authenticated %}
                             <input class="btn btn-outline-info btn-block" type="submit" name="Kirim" id="" value="Kirim">
