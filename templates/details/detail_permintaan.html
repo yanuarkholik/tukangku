@@ -76,7 +76,7 @@
 					</nav>
 					{% if object.status == 'Dalam Pengerjaan' %}
 					<div class="progress m-3" style="height: 3px;">
-						<div class="progress-bar" role="progressbar" style="width: 50%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+						<div class="progress-bar" role="progressbar" style="width: 35%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
 					</div>
 					<!-- <img class="card-img-top mt-3 mt-3" src="{{ object.image.url }}" alt="{{ object.oleh }}" style="height: 300px; object-fit: cover;"> -->
 					<small class="text-secondary">Gambar telah di kompresi, preview selengkapnya ada di download document**</small>  <br> <br>
@@ -88,7 +88,7 @@
 					<small class="text-secondary">Gambar telah di kompresi, preview selengkapnya ada di download document**</small>  <br> <br>
 					{% elif object.status == 'Menunggu Pembayaran' %}
 					<div class="progress m-3" style="height: 3px;">
-						<div class="progress-bar bg-info" role="progressbar" style="width: 75%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+						<div class="progress-bar bg-info" role="progressbar" style="width: 70%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
 					</div>
 					{% else %}
 					<div class="progress m-3" style="height: 3px;">
