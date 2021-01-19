@@ -8,5 +8,5 @@ from sellerapp.views import (
 )
 
 urlpatterns = [
-    
+    # pass to tukangkuapp
 ]
