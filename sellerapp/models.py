@@ -5,7 +5,7 @@ from django.utils.text import slugify
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from PIL import Image
+
 import time
 import os
 from uuid import uuid4
@@ -85,7 +85,7 @@ class Request(models.Model):
     tanggal_pengerjaan  = models.DateField(null=True, blank=True)
     tanggal_selesai     = models.DateField(null=True, blank=True)
     files           = models.FileField(upload_to='upload/files/', default='default.jpg')
-    bukti           = models.ImageField(upload_to='upload/bukti/', null=True, blank=True)
+    bukti           = models.FileField(upload_to='upload/bukti/', null=True, blank=True)
     feedback        = models.TextField(null=True, blank=True)
     setujui         = models.CharField(max_length=50, choices=SETUJU_CHOICES, default='',null=True, blank=True)
     revisi          = models.TextField(null=True, blank=True)
@@ -114,10 +114,10 @@ class Request(models.Model):
 
 class Images(models.Model):
     oleh            = models.ForeignKey(Request, on_delete=models.CASCADE, related_name='images', null=True, blank=True)
-    image           = models.ImageField(upload_to='upload/display/{}'.format(time.strftime("%Y/%m/%d")))
-    image_1         = models.ImageField(upload_to='upload/display/{}'.format(time.strftime("%Y/%m/%d")))
-    image_2         = models.ImageField(upload_to='upload/display/{}'.format(time.strftime("%Y/%m/%d")))
-    image_3         = models.ImageField(upload_to='upload/display/{}'.format(time.strftime("%Y/%m/%d")))
+    image           = models.FileField(upload_to='upload/display/{}'.format(time.strftime("%Y/%m/%d")))
+    image_1         = models.FileField(upload_to='upload/display/{}'.format(time.strftime("%Y/%m/%d")))
+    image_2         = models.FileField(upload_to='upload/display/{}'.format(time.strftime("%Y/%m/%d")))
+    image_3         = models.FileField(upload_to='upload/display/{}'.format(time.strftime("%Y/%m/%d")))
 
     def save(self, *args, **kwargs):
         img = Image.open(self.image.path)

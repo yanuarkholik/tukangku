@@ -5,7 +5,7 @@ from django.utils.text import slugify
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from PIL import Image
+
 
 from sellerapp.models import Request
 
@@ -25,7 +25,7 @@ KATEGORI_CHOICES = [
 # Form Section
 class Profile(models.Model):
     user        = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
-    image       = models.ImageField(default='default.jpg', upload_to='upload')
+    image       = models.FileField(default='default.jpg', upload_to='upload')
     deskripsi   = models.TextField(null=True, blank=True, help_text='Deskripsi singkat Profile anda**')
     buat        = models.DateTimeField(auto_now=True)
     
