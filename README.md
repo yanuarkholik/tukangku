@@ -1,8 +1,8 @@
 # tukangku
 
-Tugas matakuliah ***Ecommerce*** Universitas AMIKOM, tahun ajaran 2019/2020 
+Tugas matakuliah ***Ecommerce*** Universitas AMIKOM
 
-Elthansa Raksa G. 18.12.0955, Frans D. Panjaitan 18.12.0956, I Gede Bima 18.12.0973, Yanuar Kholik 18.12.0974
+Yanuar Kholik 18.12.0974
 
 ### Set up [Python](https://www.python.org/downloads/) dan Django
 
